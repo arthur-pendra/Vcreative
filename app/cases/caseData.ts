@@ -229,7 +229,7 @@ export const CASES: Record<CaseSlug, CaseData> = {
       },
     ],
     quote: {
-      logo: '/logos/hal-xiii.webp',
+      logo: '/logos/hal-xiii.svg',
       text:
         'Viënna begrijpt wat een merk nodig heeft om écht zichtbaar te worden. Geen standaard content, maar beeld dat kracht uitstraalt en ons publiek raakt.',
       author: 'Rim Pinckers',
@@ -297,9 +297,9 @@ export const CASES: Record<CaseSlug, CaseData> = {
     quote: {
       logo: '/logos/vloerverwarming-limburg.webp',
       text:
-        'TODO copy klant — quote van Vloerverwarming Limburg over de samenwerking.',
-      author: 'TODO naam',
-      role: 'TODO rol bij Vloerverwarming Limburg',
+        'Eindelijk content die past bij ons vak. Eerlijk beeld van het werk op locatie, waarin klanten ons direct herkennen. Viënna snapte ons merk vanaf dag één.',
+      author: 'Team Vloerverwarming Limburg',
+      role: 'Klant sinds 2025',
     },
     fullBleedImage: '/cases/vloerverwarming-limburg/full.webp',
     socialItems: [

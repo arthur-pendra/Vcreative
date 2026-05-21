@@ -214,6 +214,9 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
             aria-hidden="true"
             className={styles.quoteLogo}
             loading="lazy"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.visibility = 'hidden'
+            }}
           />
           <blockquote className={styles.quoteText}>
             &ldquo;{data.quote.text}&rdquo;

@@ -58,12 +58,12 @@
 
   /* Type scale — em-based, scales with Osmo via body font-size.
      Figma px at 1440px (base=16): em × 16 = Figma px */
-  --text-xs: 0.75em;       /* 12px — caption / label */
-  --text-sm: 0.875em;      /* 14px — small body / buttons */
+  --text-xs: 0.55em;       /* 12px — caption / label */
+  --text-sm: 0.75em;      /* 14px — small body / buttons */
   --text-md: 1em;          /* 16px — body */
   --text-lg: 1.25em;       /* 20px — lead / large body */
-  --text-xl: 1.5em;        /* 24px — subhead / pull quote */
-  --text-2xl: 2em;         /* 32px — h3 */
+  --text-xl: 1.75em;        /* 24px — subhead / pull quote */
+  --text-2xl: 2.25em;      /* 36px — h3 */
   --text-3xl: 3em;         /* 48px — h2 */
   --text-4xl: 4.5em;       /* 72px — display / h1 */
 

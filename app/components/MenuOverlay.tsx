@@ -474,15 +474,16 @@ const MenuOverlay = ({ open, hover = false, onClose }: Props) => {
         }
       })
 
-      /* Fit model to ~90% of the frustum height so it reads big on
-         screen, matching the footer's presence. */
+      /* Fit model to ~90% of the frustum height op desktop; iets
+         compacter (0.8) op mobile zodat de logo niet de hele
+         viewport vult naast de menu-tekst. */
       const box = new THREE.Box3().setFromObject(logoModel)
       const modelSize = new THREE.Vector3()
       const modelCenter = new THREE.Vector3()
       box.getSize(modelSize)
       box.getCenter(modelCenter)
       logoModel.position.sub(modelCenter)
-      const targetHeight = 0.9
+      const targetHeight = width < 768 ? 0.8 : 0.9
       const fit = targetHeight / Math.max(modelSize.x, modelSize.y, 0.0001)
       logoModel.scale.setScalar(fit)
       logoScene.add(logoModel)

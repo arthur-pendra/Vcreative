@@ -129,7 +129,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className={styles.col}>
+          <div className={`${styles.col} ${styles.colSocials}`}>
             <p className={styles.colHead}>Volg mij</p>
             <ul className={styles.colList}>
               {SOCIALS.map((s) => (

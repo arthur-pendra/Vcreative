@@ -113,7 +113,11 @@
   position: absolute;
   top: 2.75em;
   right: 2.75em;
+  /* 44px touch target via padding + negative margin (zelfde
+     hitbox patroon als .menuLink — voorkomt dat het zichtbare
+     CONTACT label 0.5em lager uitvalt dan MENU). */
   padding: 0.5em 0.5em;
+  margin: -0.5em -0.5em;
   font-family: var(--font-secondary);
   font-size: var(--text-xs);
   font-weight: var(--weight-regular);
@@ -150,7 +154,7 @@
   }
 
   .menuLink {
-    top: 1.25em;
+    top: 1.75em;
     left: 1.25em;
     font-size: var(--text-xs);
   }
@@ -164,7 +168,7 @@
   }
 
   .contactLink {
-    top: 1.25em;
+    top: 1.75em;
     right: 1.25em;
     font-size: var(--text-xs);
   }
@@ -173,7 +177,7 @@
 @media (max-width: 479px) {
   .menuLink,
   .contactLink {
-    top: 1em;
+    top: 1.5em;
   }
 
   .menuLink {

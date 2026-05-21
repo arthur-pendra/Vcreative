@@ -348,8 +348,11 @@ export function useWebGLEffects() {
       const texts: TextEntry[] = []
 
       if (isTouch) {
-        /* Mobile: per-element WebGL canvas (scrolls with DOM, no jitter) */
-        const PAD_X = 0.12
+        /* Mobile: per-element WebGL canvas (scrolls with DOM, no jitter).
+           PAD_X kleiner dan desktop: op mobile vult de tekst al de
+           viewport-breedte, dus 12% extra ramping aan elke kant gaf
+           horizontale overflow (zichtbaar in studioQuote sectie). */
+        const PAD_X = 0.04
         const PAD_Y = 0.25
 
         textElements.forEach((element) => {

@@ -297,10 +297,14 @@
   }
 
   .columns {
-    /* On narrow phones the 3 link cols fall back to 2x2 so text stays
-       legible in each column. */
+    /* Two columns op mobile: Diensten + Contact. Socials worden
+       verborgen om de footer strakker te houden. */
     grid-template-columns: repeat(2, 1fr);
     gap: 2em 1.5em;
+  }
+
+  .colSocials {
+    display: none;
   }
 
   .brand {

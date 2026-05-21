@@ -17,22 +17,31 @@ const REVIEWS = [
     role: 'Eigenaar Hair by Kim',
     caseHref: '/cases/hair-by-kim',
   },
-  /* TODO copy klant — quote, auteur en rol voor FGS aanvullen */
+  /* TODO copy klant — placeholder quote tot definitieve copy van FGS */
   {
     logo: '/logos/fgs.webp',
     quote:
-      'TODO copy klant — quote van FGS over de samenwerking met Viënna.',
-    author: 'TODO naam',
-    role: 'TODO rol bij FGS',
+      'Viënna heeft de industriële kant van ons werk vertaald naar beeld dat klopt. Geen gepolijste plaatjes, maar de kracht en het vakmanschap die FGS écht zijn.',
+    author: 'Team FGS',
+    role: 'Klant sinds 2025',
     caseHref: '/cases/fgs',
   },
   {
-    logo: '/logos/hal-xiii.webp',
+    logo: '/logos/hal-xiii.svg',
     quote:
       'Viënna begrijpt wat een merk nodig heeft om écht zichtbaar te worden. Geen standaard content, maar beeld dat kracht uitstraalt en ons publiek raakt.',
     author: 'Rim Pinckers',
     role: 'Owner Hal XIII',
     caseHref: '/cases/hal-xiii',
+  },
+  /* TODO copy klant — placeholder quote tot definitieve copy van VVL */
+  {
+    logo: '/logos/vloerverwarming-limburg.webp',
+    quote:
+      'Eindelijk content die past bij ons vak. Eerlijk beeld van het werk op locatie, waarin klanten ons direct herkennen. Viënna snapte ons merk vanaf dag één.',
+    author: 'Team Vloerverwarming Limburg',
+    role: 'Klant sinds 2025',
+    caseHref: '/cases/vloerverwarming-limburg',
   },
 ] as const
 
@@ -548,11 +557,18 @@ const TextDemo = () => {
 
       <section className={styles.reviewsSection} aria-roledescription="carousel">
         <div className={styles.reviewCard}>
+          {/* key forceert remount per logo zodat een eerder onError verborgen
+              img niet hidden blijft als de carousel naar een wel werkend
+              bestand cyclet. */}
           <img
+            key={currentReview.logo}
             src={currentReview.logo}
             alt=""
             aria-hidden="true"
             className={styles.reviewLogo}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.visibility = 'hidden'
+            }}
           />
           <div className={styles.reviewQuoteRow}>
             <IconCircle

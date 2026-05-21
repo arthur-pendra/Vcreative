@@ -11,7 +11,7 @@ const LOGOS = [
   {src: '/logos/adventure-paradise.webp', alt: 'Adventure Paradise'},
   {src: '/logos/mocca.webp', alt: 'Mocca'},
   {src: '/logos/trento.webp', alt: 'Trento'},
-  {src: '/logos/mmm.webp', alt: 'MMM'},
+  {src: '/logos/vloerverwarming-limburg.webp', alt: 'Vloerverwarming Limburg'},
 ]
 
 type Props = {

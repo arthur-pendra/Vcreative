@@ -251,7 +251,7 @@
 }
 
 .projectImageTop {
-  object-position: 50% 20%;
+  object-position: 50% 35%;
 }
 
 .projectFull .projectFigure {
@@ -561,20 +561,25 @@
 }
 
 .reviewLogo {
-  width: 6em;
-  height: auto;
-  max-height: 3em;
+  /* Height-based sizing zoals LogoMarquee — alle logos krijgen dezelfde
+     hoogte, breedte schaalt mee met de aspect ratio. max-width voorkomt
+     dat extreem brede logos (FGS, 4.5:1) groter ogen dan portrait logos. */
+  height: 3em;
+  width: auto;
+  max-width: 8em;
   object-fit: contain;
-  opacity: 0.5;
   margin-bottom: 5em;
   display: block;
+  /* Klantlogo's zijn wit-op-transparant (zelfde set als LogoMarquee).
+     brightness(0) flattens ze naar zwart en houdt het alpha-kanaal. */
+  filter: brightness(0);
 }
 
 .reviewQuoteRow {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: center;
-  gap: 4em;
+  column-gap: 4em;
   width: 100%;
   height: 13em;
   margin: 0 0 4em;
@@ -597,7 +602,8 @@
   line-height: var(--leading-snug);
   color: var(--color-navy);
   margin: 0;
-  flex: 1;
+  min-width: 0;
+  align-self: center;
   quotes: none;
 }
 
@@ -993,16 +999,29 @@
   }
 
   .reviewsSection {
-    padding: 5em 1.5em 6em;
+    padding: 3em 1.5em 4em;
+  }
+
+  .reviewLogo {
+    margin-bottom: 2em;
   }
 
   .reviewQuoteRow {
     gap: 2em;
-    height: 15em;
+    height: 10em;
+    margin: 0 0 2em;
   }
 
   .reviewQuote {
     font-size: var(--text-lg);
+  }
+
+  .reviewRole {
+    margin: 0 0 0.75em;
+  }
+
+  .reviewStars {
+    margin: 0 0 1em;
   }
 
   .werkwijzeSection {
@@ -1117,11 +1136,16 @@
   }
 
   .reviewsSection {
-    padding: 3.5em 1.25em 4.5em;
+    padding: 2.5em 1.25em 3.5em;
+  }
+
+  .reviewLogo {
+    margin-bottom: 1.5em;
   }
 
   .reviewQuoteRow {
-    height: 18em;
+    height: 11em;
+    margin: 0 0 1.5em;
   }
 
   .reviewQuote {

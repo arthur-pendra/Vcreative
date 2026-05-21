@@ -358,12 +358,16 @@
 }
 
 .quoteLogo {
-  width: 6em;
-  height: auto;
-  max-height: 3em;
+  /* Height-based sizing (zelfde patroon als LogoMarquee + reviewLogo) —
+     max-width voorkomt dat wide logos te dominant ogen. */
+  height: 3em;
+  width: auto;
+  max-width: 8em;
   object-fit: contain;
-  opacity: 0.5;
   display: block;
+  /* Klantlogo's zijn wit-op-transparant; flatten naar zwart zodat
+     ze leesbaar zijn op het cream background. */
+  filter: brightness(0);
 }
 
 .quoteText {
@@ -568,7 +572,7 @@
   .sectionCText {
     display: flex;
     flex-direction: column;
-    gap: 1.5em;
+    gap: 0;
   }
 }
 
@@ -579,12 +583,21 @@
     --gutter: 1em;
   }
 
+  /* Match homepage: tekst-sectie + hero-figure elk 50vh, samen
+     een schone twee-helften compositie op mobile. */
   .hero {
-    padding: 8em var(--container-pad) var(--rhythm);
+    padding: 6em var(--container-pad) 2em;
+    height: 50vh;
+    min-height: auto;
     gap: 1.5em;
   }
 
   .heroTitle { font-size: var(--text-2xl); }
+
+  .heroFigure {
+    aspect-ratio: auto;
+    height: 50vh;
+  }
 
   /* Mobile: stack all variants — image on top, text below */
   .sectionA .sectionText,
@@ -598,7 +611,9 @@
   }
 
   .sectionA .sectionText { order: 2; }
-  .sectionA .sectionFigure { order: 1; aspect-ratio: 4 / 3; }
+  /* Sectie 01 image verbergen op mobile — direct na de full-width hero
+     image staan twee afbeeldingen achter elkaar wat te druk oogt. */
+  .sectionA .sectionFigure { display: none; }
   .sectionB .sectionFigure { order: 1; aspect-ratio: 4 / 3; }
   .sectionB .sectionText { order: 2; }
   .sectionC .sectionFigure { aspect-ratio: 4 / 3; }
@@ -624,8 +639,8 @@
   }
 
   .hero { padding: 6em var(--container-pad) var(--rhythm); }
-  .heroTitle { font-size: var(--text-xl); }
-  .sectionTitle { font-size: var(--text-lg); }
+  .heroTitle { font-size: var(--text-2xl); }
+  .sectionTitle { font-size: var(--text-xl); }
   .quoteText { font-size: var(--text-md); }
   .nextCaseTitle { font-size: var(--text-xl); }
 }
