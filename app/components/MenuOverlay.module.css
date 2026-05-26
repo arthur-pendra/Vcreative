@@ -1,99 +1,14 @@
-/* ──────────────────────────────────────────────────────────────
-   Menu overlay — reuses the same noise-mask reveal shader that
-   drives the site's text reveals.
-
-   Reveal strategy: text colour matches the page background
-   (cream). The menu items + contact text are ALWAYS rendered at
-   full opacity above the ink canvas, but on the cream page they
-   blend into the background and read as invisible. As the oil-
-   spill shader spreads navy ink across the viewport, the cream
-   text starts reading clearly against the navy — the shader is
-   literally the mask. No opacity or translate animations: the
-   shader alone drives the reveal, which is why it feels less
-   "UI sliding in" and more "typography surfacing".
-   ────────────────────────────────────────────────────────────── */
-
 .root {
   position: fixed;
   inset: 0;
-  z-index: 45; /* below header (50), above progressive-blur (40) */
+  z-index: 45;
   pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.root[data-open='true'] {
-  pointer-events: auto;
-}
-
-/* The three.js canvas gets appended here — cover the full root.
-   Both the ink AND the big background logo are rendered into this
-   single canvas (logo drawn into a render target, then sampled by
-   the ink shader as uLogoTex). */
 .canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1;
-}
-
-/* ── Menu ── */
-
-.menu {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2.2em;
-  padding: 2em;
-}
-
-.list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.7em;
-}
-
-.itemWrap {
-  display: block;
-}
-
-/* HTML text is the hit target + layout source for the WebGL glyphs.
-   color: transparent hides the DOM text so only the shader's text
-   is visible, while keeping the element focusable and measurable
-   via getBoundingClientRect. */
-.item {
-  font-family: var(--font-primary);
-  font-style: italic;
-  font-size: var(--text-4xl);
-  font-weight: var(--weight-regular);
-  color: transparent;
-  text-decoration: none;
-  line-height: 1;
-  padding: 0.15em 0.5em;
-  letter-spacing: var(--tracking-tight);
-  cursor: pointer;
-}
-
-/* ── Mobile ── */
-
-@media (max-width: 767px) {
-  .item {
-    font-size: var(--text-3xl);
-  }
-}
-
-@media (max-width: 479px) {
-  .item {
-    font-size: var(--text-2xl);
-  }
 }

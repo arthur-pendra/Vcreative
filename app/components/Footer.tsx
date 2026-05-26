@@ -54,7 +54,7 @@ const Footer = () => {
       brand.style.fontSize = '100px'
       const naturalWidth = brand.scrollWidth
       if (!naturalWidth) return
-      const target = row.clientWidth * 0.97
+      const target = row.clientWidth
       const next = (target / naturalWidth) * 100
       brand.style.fontSize = `${Math.max(40, next)}px`
     }
@@ -154,7 +154,7 @@ const Footer = () => {
           <Logo3D interaction="mouseTilt" hoverSpin={false} className={styles.logoMark} />
         </Link>
         <p className={styles.brand} aria-hidden="true" ref={brandRef}>
-          <em>V</em>ienna <em>C</em>reative
+          <em>C</em>reative
         </p>
       </div>
 

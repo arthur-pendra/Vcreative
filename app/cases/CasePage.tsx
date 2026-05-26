@@ -269,10 +269,6 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
               />
             </div>
           </figure>
-          <p className={styles.nextCaseName}>
-            Bekijk case
-            <span className={styles.nextCaseArrow} aria-hidden="true">→</span>
-          </p>
         </a>
       </section>
 

@@ -228,7 +228,7 @@
 .sectionTitle {
   font-family: var(--font-primary);
   font-style: italic;
-  font-size: var(--text-2xl);
+  font-size: var(--text-xl);
   font-weight: var(--weight-regular);
   color: var(--color-navy);
   line-height: 0.95;
@@ -238,10 +238,9 @@
 }
 
 .sectionTitle em {
-  font-family: var(--font-script);
-  font-style: normal;
-  font-weight: var(--weight-bold);
-  text-transform: none;
+  font-family: inherit;
+  font-style: inherit;
+  font-weight: inherit;
 }
 
 .sectionBody {
@@ -372,7 +371,7 @@
 
 .quoteText {
   font-family: var(--font-primary);
-  font-size: var(--text-2xl);
+  font-size: var(--text-xl);
   font-weight: var(--weight-regular);
   line-height: var(--leading-snug);
   color: var(--color-navy);
@@ -592,7 +591,7 @@
     gap: 1.5em;
   }
 
-  .heroTitle { font-size: var(--text-2xl); }
+  .heroTitle { font-size: var(--text-3xl); }
 
   .heroFigure {
     aspect-ratio: auto;
@@ -618,7 +617,7 @@
   .sectionB .sectionText { order: 2; }
   .sectionC .sectionFigure { aspect-ratio: 4 / 3; }
 
-  .sectionTitle { font-size: var(--text-xl); }
+  .sectionTitle { font-size: var(--text-lg); }
 
   .quoteText { font-size: var(--text-lg); }
 
@@ -640,7 +639,7 @@
 
   .hero { padding: 6em var(--container-pad) var(--rhythm); }
   .heroTitle { font-size: var(--text-2xl); }
-  .sectionTitle { font-size: var(--text-xl); }
+  .sectionTitle { font-size: var(--text-lg); }
   .quoteText { font-size: var(--text-md); }
   .nextCaseTitle { font-size: var(--text-xl); }
 }

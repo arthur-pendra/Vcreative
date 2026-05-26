@@ -80,7 +80,7 @@
 
 .logoMark {
   display: block;
-  width: 13em;
+  width: 18em;
   aspect-ratio: 88.92 / 104.29;
 }
 
@@ -169,7 +169,7 @@
   font-size: var(--text-xs);
   font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-normal);
-  color: var(--color-muted);
+  color: rgba(250, 248, 242, 0.45);
   margin: 0;
 }
 
@@ -223,7 +223,7 @@
   font-family: var(--font-primary);
   font-style: italic;
   font-weight: var(--weight-regular);
-  color: var(--color-muted);
+  color: #37332d;
   margin: 0;
   line-height: 0.85;
   letter-spacing: var(--tracking-tight);
