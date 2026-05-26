@@ -448,7 +448,7 @@ export function useWebGLEffects() {
             } else {
               triggers.push(ScrollTrigger.create({
                 trigger: element,
-                start: 'top 85%',
+                start: 'top 95%',
                 once: true,
                 onEnter: () => {
                   remeasureEl()
@@ -500,8 +500,8 @@ export function useWebGLEffects() {
               },
               scrollTrigger: {
                 trigger: element,
-                start: 'top 85%',
-                end: 'top 25%',
+                start: 'top 95%',
+                end: 'top 35%',
                 scrub: 0.5,
               },
             }))
@@ -571,7 +571,7 @@ export function useWebGLEffects() {
             } else {
               triggers.push(ScrollTrigger.create({
                 trigger: t.element,
-                start: 'top 85%',
+                start: 'top 95%',
                 once: true,
                 onEnter: () => {
                   remeasure()
@@ -616,8 +616,8 @@ export function useWebGLEffects() {
               onUpdate: () => { needsRender = true },
               scrollTrigger: {
                 trigger: t.element,
-                start: 'top 85%',
-                end: 'top 25%',
+                start: 'top 95%',
+                end: 'top 35%',
                 scrub: 0.5,
               },
             }))

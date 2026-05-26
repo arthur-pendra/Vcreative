@@ -1,7 +1,7 @@
 .root {
   position: fixed;
-  bottom: 2.75em;
-  right: 2.75em;
+  bottom: 2.25em;
+  right: 2.25em;
   z-index: 44;
   pointer-events: none;
   width: 2.5em;
