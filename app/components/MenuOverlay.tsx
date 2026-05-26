@@ -17,7 +17,9 @@ const fragmentShader = /* glsl */ `
   uniform float uReveal;
   uniform float uTime;
   uniform vec2 uAspect;
+  uniform vec3 uTextColor;
   uniform sampler2D uNoiseTex;
+  uniform sampler2D uTextTex;
   varying vec2 vUv;
 
   void main() {
@@ -51,8 +53,11 @@ const fragmentShader = /* glsl */ `
     float mask = smoothstep(reach + 0.05, reach - 0.05, distorted);
     if (mask < 0.01) discard;
 
-    vec3 color = vec3(0.2, 0.184, 0.161);
-    gl_FragColor = vec4(color, mask);
+    vec3 color = vec3(0.996, 0.6, 0.388);
+    float textAlpha = texture2D(uTextTex, vUv).a;
+    vec3 finalColor = mix(color, uTextColor, textAlpha);
+
+    gl_FragColor = vec4(finalColor, mask);
   }
 `
 
@@ -64,6 +69,7 @@ const MenuOverlay = ({ hover }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const materialRef = useRef<{ uniforms: { uReveal: { value: number } } } | null>(null)
   const renderRef = useRef<(() => void) | null>(null)
+  const paintTextRef = useRef<(() => void) | null>(null)
 
   useEffect(() => {
     const container = containerRef.current
@@ -107,6 +113,57 @@ const MenuOverlay = ({ hover }: Props) => {
       noiseTex.minFilter = THREE.LinearFilter
       noiseTex.magFilter = THREE.LinearFilter
 
+      const textCanvas = document.createElement('canvas')
+      const textCtx = textCanvas.getContext('2d')
+      if (!textCtx) {
+        noiseTex.dispose()
+        renderer.dispose()
+        return
+      }
+      const textTex = new THREE.CanvasTexture(textCanvas)
+      textTex.minFilter = THREE.LinearFilter
+      textTex.magFilter = THREE.LinearFilter
+      textTex.generateMipmaps = false
+
+      const paintText = () => {
+        const dpr = Math.min(window.devicePixelRatio, 2)
+        const w = window.innerWidth
+        const h = window.innerHeight
+        if (textCanvas.width !== w * dpr || textCanvas.height !== h * dpr) {
+          textCanvas.width = w * dpr
+          textCanvas.height = h * dpr
+        }
+        textCtx.setTransform(1, 0, 0, 1, 0, 0)
+        textCtx.clearRect(0, 0, textCanvas.width, textCanvas.height)
+        textCtx.scale(dpr, dpr)
+
+        textCtx.textAlign = 'left'
+        textCtx.textBaseline = 'top'
+        textCtx.fillStyle = '#ffffff'
+
+        const nodes = document.querySelectorAll<HTMLElement>('[data-menu-text]')
+        nodes.forEach((el) => {
+          const rect = el.getBoundingClientRect()
+          const style = getComputedStyle(el)
+          textCtx.font = `${style.fontStyle} 300 ${style.fontSize} ${style.fontFamily}`
+          if (style.textTransform === 'uppercase') {
+            ;(textCtx as CanvasRenderingContext2D & { letterSpacing?: string })
+              .letterSpacing = style.letterSpacing
+          }
+          textCtx.fillText(
+            style.textTransform === 'uppercase'
+              ? (el.textContent ?? '').toUpperCase()
+              : (el.textContent ?? ''),
+            rect.left,
+            rect.top,
+          )
+        })
+
+        textTex.needsUpdate = true
+      }
+
+      paintTextRef.current = paintText
+
       const material = new THREE.ShaderMaterial({
         transparent: true,
         vertexShader,
@@ -115,7 +172,11 @@ const MenuOverlay = ({ hover }: Props) => {
           uReveal: { value: 1 },
           uTime: { value: 0 },
           uAspect: { value: new THREE.Vector2(width / height, 1) },
+          uTextColor: {
+            value: new THREE.Vector3(0x33 / 255, 0x2f / 255, 0x29 / 255),
+          },
           uNoiseTex: { value: noiseTex },
+          uTextTex: { value: textTex },
         },
       })
 
@@ -123,6 +184,15 @@ const MenuOverlay = ({ hover }: Props) => {
       scene.add(mesh)
 
       const render = () => renderer.render(scene, camera)
+
+      await document.fonts.ready
+      if (cancelled) {
+        noiseTex.dispose()
+        textTex.dispose()
+        renderer.dispose()
+        return
+      }
+      paintText()
       render()
 
       materialRef.current = material as unknown as {
@@ -144,6 +214,7 @@ const MenuOverlay = ({ hover }: Props) => {
         const h = window.innerHeight
         renderer.setSize(w, h, false)
         ;(material.uniforms.uAspect.value as THREE.Vector2).set(w / h, 1)
+        paintText()
         render()
       }
       window.addEventListener('resize', onResize)
@@ -154,11 +225,13 @@ const MenuOverlay = ({ hover }: Props) => {
         material.dispose()
         mesh.geometry.dispose()
         noiseTex.dispose()
+        textTex.dispose()
         renderer.dispose()
         try { renderer.forceContextLoss() } catch { /* swallow */ }
         if (canvas.parentNode === container) container.removeChild(canvas)
         materialRef.current = null
         renderRef.current = null
+        paintTextRef.current = null
       }
     }
 
@@ -183,8 +256,10 @@ const MenuOverlay = ({ hover }: Props) => {
       gsap.killTweensOf(material.uniforms.uReveal)
 
       if (hover) {
+        paintTextRef.current?.()
+        render()
         gsap.to(material.uniforms.uReveal, {
-          value: 0.78,
+          value: 0.83,
           duration: 0.9,
           ease: 'power2.out',
           onUpdate: render,

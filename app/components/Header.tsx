@@ -74,6 +74,7 @@ const Header = () => {
                 href={item.href}
                 className={styles.menuItem}
                 tabIndex={menuVisible ? 0 : -1}
+                data-menu-text
               >
                 {item.label}
               </Link>

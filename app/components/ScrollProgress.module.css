@@ -2,12 +2,10 @@
   position: fixed;
   bottom: 2.75em;
   right: 2.75em;
-  z-index: 44; /* below header (50) + menu overlay (45) so menu covers it */
+  z-index: 44;
   pointer-events: none;
   width: 2.5em;
   height: 2.5em;
-  padding: 0.5em;
-  margin: -0.5em;
 }
 
 .svg {
