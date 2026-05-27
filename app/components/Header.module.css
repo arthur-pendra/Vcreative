@@ -43,6 +43,13 @@
   cursor: pointer;
 }
 
+.menuLink[data-hover='true'] {
+  color: #ffffff;
+}
+
+.menuLink[data-hover='true'] .menuDot {
+  background: #ffffff;
+}
 
 .menuDot {
   display: inline-block;
@@ -121,7 +128,7 @@
 }
 
 :global(body[data-chrome-tr='dark']) .contactLink {
-  color: var(--color-cream);
+  color: #ffffff;
 }
 
 .contactLink:hover {

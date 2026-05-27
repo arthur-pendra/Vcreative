@@ -17,7 +17,7 @@
 
 /* Adaptive chrome: flip cream when the year stamp is over a dark section. */
 :global(body[data-chrome-bl='dark']) .root {
-  color: var(--color-cream);
+  color: #ffffff;
 }
 
 @media (max-width: 767px) {

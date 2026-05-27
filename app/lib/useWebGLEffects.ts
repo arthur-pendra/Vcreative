@@ -330,7 +330,7 @@ export function useWebGLEffects() {
 
       /* Mask color = background it dissolves from. Defaults to cream; elements
          on dark sections can override via data-webgl-text-bg="#332f29". */
-      const CREAM_RGB = new THREE.Vector3(0xfa / 255, 0xf8 / 255, 0xf2 / 255)
+      const CREAM_RGB = new THREE.Vector3(0xf2 / 255, 0xeb / 255, 0xd9 / 255)
       const getMaskColor = (element: HTMLElement) => {
         const attr = element.dataset.webglTextBg
         if (!attr) return CREAM_RGB.clone()

@@ -53,7 +53,7 @@ const fragmentShader = /* glsl */ `
     float mask = smoothstep(reach + 0.05, reach - 0.05, distorted);
     if (mask < 0.01) discard;
 
-    vec3 color = vec3(0.996, 0.6, 0.388);
+    vec3 color = vec3(0.392, 0.063, 0.094);
     float textAlpha = texture2D(uTextTex, vUv).a;
     vec3 finalColor = mix(color, uTextColor, textAlpha);
 
@@ -173,7 +173,7 @@ const MenuOverlay = ({ hover }: Props) => {
           uTime: { value: 0 },
           uAspect: { value: new THREE.Vector2(width / height, 1) },
           uTextColor: {
-            value: new THREE.Vector3(0x33 / 255, 0x2f / 255, 0x29 / 255),
+            value: new THREE.Vector3(1, 1, 1),
           },
           uNoiseTex: { value: noiseTex },
           uTextTex: { value: textTex },

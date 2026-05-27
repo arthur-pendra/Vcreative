@@ -47,9 +47,9 @@
   --size-font: calc(var(--size-container) / (var(--size-container-ideal) / var(--size-unit)));
 
   /* Colors */
-  --color-cream: #faf8f2;
-  --color-navy: #332f29;
-  --color-accent: #fe9963;
+  --color-cream: #F2EBD9;
+  --color-navy: #000000;
+  --color-accent: #641018;
 
   /* Typography */
   --font-primary: 'HW Cigars', Georgia, serif;
@@ -91,14 +91,14 @@
   --radius-full: 50%;
 
   /* Borders */
-  --border-subtle: rgba(51, 47, 41, 0.15);
+  --border-subtle: rgba(0, 0, 0, 0.25);
   --border-subtle-inverse: rgba(250, 248, 242, 0.12);
 
   /* Muted text — one solid dark warm-grey that replaces every
      per-element rgba() tint on the site. Used on the navy footer for
      the Vienna Creative brand line, column headers, placeholder text,
      copyright, etc. */
-  --color-muted: #4e4a43;
+  --color-muted: #2a2722;
 }
 
 /* Tablet */
@@ -221,7 +221,7 @@ textarea:focus-visible {
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   line-height: 1.2;
-  color: var(--color-cream);
+  color: #ffffff;
   text-decoration: none;
   background: transparent;
   border: none;
@@ -236,7 +236,7 @@ textarea:focus-visible {
   gap: 0.75em;
   padding: 1em 1em 1em 1.5em;
   background: var(--color-navy);
-  color: var(--color-cream);
+  color: #ffffff;
   border-radius: 999em;
   overflow: hidden;
   isolation: isolate;
@@ -271,7 +271,7 @@ textarea:focus-visible {
   position: absolute;
   inset: 0;
   border-radius: 999em;
-  background-color: var(--color-cream);
+  background-color: #ffffff;
 }
 
 .btn-icon-icon__wrap {
@@ -336,7 +336,7 @@ textarea:focus-visible {
 }
 
 .btn-icon-only .btn-icon-icon__wrap {
-  color: var(--color-cream);
+  color: #ffffff;
 }
 
 .btn-icon-only .btn-icon-icon__arrow {
@@ -386,7 +386,7 @@ textarea:focus-visible {
   background-color: var(--color-navy);
 }
 [data-theme='dark'] .btn-icon-icon__wrap {
-  color: var(--color-cream);
+  color: #ffffff;
 }
 
 @media (max-width: 767px) {

@@ -330,7 +330,7 @@
 
 .studioSection {
   background: var(--color-navy);
-  color: var(--color-cream);
+  color: #ffffff;
   position: relative;
 }
 
@@ -494,14 +494,14 @@
    override de dark-theme button overrides zodat de pill weer navy is
    met cream tekst en cream icon circle (i.p.v. cream-op-cream). */
 .studioActions .studioCta:global(.btn-icon-link) {
-  color: var(--color-cream);
+  color: #ffffff;
 }
 .studioActions .studioCta :global(.btn-icon-content) {
   background: var(--color-navy);
-  color: var(--color-cream);
+  color: #ffffff;
 }
 .studioActions .studioCta :global(.btn-icon-icon__bg) {
-  background-color: var(--color-cream);
+  background-color: #ffffff;
 }
 .studioActions .studioCta :global(.btn-icon-icon__wrap) {
   color: var(--color-navy);

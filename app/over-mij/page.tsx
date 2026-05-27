@@ -104,7 +104,7 @@ const OverMij = () => (
               Mijn verhaal
             </p>
             <h2 data-animation="webgl-text" className={styles.sectionTitle}>
-              <em>T</em>rage groei,
+              Trage groei,
               <br />
               content die blijft hangen
             </h2>
@@ -162,7 +162,7 @@ const OverMij = () => (
               Wat ik doe
             </p>
             <h2 data-animation="webgl-text" className={styles.sectionTitle}>
-              <em>V</em>an eerste concept
+              Van eerste concept
               <br />
               tot maandelijks ritme
             </h2>
@@ -206,7 +206,7 @@ const OverMij = () => (
                 Hoe ik werk
               </p>
               <h2 data-animation="webgl-text" className={styles.sectionTitle}>
-                <em>V</em>ier stappen,
+                Vier stappen,
                 <br />
                 één ritme
               </h2>
@@ -235,7 +235,7 @@ const OverMij = () => (
         </p>
         <h2
           data-animation="webgl-text"
-          data-webgl-text-bg="#332f29"
+          data-webgl-text-bg="#000000"
           className={styles.ctaTitle}
         >
           <em>K</em>laar om jouw merk

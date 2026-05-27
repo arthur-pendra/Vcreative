@@ -247,7 +247,7 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
         </p>
         <h2
           data-animation="webgl-text"
-          data-webgl-text-bg="#332f29"
+          data-webgl-text-bg="#000000"
           className={styles.nextCaseTitle}
         >
           <em>{next.name.charAt(0)}</em>{next.name.slice(1)}

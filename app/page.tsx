@@ -251,7 +251,7 @@ const TextDemo = () => {
       <figure className={styles.heroFigure} data-parallax="trigger">
         <div className={styles.parallaxTarget} data-parallax="target">
           <img
-            src="/images/hero.webp"
+            src="/images/hero-pattern.png"
             alt="V-Creative hero"
             className={styles.heroImage}
           />
@@ -428,7 +428,7 @@ const TextDemo = () => {
         <div className={styles.studioHero}>
           <div className={styles.studioBg}>
             <div className={styles.parallaxTarget}>
-              <img src="/images/studio-bg.webp" alt="" className={styles.studioBgImage} loading="lazy" />
+              <img src="/images/hero-pattern.png" alt="" className={styles.studioBgImage} loading="lazy" />
             </div>
           </div>
           <div className={styles.studioCard}>

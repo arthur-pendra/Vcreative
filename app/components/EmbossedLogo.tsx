@@ -141,7 +141,7 @@ const EmbossedLogo = ({
   src,
   className,
   ariaHidden = true,
-  paperColor = '#faf8f2',
+  paperColor = '#F2EBD9',
   strength = 1,
   azimuth = 135,
   elevation = 45,

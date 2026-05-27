@@ -189,7 +189,7 @@ export const CASES: Record<CaseSlug, CaseData> = {
       rest: 'aandelijks beheer\nvoor Hal XIII',
     },
     heroTags: ['Strategie', 'Maandelijks beheer', 'Fotografie', 'Video'],
-    heroImage: '/cases/hal-xiii/hero.webp',
+    heroImage: '/cases/hal-xiii/03.webp',
     sections: [
       {
         label: 'Het startpunt',
