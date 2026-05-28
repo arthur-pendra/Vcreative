@@ -53,7 +53,7 @@ const fragmentShader = /* glsl */ `
     float mask = smoothstep(reach + 0.05, reach - 0.05, distorted);
     if (mask < 0.01) discard;
 
-    vec3 color = vec3(0.392, 0.063, 0.094);
+    vec3 color = vec3(0.063, 0.086, 0.267);
     float textAlpha = texture2D(uTextTex, vUv).a;
     vec3 finalColor = mix(color, uTextColor, textAlpha);
 

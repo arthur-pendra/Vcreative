@@ -336,10 +336,10 @@
   max-width: 32em;
 }
 
-/* ── CTA — navy block (mirrors .nextCase in case.module.css) ── */
+/* ── CTA — deep blue block ── */
 
 .cta {
-  background: var(--color-navy);
+  background: var(--color-blue);
   color: #ffffff;
   padding: calc(var(--rhythm) * 1.5) var(--container-pad) calc(var(--rhythm) * 2);
   display: flex;

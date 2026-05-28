@@ -236,14 +236,13 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
         </div>
       </figure>
 
-      <section className={styles.nextCase} data-theme="dark">
+      <section className={styles.nextCase}>
         <p className={styles.nextCaseLabel}>
           <span className={styles.nextCaseLabelDot} aria-hidden="true" />
           Volgende case
         </p>
         <h2
           data-animation="webgl-text"
-          data-webgl-text-bg="#000000"
           className={styles.nextCaseTitle}
         >
           <em>{next.name.charAt(0)}</em>{next.name.slice(1)}
