@@ -253,6 +253,15 @@ export function useWebGLEffects() {
     const init = async () => {
       await document.fonts.ready
 
+      /* Mobile/touch: skip the entire WebGL text + image pipeline.
+         The per-element renderers were heavy (5–10 contexts per case
+         page) and visually didn't read well on small screens. Text
+         elements stay as plain DOM, [data-webgl-media] images render
+         as normal <img> (already the case below). useGlobalParallax
+         is a separate hook and keeps running for the scroll-pan. */
+      const isTouch = 'ontouchstart' in document.documentElement
+      if (isTouch) return
+
       const THREE = await import('three')
       const {getLenisInstance} = await import('@/app/lib/lenis')
       const gsap = (await import('gsap')).default
@@ -303,7 +312,6 @@ export function useWebGLEffects() {
       )
       camera.position.z = DIST
 
-      const isTouch = 'ontouchstart' in document.documentElement
       const dpr = Math.min(window.devicePixelRatio, 2)
 
       const renderer = new THREE.WebGLRenderer({

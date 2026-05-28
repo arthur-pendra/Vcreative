@@ -70,6 +70,8 @@ const MenuOverlay = ({ hover }: Props) => {
   const materialRef = useRef<{ uniforms: { uReveal: { value: number } } } | null>(null)
   const renderRef = useRef<(() => void) | null>(null)
   const paintTextRef = useRef<(() => void) | null>(null)
+  const startLoopRef = useRef<(() => void) | null>(null)
+  const stopLoopRef = useRef<(() => void) | null>(null)
 
   useEffect(() => {
     const container = containerRef.current
@@ -102,7 +104,7 @@ const MenuOverlay = ({ hover }: Props) => {
       camera.position.z = 1
 
       const texLoader = new THREE.TextureLoader()
-      const noiseTex = await texLoader.loadAsync('/noises/mask-noise.png')
+      const noiseTex = await texLoader.loadAsync('/noises/mask-noise.webp')
       if (cancelled) {
         noiseTex.dispose()
         renderer.dispose()
@@ -195,19 +197,34 @@ const MenuOverlay = ({ hover }: Props) => {
       paintText()
       render()
 
+      /* Declare the time-loop helpers BEFORE the ref assignments so
+         the refs capture the real functions. The previous order put
+         `startLoopRef.current = startTimeLoop` above the `const
+         startTimeLoop = ...` declaration, which threw a TDZ
+         ReferenceError as an unhandled promise rejection — silently
+         breaking the menu's ink drift animation and skipping the rest
+         of init (including cleanup assignment). */
+      const startT = performance.now()
+      let timeRaf: number | null = null
+      const tickTime = () => {
+        const t = (performance.now() - startT) * 0.001
+        material.uniforms.uTime.value = t
+        renderer.render(scene, camera)
+        timeRaf = requestAnimationFrame(tickTime)
+      }
+      const startTimeLoop = () => {
+        if (timeRaf == null) timeRaf = requestAnimationFrame(tickTime)
+      }
+      const stopTimeLoop = () => {
+        if (timeRaf != null) { cancelAnimationFrame(timeRaf); timeRaf = null }
+      }
+
       materialRef.current = material as unknown as {
         uniforms: { uReveal: { value: number } }
       }
       renderRef.current = render
-
-      const startT = performance.now()
-      renderer.setAnimationLoop(() => {
-        const t = (performance.now() - startT) * 0.001
-        material.uniforms.uTime.value = t
-        if ((material.uniforms.uReveal.value as number) < 0.999) {
-          renderer.render(scene, camera)
-        }
-      })
+      startLoopRef.current = startTimeLoop
+      stopLoopRef.current = stopTimeLoop
 
       const onResize = () => {
         const w = window.innerWidth
@@ -221,7 +238,7 @@ const MenuOverlay = ({ hover }: Props) => {
 
       cleanup = () => {
         window.removeEventListener('resize', onResize)
-        renderer.setAnimationLoop(null)
+        stopTimeLoop()
         material.dispose()
         mesh.geometry.dispose()
         noiseTex.dispose()
@@ -232,6 +249,8 @@ const MenuOverlay = ({ hover }: Props) => {
         materialRef.current = null
         renderRef.current = null
         paintTextRef.current = null
+        startLoopRef.current = null
+        stopLoopRef.current = null
       }
     }
 
@@ -256,6 +275,7 @@ const MenuOverlay = ({ hover }: Props) => {
       gsap.killTweensOf(material.uniforms.uReveal)
 
       if (hover) {
+        startLoopRef.current?.()
         paintTextRef.current?.()
         render()
         gsap.to(material.uniforms.uReveal, {
@@ -270,6 +290,7 @@ const MenuOverlay = ({ hover }: Props) => {
           duration: 0.7,
           ease: 'power2.inOut',
           onUpdate: render,
+          onComplete: () => { stopLoopRef.current?.() },
         })
       }
     }

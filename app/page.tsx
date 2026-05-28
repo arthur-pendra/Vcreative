@@ -7,6 +7,7 @@ import LogoMarquee from '@/app/components/LogoMarquee'
 import { useWebGLEffects, useGlobalParallax } from '@/app/lib/useWebGLEffects'
 import { IconButton, IconCircle } from '@/app/components/IconButton'
 import EmbossedLogo from '@/app/components/EmbossedLogo'
+import LazyVideo from '@/app/components/LazyVideo'
 
 const REVIEWS = [
   {
@@ -251,7 +252,7 @@ const TextDemo = () => {
       <figure className={styles.heroFigure} data-parallax="trigger">
         <div className={styles.parallaxTarget} data-parallax="target">
           <img
-            src="/images/hero-pattern.png"
+            src="/images/hero-pattern.webp"
             alt="V-Creative hero"
             className={styles.heroImage}
           />
@@ -428,13 +429,13 @@ const TextDemo = () => {
         <div className={styles.studioHero}>
           <div className={styles.studioBg}>
             <div className={styles.parallaxTarget}>
-              <img src="/images/hero-pattern.png" alt="" className={styles.studioBgImage} loading="lazy" />
+              <img src="/images/hero-pattern.webp" alt="" className={styles.studioBgImage} loading="lazy" />
             </div>
           </div>
           <div className={styles.studioCard}>
             <p className={styles.studioLabel}>Over V-Creative</p>
             <EmbossedLogo
-              src="/icons/SVG/vienna_bigloog-nomrla.png"
+              src="/icons/SVG/vienna_bigloog-nomrla.webp"
               className={styles.studioLogo}
             />
             <div className={styles.studioBottomGroup}>
@@ -535,15 +536,10 @@ const TextDemo = () => {
 
         <div className={styles.werkwijzeCta}>
           <figure className={styles.werkwijzeCtaFigure}>
-            <video
+            <LazyVideo
               src="/videos/vienna-introductie.mp4"
               className={styles.werkwijzeCtaImage}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              aria-label="Viënna introductie"
+              ariaLabel="Viënna introductie"
             />
           </figure>
           <p className={styles.werkwijzeCtaText}>

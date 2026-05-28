@@ -73,18 +73,13 @@ const PageTransition = () => {
       await new Promise<void>((r) => requestAnimationFrame(() => r()))
       if (cancelled) return
 
-      /* 3. Re-measure every ScrollTrigger now that layout + scroll
-            are stable. GSAP otherwise only refreshes on the window
-            load event (which doesn't re-fire on SPA nav). */
-      lenis?.resize?.()
-      ScrollTrigger.refresh()
-
-      /* 4. Stabilisation pause — useWebGLEffects init is async
+      /* 3. Short stabilisation pause — useWebGLEffects init is async
             (awaits fonts + image textures) and registers its triggers
-            slightly later. Holding the cream cover for a beat lets
-            those land so the *second* refresh below catches them
-            before the reveal starts. */
-      await new Promise<void>((r) => setTimeout(r, 280))
+            slightly later. One refresh after the pause covers both
+            sync triggers and useWebGLEffects' late ones; we used to
+            refresh twice (before AND after the pause) which doubled
+            the cost of every navigation. */
+      await new Promise<void>((r) => setTimeout(r, 150))
       if (cancelled) return
 
       lenis?.resize?.()

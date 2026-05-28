@@ -220,103 +220,23 @@ const Logo3D = ({
       const easeInOutCubic = (t: number) =>
         t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
 
-      if (interaction === 'idle') {
-        /* Mega-subtle idle wobble — barely perceptible drift on both
-           axes with non-harmonic periods so the motion never repeats
-           visibly. Amplitudes (~1.4° / ~0.9°) are tuned so the navbar
-           logo looks "alive" without ever pulling the eye. */
-        const start = performance.now()
-        let idleRaf = 0
-        const idle = () => {
-          const t = (performance.now() - start) / 1000
-          targetRotY = Math.sin(t * 0.35) * 0.025
-          targetRotX = Math.sin(t * 0.25 + 1.0) * 0.015
-          idleRaf = requestAnimationFrame(idle)
-        }
-        idle()
-        detachInteraction = () => cancelAnimationFrame(idleRaf)
-      } else if (interaction === 'auto') {
-        /* Dual-axis rotation with non-harmonic frequencies so the motion
-           never repeats identically — reads like a coin tumbling in
-           zero-g rather than a metronome.
-           - Y is the primary spin (continuous)
-           - X does the "coin flip" tumble, slightly faster than Y
-           - Each axis gets an extra sinusoidal wobble at a different
-             period, pushing/pulling the speed irregularly */
-        const start = performance.now()
-        let autoRaf = 0
-        const tick = () => {
-          const t = (performance.now() - start) / 1000
-          targetRotY = t * 0.95 + Math.sin(t * 0.43) * 0.5
-          targetRotX = t * 1.35 + Math.sin(t * 0.61 + 1.7) * 0.55
-          autoRaf = requestAnimationFrame(tick)
-        }
-        tick()
-        detachInteraction = () => cancelAnimationFrame(autoRaf)
-      } else if (isTouch) {
-        // touch: subtle continuous wobble — no mouse to follow
-        const start = performance.now()
-        let wobbleRaf = 0
-        const wobble = () => {
-          const t = (performance.now() - start) / 1000
-          targetRotY = Math.sin(t * 0.5) * 0.18
-          targetRotX = Math.sin(t * 0.35 + 1.2) * 0.08
-          wobbleRaf = requestAnimationFrame(wobble)
-        }
-        wobble()
-        detachInteraction = () => cancelAnimationFrame(wobbleRaf)
-      } else {
-        /* mouseTilt: subtle viewport-wide cursor follow. The whole
-           window is the tilt zone so the logo reacts no matter where
-           the cursor is — small TILT keeps it very gentle, just enough
-           to roll the matcap highlights and read as "alive metal". */
-        const tiltZone =
-          (container.closest('footer') as HTMLElement | null) ?? null
-        const TILT = tiltZone ? 0.22 : 0.08
-        const onMove = (e: MouseEvent) => {
-          const rect = (tiltZone ?? document.documentElement).getBoundingClientRect()
-          const cx = rect.left + rect.width / 2
-          const cy = rect.top + rect.height / 2
-          const nx = (e.clientX - cx) / (rect.width / 2)
-          const ny = (e.clientY - cy) / (rect.height / 2)
-          targetRotY = Math.max(Math.min(nx, 1), -1) * TILT
-          targetRotX = Math.max(Math.min(ny, 1), -1) * TILT * 0.6
-        }
-        const onLeave = () => {
-          targetRotY = 0
-          targetRotX = 0
-        }
-        const zone = tiltZone ?? window
-        zone.addEventListener('mousemove', onMove as EventListener)
-        zone.addEventListener('mouseleave', onLeave as EventListener)
-
-        /* Hover-triggered 360° spin. Ignored if a turn is already in
-           flight so rapid re-enters don't queue up or stutter. Opt-out
-           via hoverSpin={false} (footer uses this for a calmer feel). */
-        const onHoverEnter = () => {
-          if (spinStart < 0) spinStart = performance.now()
-        }
-        if (hoverSpin) container.addEventListener('pointerenter', onHoverEnter)
-
-        detachInteraction = () => {
-          zone.removeEventListener('mousemove', onMove as EventListener)
-          zone.removeEventListener('mouseleave', onLeave as EventListener)
-          if (hoverSpin) container.removeEventListener('pointerenter', onHoverEnter)
-        }
-      }
-
-      /* Tilt is lerped in its own state so the hover spin can be added
-         on top without polluting the tilt's accumulator. After the spin
-         completes (lands at 2π = same orientation), we reset spinStart
-         and the next frame falls back to the bare tilt — no jump. */
+      let continuousMode = false
       let tiltY = 0
       let tiltX = 0
-      /* Tiny scale dip during the spin: sin(πt) eases out → in around
-         the midpoint, so the logo gently pulls back and returns to its
-         original size as the turn lands. SCALE_DIP is the peak shrink
-         (4% — visible only as a hint of depth). */
       const SCALE_DIP = 0.04
+
+      const ensureLoop = () => {
+        if (!raf) raf = requestAnimationFrame(animate)
+      }
+
       const animate = () => {
+        raf = 0
+
+        if (continuousMode) {
+          const t = (performance.now() - continuousStart) / 1000
+          continuousUpdate(t)
+        }
+
         tiltY += (targetRotY - tiltY) * 0.12
         tiltX += (targetRotX - tiltX) * 0.12
 
@@ -336,9 +256,74 @@ const Logo3D = ({
         model.rotation.x = tiltX
         model.scale.setScalar(fit * scaleMul)
         renderer.render(scene, camera)
-        raf = requestAnimationFrame(animate)
+
+        if (continuousMode || spinStart >= 0
+          || Math.abs(targetRotY - tiltY) > 0.0005
+          || Math.abs(targetRotX - tiltX) > 0.0005) {
+          raf = requestAnimationFrame(animate)
+        }
       }
-      animate()
+
+      let continuousStart = performance.now()
+      let continuousUpdate = (_t: number) => {}
+
+      if (interaction === 'idle') {
+        continuousMode = true
+        continuousUpdate = (t: number) => {
+          targetRotY = Math.sin(t * 0.35) * 0.025
+          targetRotX = Math.sin(t * 0.25 + 1.0) * 0.015
+        }
+      } else if (interaction === 'auto') {
+        continuousMode = true
+        continuousUpdate = (t: number) => {
+          targetRotY = t * 0.95 + Math.sin(t * 0.43) * 0.5
+          targetRotX = t * 1.35 + Math.sin(t * 0.61 + 1.7) * 0.55
+        }
+      } else if (isTouch) {
+        continuousMode = true
+        continuousUpdate = (t: number) => {
+          targetRotY = Math.sin(t * 0.5) * 0.18
+          targetRotX = Math.sin(t * 0.35 + 1.2) * 0.08
+        }
+      } else {
+        const tiltZone =
+          (container.closest('footer') as HTMLElement | null) ?? null
+        const TILT = tiltZone ? 0.22 : 0.08
+        const onMove = (e: MouseEvent) => {
+          const rect = (tiltZone ?? document.documentElement).getBoundingClientRect()
+          const cx = rect.left + rect.width / 2
+          const cy = rect.top + rect.height / 2
+          const nx = (e.clientX - cx) / (rect.width / 2)
+          const ny = (e.clientY - cy) / (rect.height / 2)
+          targetRotY = Math.max(Math.min(nx, 1), -1) * TILT
+          targetRotX = Math.max(Math.min(ny, 1), -1) * TILT * 0.6
+          ensureLoop()
+        }
+        const onLeave = () => {
+          targetRotY = 0
+          targetRotX = 0
+          ensureLoop()
+        }
+        const zone = tiltZone ?? window
+        zone.addEventListener('mousemove', onMove as EventListener)
+        zone.addEventListener('mouseleave', onLeave as EventListener)
+
+        const onHoverEnter = () => {
+          if (spinStart < 0) {
+            spinStart = performance.now()
+            ensureLoop()
+          }
+        }
+        if (hoverSpin) container.addEventListener('pointerenter', onHoverEnter)
+
+        detachInteraction = () => {
+          zone.removeEventListener('mousemove', onMove as EventListener)
+          zone.removeEventListener('mouseleave', onLeave as EventListener)
+          if (hoverSpin) container.removeEventListener('pointerenter', onHoverEnter)
+        }
+      }
+
+      ensureLoop()
 
       const handleResize = () => {
         const r = container.getBoundingClientRect()

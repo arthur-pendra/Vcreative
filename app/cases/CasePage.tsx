@@ -2,6 +2,7 @@
 
 import { Fragment } from 'react'
 import Footer from '@/app/components/Footer'
+import LazyVideo from '@/app/components/LazyVideo'
 import { useWebGLEffects, useGlobalParallax } from '@/app/lib/useWebGLEffects'
 import { CASES, type CaseSlug, type CaseTitle } from './caseData'
 import styles from './case.module.css'
@@ -180,15 +181,10 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
             {data.socialItems.map((item, i) =>
               item.type === 'video' ? (
                 <figure key={i} className={styles.socialItem}>
-                  <video
+                  <LazyVideo
                     src={item.src}
                     poster={item.poster}
                     className={styles.socialMedia}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
                   />
                 </figure>
               ) : (
