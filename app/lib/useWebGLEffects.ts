@@ -201,7 +201,7 @@ export function useWebGLEffects() {
       | typeof import('gsap/ScrollTrigger')['ScrollTrigger']
       | undefined
     let docResizeObserver: ResizeObserver | undefined
-    let remeasureTimeouts: ReturnType<typeof setTimeout>[] = []
+    const remeasureTimeouts: ReturnType<typeof setTimeout>[] = []
     let remeasureDebounce: ReturnType<typeof setTimeout> | undefined
     let canvas: HTMLCanvasElement | undefined
     let cancelled = false
@@ -355,167 +355,7 @@ export function useWebGLEffects() {
       )
       const texts: TextEntry[] = []
 
-      if (isTouch) {
-        /* Mobile: per-element WebGL canvas (scrolls with DOM, no jitter).
-           PAD_X kleiner dan desktop: op mobile vult de tekst al de
-           viewport-breedte, dus 12% extra ramping aan elke kant gaf
-           horizontale overflow (zichtbaar in studioQuote sectie). */
-        const PAD_X = 0.04
-        const PAD_Y = 0.25
-
-        textElements.forEach((element) => {
-          element.style.position = 'relative'
-          restoreElements.push({el: element, prop: 'position', val: ''})
-
-          const bounds = element.getBoundingClientRect()
-          const paddedW = bounds.width * (1 + PAD_X * 2)
-          const paddedH = bounds.height * (1 + PAD_Y * 2)
-          const offsetX = bounds.width * PAD_X
-          const offsetY = bounds.height * PAD_Y
-          const elDpr = Math.min(window.devicePixelRatio, 1.5)
-
-          const elRenderer = new THREE.WebGLRenderer({
-            alpha: true,
-            antialias: false,
-            powerPreference: 'low-power',
-          })
-          elRenderer.setSize(paddedW, paddedH)
-          elRenderer.setPixelRatio(elDpr)
-          elRenderer.outputColorSpace = THREE.LinearSRGBColorSpace
-          registerDisposable(elRenderer)
-
-          const elCanvas = elRenderer.domElement
-          elCanvas.style.cssText = `position:absolute;top:${-offsetY}px;left:${-offsetX}px;z-index:1;pointer-events:none;width:${paddedW}px;height:${paddedH}px;`
-          element.appendChild(elCanvas)
-          restoreElements.push({el: elCanvas, prop: '__remove', val: ''})
-
-          const elCamera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, 0.1, 10)
-          elCamera.position.z = 1
-
-          const elScene = new THREE.Scene()
-          const bgColor = getMaskColor(element)
-
-          const aspect = paddedW / paddedH
-          const elMaterial = new THREE.ShaderMaterial({
-            fragmentShader: textFragShader,
-            vertexShader: textVertShader,
-            transparent: true,
-            uniforms: {
-              uReveal: new THREE.Uniform(0),
-              uColor: {value: bgColor},
-              uAspect: {value: new THREE.Vector2(aspect, 1.0)},
-            },
-          })
-          registerDisposable(elMaterial)
-
-          const elGeometry = new THREE.PlaneGeometry(1, 1)
-          registerDisposable(elGeometry)
-          const elMesh = new THREE.Mesh(elGeometry, elMaterial)
-          elScene.add(elMesh)
-          elRenderer.render(elScene, elCamera)
-
-          const mode = element.dataset.webglTextMode
-
-          const renderEl = () => {
-            elRenderer.render(elScene, elCamera)
-          }
-
-          const remeasureEl = () => {
-            const b = element.getBoundingClientRect()
-            const pW = b.width * (1 + PAD_X * 2)
-            const pH = b.height * (1 + PAD_Y * 2)
-            const oX = b.width * PAD_X
-            const oY = b.height * PAD_Y
-            elRenderer.setSize(pW, pH)
-            elCanvas.style.top = `${-oY}px`
-            elCanvas.style.left = `${-oX}px`
-            elCanvas.style.width = `${pW}px`
-            elCanvas.style.height = `${pH}px`
-            ;(elMaterial.uniforms.uAspect.value as THREE.Vector2).set(pW / pH, 1.0)
-          }
-
-          if (mode === 'hero') {
-            tweens.push(gsap.to(elMaterial.uniforms.uReveal, {
-              value: 1,
-              duration: 3,
-              delay: 0,
-              ease: 'power2.inOut',
-              onUpdate: renderEl,
-              onComplete: () => elCanvas.remove(),
-            }))
-          } else if (mode === 'time-trigger' || mode === 'carousel') {
-            /* carousel mode = time-trigger's cousin: skip the initial
-               scroll-in reveal and start fully revealed, but keep the
-               replay/remeasured listeners so prev/next carousel clicks
-               still mask-swap-reveal. Useful when the first entry is
-               already visible above the fold and an entrance animation
-               would feel gratuitous. */
-            if (mode === 'carousel') {
-              elMaterial.uniforms.uReveal.value = 1
-              renderEl()
-            } else {
-              triggers.push(ScrollTrigger.create({
-                trigger: element,
-                start: 'top 95%',
-                once: true,
-                onEnter: () => {
-                  remeasureEl()
-                  renderEl()
-                  tweens.push(gsap.to(elMaterial.uniforms.uReveal, {
-                    value: 1,
-                    duration: 1.4,
-                    ease: 'power2.inOut',
-                    onUpdate: renderEl,
-                  }))
-                },
-              }))
-            }
-            const onReplay = () => {
-              gsap.killTweensOf(elMaterial.uniforms.uReveal)
-              tweens.push(gsap.to(elMaterial.uniforms.uReveal, {
-                value: 0,
-                duration: 0.3,
-                ease: 'power2.in',
-                onUpdate: renderEl,
-              }))
-            }
-            const onRemeasured = () => {
-              remeasureEl()
-              renderEl()
-              gsap.killTweensOf(elMaterial.uniforms.uReveal)
-              tweens.push(gsap.to(elMaterial.uniforms.uReveal, {
-                value: 1,
-                duration: 0.6,
-                ease: 'power2.out',
-                onUpdate: renderEl,
-              }))
-            }
-            element.addEventListener('webgl-text-replay', onReplay)
-            element.addEventListener('webgl-text-remeasured', onRemeasured)
-            domListeners.push(
-              {el: element, type: 'webgl-text-replay', fn: onReplay},
-              {el: element, type: 'webgl-text-remeasured', fn: onRemeasured},
-            )
-          } else {
-            tweens.push(gsap.to(elMaterial.uniforms.uReveal, {
-              value: 1,
-              ease: 'none',
-              onUpdate: renderEl,
-              onComplete: () => {
-                elCanvas.remove()
-                elRenderer.dispose()
-                elMaterial.dispose()
-              },
-              scrollTrigger: {
-                trigger: element,
-                start: 'top 95%',
-                end: 'top 35%',
-                scrub: 0.5,
-              },
-            }))
-          }
-        })
-      } else {
+      {
         /* Desktop: single WebGL overlay canvas (smooth with Lenis) */
         const PAD_X = 0.12
         const PAD_Y = 0.25
@@ -635,9 +475,9 @@ export function useWebGLEffects() {
 
       /* WebGL images — desktop only */
 
-      const mediaElements = isTouch
-        ? []
-        : Array.from(document.querySelectorAll<HTMLImageElement>('[data-webgl-media]'))
+      const mediaElements = Array.from(
+        document.querySelectorAll<HTMLImageElement>('[data-webgl-media]'),
+      )
       const images: ImageEntry[] = []
       const imageGeometry = new THREE.PlaneGeometry(1, 1, 32, 32)
       registerDisposable(imageGeometry)
@@ -820,17 +660,14 @@ export function useWebGLEffects() {
         `,
       }
 
-      let composer: InstanceType<typeof EffectComposer> | null = null
-      if (!isTouch) {
-        composer = new EffectComposer(renderer)
-        composer.addPass(new RenderPass(scene, camera))
-        const barrelPass = new ShaderPass(barrelShader)
-        barrelPass.renderToScreen = true
-        composer.addPass(barrelPass)
-        /* Stash so cleanup can dispose the composer's render targets +
-           walk the passes (composer.dispose() doesn't cascade to them). */
-        composerRef = composer as unknown as typeof composerRef
-      }
+      const composer = new EffectComposer(renderer)
+      composer.addPass(new RenderPass(scene, camera))
+      const barrelPass = new ShaderPass(barrelShader)
+      barrelPass.renderToScreen = true
+      composer.addPass(barrelPass)
+      /* Stash so cleanup can dispose the composer's render targets +
+         walk the passes (composer.dispose() doesn't cascade to them). */
+      composerRef = composer as unknown as typeof composerRef
 
       let fpsCheckCount = 0
       let fpsFrames = 0
@@ -940,8 +777,6 @@ export function useWebGLEffects() {
       resizeHandler = () => {
         clearTimeout(resizeTimeout)
         resizeTimeout = setTimeout(() => {
-          if (isTouch && window.innerWidth === screen.width) return
-
           screen.width = window.innerWidth
           screen.height = window.innerHeight
 

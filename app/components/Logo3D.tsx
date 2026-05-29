@@ -290,11 +290,28 @@ const Logo3D = ({
           (container.closest('footer') as HTMLElement | null) ?? null
         const TILT = tiltZone ? 0.22 : 0.08
         const onMove = (e: MouseEvent) => {
-          const rect = (tiltZone ?? document.documentElement).getBoundingClientRect()
-          const cx = rect.left + rect.width / 2
-          const cy = rect.top + rect.height / 2
-          const nx = (e.clientX - cx) / (rect.width / 2)
-          const ny = (e.clientY - cy) / (rect.height / 2)
+          let cx: number, cy: number, halfW: number, halfH: number
+          if (tiltZone) {
+            /* Footer: tilt is local to the footer box, which scrolls,
+               so we still need its live rect — but the mousemove only
+               fires while the cursor is actually over the footer. */
+            const rect = tiltZone.getBoundingClientRect()
+            halfW = rect.width / 2
+            halfH = rect.height / 2
+            cx = rect.left + halfW
+            cy = rect.top + halfH
+          } else {
+            /* Header: measure against the viewport centre. No layout
+               read per move (the old documentElement.getBoundingClientRect
+               forced a reflow on every event AND drifted the tilt centre
+               as the page scrolled). innerWidth/Height is a cached value. */
+            halfW = window.innerWidth / 2
+            halfH = window.innerHeight / 2
+            cx = halfW
+            cy = halfH
+          }
+          const nx = (e.clientX - cx) / halfW
+          const ny = (e.clientY - cy) / halfH
           targetRotY = Math.max(Math.min(nx, 1), -1) * TILT
           targetRotX = Math.max(Math.min(ny, 1), -1) * TILT * 0.6
           ensureLoop()
@@ -305,7 +322,7 @@ const Logo3D = ({
           ensureLoop()
         }
         const zone = tiltZone ?? window
-        zone.addEventListener('mousemove', onMove as EventListener)
+        zone.addEventListener('mousemove', onMove as EventListener, { passive: true })
         zone.addEventListener('mouseleave', onLeave as EventListener)
 
         const onHoverEnter = () => {

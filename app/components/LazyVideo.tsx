@@ -34,9 +34,14 @@ const LazyVideo = ({
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
+            /* Eerste keer in beeld: trigger de download. Bij elke
+               volgende keer in beeld: hervat het afspelen. */
             setShouldLoad(true)
-            io.disconnect()
-            break
+            el.play().catch(() => {})
+          } else {
+            /* Buiten beeld: pauzeer zodat we geen video blijven decoden
+               die niemand ziet — scheelt CPU/GPU en batterij. */
+            el.pause()
           }
         }
       },

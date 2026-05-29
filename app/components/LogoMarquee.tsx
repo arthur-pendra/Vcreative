@@ -91,6 +91,13 @@ const LogoMarquee = ({
           trigger: marquee,
           start: 'top bottom',
           end: 'bottom top',
+          /* Pauzeer de oneindige loop zodra de marquee buiten beeld is —
+             scheelt een continu draaiende tween + GPU-werk als je voorbij
+             gescrold bent. */
+          onToggle: (self) => {
+            if (self.isActive) animation.resume()
+            else animation.pause()
+          },
           onUpdate: (self) => {
             const isInverted = self.direction === 1
             const currentDirection = isInverted

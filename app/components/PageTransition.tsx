@@ -135,11 +135,6 @@ const PageTransition = () => {
       if (!anchor) return
       if (anchor.target && anchor.target !== '_self') return
       if (anchor.hasAttribute('download')) return
-      /* Menu items handle their own navigation + timed close in
-         MenuOverlay — they act as the cover themselves, so we skip
-         the cream fade-in. The pathname-change effect still runs
-         (scroll reset + ScrollTrigger.refresh) regardless. */
-      if (anchor.dataset.menuLink === 'true') return
 
       const href = anchor.getAttribute('href')
       if (!href) return
@@ -153,36 +148,11 @@ const PageTransition = () => {
       const url = new URL(anchor.href, window.location.origin)
       if (url.origin !== window.location.origin) return
 
-      const menuOpen = document.body.dataset.menuOpen === 'true'
-      const samePath = url.pathname === window.location.pathname
-
-      /* Same-path click: normally a no-op, but if the menu is open we
-         still need to close it (the user clearly wants out). The
-         pathname useEffect in Header doesn't fire when pathname
-         doesn't change, so dispatch an explicit close request. */
-      if (samePath) {
-        if (menuOpen) {
-          e.preventDefault()
-          e.stopPropagation()
-          document.dispatchEvent(new CustomEvent('vienna:close-menu'))
-        }
-        return
-      }
+      /* Same-path click is a no-op — let it through without firing the
+         cream fade. */
+      if (url.pathname === window.location.pathname) return
 
       const dest = url.pathname + url.search + url.hash
-
-      /* Menu open → the ink overlay is the cover. Skip the cream
-         fade and push the route ourselves; relying on Next Link's
-         bubble-phase handler firing after our capture listener was
-         flaky (some clicks landed, some didn't). The Header's own
-         pathname effect closes the menu, and the ink dissolve plays
-         on top of the freshly-mounted page. */
-      if (menuOpen) {
-        e.preventDefault()
-        e.stopPropagation()
-        router.push(dest)
-        return
-      }
 
       /* preventDefault AND stopPropagation so Next.js Link's own click
          handler (delegated at the React root) doesn't also push the
