@@ -448,14 +448,8 @@ const TextDemo = () => {
         </div>
         <div className={styles.studioContent}>
           <div className={styles.studioContentInner}>
-            <blockquote className={styles.studioQuote} data-animation="webgl-text">
-              &ldquo;Content is meer dan een mooie foto. Het bepaalt hoe jouw merk ervaren, herinnerd en vertrouwd wordt.&rdquo;
-            </blockquote>
             <p className={styles.studioBody}>
-              Ik werk met ondernemers die hun verhaal serieus willen nemen. Geen losse posts, maar content die past bij wie je bent en hoe je gezien wilt worden.
-            </p>
-            <p className={styles.studioBody}>
-              Van strategie en concept tot fotografie, video en editing. Iedere stap krijgt aandacht, want kleur, licht, compositie en timing bepalen samen hoe jouw merk online voelt en blijft hangen.
+              Content is meer dan een mooie foto &mdash; het bepaalt hoe jouw merk ervaren, herinnerd en vertrouwd wordt. Daarom werk ik met ondernemers die hun verhaal serieus nemen: geen losse posts, maar beeld dat past bij wie je bent en hoe je gezien wilt worden. Van strategie en concept tot fotografie, video en editing krijgt elke stap aandacht, want kleur, licht, compositie en timing bepalen samen hoe jouw merk online voelt en blijft hangen.
             </p>
             <div className={styles.studioActions}>
               <IconButton href="/over-mij" className={styles.studioCta}>

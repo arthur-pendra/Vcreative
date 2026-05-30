@@ -160,10 +160,6 @@ const Footer = () => {
 
       <div className={styles.bottom}>
         <span>© 2026 Vienna Wachelder</span>
-        <span className={styles.bottomSep} aria-hidden="true">
-          ·
-        </span>
-        <span>Alle rechten voorbehouden</span>
       </div>
     </footer>
   )

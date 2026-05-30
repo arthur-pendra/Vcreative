@@ -16,11 +16,21 @@ const ITEMS = [
 
 const Header = () => {
   const [menuVisible, setMenuVisible] = useState(false)
+  /* WebGL ink overlay is desktop-only. On touch/mobile the menu is just
+     the plain DOM dropdown (visible via CSS), so we skip mounting the
+     overlay entirely. Set after mount to avoid a hydration mismatch. */
+  const [showOverlay, setShowOverlay] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
     setMenuVisible(false)
   }, [pathname])
+
+  useEffect(() => {
+    setShowOverlay(
+      window.matchMedia('(hover: hover) and (pointer: fine)').matches,
+    )
+  }, [])
 
   const canHover = () =>
     typeof window !== 'undefined' &&
@@ -91,7 +101,7 @@ const Header = () => {
         </Link>
       </header>
 
-      <MenuOverlay hover={menuVisible} />
+      {showOverlay && <MenuOverlay hover={menuVisible} />}
     </>
   )
 }

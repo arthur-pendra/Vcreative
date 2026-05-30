@@ -18,6 +18,7 @@ const fragmentShader = /* glsl */ `
   uniform float uTime;
   uniform vec2 uAspect;
   uniform vec3 uTextColor;
+  uniform vec3 uInkColor;
   uniform sampler2D uNoiseTex;
   uniform sampler2D uTextTex;
   varying vec2 vUv;
@@ -53,9 +54,8 @@ const fragmentShader = /* glsl */ `
     float mask = smoothstep(reach + 0.05, reach - 0.05, distorted);
     if (mask < 0.01) discard;
 
-    vec3 color = vec3(0.063, 0.086, 0.267);
     float textAlpha = texture2D(uTextTex, vUv).a;
-    vec3 finalColor = mix(color, uTextColor, textAlpha);
+    vec3 finalColor = mix(uInkColor, uTextColor, textAlpha);
 
     gl_FragColor = vec4(finalColor, mask);
   }
@@ -166,6 +166,21 @@ const MenuOverlay = ({ hover }: Props) => {
 
       paintTextRef.current = paintText
 
+      /* On touch devices the ink reads as cream so the overlay blends
+         with the page background (cream sections become invisible, dark
+         sections show a soft cream blob). Text flips to navy so it
+         stays legible against the cream ink. Desktop keeps the deep
+         blue ink + white text combo. */
+      const isTouch =
+        'ontouchstart' in document.documentElement ||
+        navigator.maxTouchPoints > 0
+      const inkColor = isTouch
+        ? new THREE.Vector3(0xf2 / 255, 0xeb / 255, 0xd9 / 255)
+        : new THREE.Vector3(0.063, 0.086, 0.267)
+      const textColor = isTouch
+        ? new THREE.Vector3(0, 0, 0)
+        : new THREE.Vector3(1, 1, 1)
+
       const material = new THREE.ShaderMaterial({
         transparent: true,
         vertexShader,
@@ -174,9 +189,8 @@ const MenuOverlay = ({ hover }: Props) => {
           uReveal: { value: 1 },
           uTime: { value: 0 },
           uAspect: { value: new THREE.Vector2(width / height, 1) },
-          uTextColor: {
-            value: new THREE.Vector3(1, 1, 1),
-          },
+          uTextColor: { value: textColor },
+          uInkColor: { value: inkColor },
           uNoiseTex: { value: noiseTex },
           uTextTex: { value: textTex },
         },

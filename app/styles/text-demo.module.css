@@ -1064,7 +1064,7 @@
 
 @media (max-width: 479px) {
   .hero {
-    padding: 5em 1.25em 1.5em;
+    padding: 5em 0.75em 1.5em;
     height: 50vh;
     min-height: auto;
     justify-content: center;
@@ -1081,7 +1081,7 @@
   }
 
   .imageGrid {
-    padding: 0 1.25em;
+    padding: 0 0.75em;
     gap: 5em;
   }
 
@@ -1106,7 +1106,7 @@
 
   .studioCard {
     width: 100%;
-    padding: 1.5em 1.25em;
+    padding: 1.5em 0.75em;
     gap: 2em;
   }
 
@@ -1123,20 +1123,24 @@
   }
 
   .studioContent {
-    padding: 0 1.25em 4em;
+    padding: 0 0.75em 4em;
   }
 
   .studioContentInner {
     width: 100%;
-    padding: 1.5em 1.25em;
+    padding: 1.5em 0.75em;
   }
 
   .studioQuote {
     font-size: var(--text-md);
   }
 
+  .studioBody {
+    font-size: var(--text-md);
+  }
+
   .reviewsSection {
-    padding: 2.5em 1.25em 3.5em;
+    padding: 2.5em 0.75em 3.5em;
   }
 
   .reviewLogo {
@@ -1153,7 +1157,7 @@
   }
 
   .werkwijzeSection {
-    padding: 4em 1.25em 5em;
+    padding: 4em 0.75em 5em;
   }
 
   .werkwijzeLabel {

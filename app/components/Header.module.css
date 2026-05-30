@@ -43,14 +43,6 @@
   cursor: pointer;
 }
 
-.menuLink[data-hover='true'] {
-  color: #ffffff;
-}
-
-.menuLink[data-hover='true'] .menuDot {
-  background: #ffffff;
-}
-
 .menuDot {
   display: inline-block;
   width: 0.35em;
@@ -82,11 +74,29 @@
   font-family: var(--font-secondary);
   font-size: 0.65em;
   font-weight: var(--weight-regular);
-  color: transparent;
+  color: var(--color-navy);
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
   line-height: 1;
+}
+
+/* Desktop only: the WebGL ink overlay paints the menu text, so the DOM
+   text is transparent and the menu button flips to white over the ink
+   blob. On touch/mobile there is no overlay — the plain navy dropdown
+   above stays visible and the button keeps its navy colour. */
+@media (hover: hover) and (pointer: fine) {
+  .menuItem {
+    color: transparent;
+  }
+
+  .menuLink[data-hover='true'] {
+    color: #ffffff;
+  }
+
+  .menuLink[data-hover='true'] .menuDot {
+    background: #ffffff;
+  }
 }
 
 /* ── Logo (top center) ── */
