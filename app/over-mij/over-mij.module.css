@@ -74,7 +74,7 @@
   font-size: 1.1em;
   line-height: 0.8;
   display: inline-block;
-  transform: translateY(-0.22em);
+  transform: translateY(-0.05em);
   margin-right: -0.15em;
 }
 
@@ -339,7 +339,7 @@
 /* ── CTA — deep blue block ── */
 
 .cta {
-  background: var(--color-blue);
+  background: var(--color-navy);
   color: #ffffff;
   padding: calc(var(--rhythm) * 1.5) var(--container-pad) calc(var(--rhythm) * 2);
   display: flex;
@@ -386,6 +386,8 @@
   font-style: normal;
   font-weight: var(--weight-bold);
   text-transform: none;
+  display: inline-block;
+  transform: translateY(-0.12em);
 }
 
 .ctaActions {
@@ -458,8 +460,8 @@
 @media (max-width: 767px) {
   .page {
     --rhythm: 4em;
-    --container-pad: 1.5em;
-    --gutter: 1em;
+    --container-pad: 0.75em;
+    --gutter: 0.75em;
   }
 
   .hero {
@@ -498,7 +500,7 @@
 @media (max-width: 479px) {
   .page {
     --rhythm: 3em;
-    --container-pad: 1.25em;
+    --container-pad: 0.75em;
   }
 
   .hero { padding: 6em var(--container-pad) var(--rhythm); }

@@ -578,8 +578,8 @@
 @media (max-width: 767px) {
   .page {
     --rhythm: 4em;
-    --container-pad: 1.5em;
-    --gutter: 1em;
+    --container-pad: 0.75em;
+    --gutter: 0.75em;
   }
 
   /* Match homepage: tekst-sectie + hero-figure elk 50vh, samen
@@ -634,7 +634,7 @@
 @media (max-width: 479px) {
   .page {
     --rhythm: 3em;
-    --container-pad: 1.25em;
+    --container-pad: 0.75em;
   }
 
   .hero { padding: 6em var(--container-pad) var(--rhythm); }

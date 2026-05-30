@@ -288,7 +288,7 @@
 
 @media (max-width: 767px) {
   .footer {
-    padding: 3.5em 1.5em 1.5em;
+    padding: 3.5em 0.75em 1.5em;
     padding-bottom: max(1.5em, env(safe-area-inset-bottom));
     gap: 3em;
   }
@@ -305,7 +305,7 @@
     /* Two columns op mobile: Diensten + Contact. Socials worden
        verborgen om de footer strakker te houden. */
     grid-template-columns: repeat(2, 1fr);
-    gap: 2em 1.5em;
+    gap: 2em 0.75em;
   }
 
   .colSocials {

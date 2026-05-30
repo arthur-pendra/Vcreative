@@ -442,14 +442,13 @@ const TextDemo = () => {
               <h2 className={styles.studioTagline}>
                 <em>M</em>ijn missie is om jouw merk écht zichtbaar te maken.
               </h2>
-              <p className={styles.studioScroll}>Blijf scrollen</p>
             </div>
           </div>
         </div>
         <div className={styles.studioContent}>
           <div className={styles.studioContentInner}>
             <p className={styles.studioBody}>
-              Content is meer dan een mooie foto &mdash; het bepaalt hoe jouw merk ervaren, herinnerd en vertrouwd wordt. Daarom werk ik met ondernemers die hun verhaal serieus nemen: geen losse posts, maar beeld dat past bij wie je bent en hoe je gezien wilt worden. Van strategie en concept tot fotografie, video en editing krijgt elke stap aandacht, want kleur, licht, compositie en timing bepalen samen hoe jouw merk online voelt en blijft hangen.
+              Content is meer dan een mooie foto. Het bepaalt hoe jouw merk ervaren, herinnerd en vertrouwd wordt. Daarom werk ik met ondernemers die hun verhaal serieus nemen: geen losse posts, maar beeld dat past bij wie je bent. Van strategie tot fotografie, video en editing krijgt elke stap aandacht, want kleur, licht en timing bepalen samen hoe jouw merk voelt en blijft hangen.
             </p>
             <div className={styles.studioActions}>
               <IconButton href="/over-mij" className={styles.studioCta}>

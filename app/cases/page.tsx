@@ -6,7 +6,7 @@ import styles from '@/app/cases/cases-index.module.css'
 export const metadata: Metadata = {
   title: 'Cases',
   description:
-    'Werk dat ik trots op deelt. Een selectie van merken die ik mocht helpen met content en social media.',
+    'Werk dat ik met trots deel. Een selectie van merken die ik mocht helpen met content en social media.',
 }
 
 /* Mirrors the home's "Creative projecten" block: one full-bleed card,
@@ -26,9 +26,9 @@ const CasesIndex = () => (
           data-animation="webgl-text"
           data-webgl-text-mode="hero"
         >
-          <em>W</em>erk dat ik trots
+          <em>W</em>erk dat ik
           <br />
-          op deelt
+          met trots deel
         </h1>
         <p className={styles.subtitle}>
           Een selectie van merken die ik mocht helpen, van strategie tot

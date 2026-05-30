@@ -260,6 +260,7 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
                 src={next.heroImage}
                 alt={next.name}
                 className={styles.nextCaseImage}
+                style={next.heroImagePosition ? { objectPosition: next.heroImagePosition } : undefined}
                 loading="lazy"
               />
             </div>

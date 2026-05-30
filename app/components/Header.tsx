@@ -8,7 +8,6 @@ import Logo3D from '@/app/components/Logo3D'
 import MenuOverlay from '@/app/components/MenuOverlay'
 
 const ITEMS = [
-  { label: 'Home', href: '/' },
   { label: 'Projecten', href: '/cases' },
   { label: 'Over', href: '/over-mij' },
   { label: 'Start project', href: '/contact' },

@@ -722,6 +722,12 @@
 
 .werkwijzeItem {
   border-top: 1px solid var(--border-subtle);
+  /* Number-column width, grid gap and side padding — shared by the title
+     row and the description indent so the body text always left-aligns
+     with the title. */
+  --wz-num: 2em;
+  --wz-gap: 3em;
+  --wz-pad: 1em;
 }
 
 .werkwijzeItem:last-child {
@@ -730,10 +736,10 @@
 
 .werkwijzeTop {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: var(--wz-num) 1fr auto;
   align-items: center;
-  gap: 3em;
-  padding: 2em 1em;
+  gap: var(--wz-gap);
+  padding: 2em var(--wz-pad);
   width: 100%;
   background: transparent;
   border: 0;
@@ -812,17 +818,18 @@
 }
 
 .werkwijzeBottomContent {
-  padding: 0 1em 2em calc(2em + 3em + 1em);
+  padding: 0 var(--wz-pad) 2em calc(var(--wz-pad) + var(--wz-num) + var(--wz-gap));
   text-align: left;
 }
 
 .werkwijzeP {
-  font-family: var(--font-primary);
-  font-size: var(--text-lg);
+  font-family: var(--font-secondary);
+  font-size: var(--text-sm);
   font-weight: var(--weight-regular);
-  line-height: var(--leading-relaxed);
+  line-height: var(--leading-loose);
+  color: var(--color-navy);
   margin: 0;
-  max-width: 35em;
+  max-width: 32em;
 }
 
 /* ── Werkwijze CTA ── */
@@ -900,7 +907,7 @@
 
 @media (max-width: 767px) {
   .hero {
-    padding: 6em 1.5em 2em;
+    padding: 6em 0.75em 2em;
     height: 50vh;
     min-height: auto;
     justify-content: center;
@@ -917,7 +924,7 @@
   }
 
   .imageGrid {
-    padding: 0 1.5em;
+    padding: 0 0.75em;
     gap: 8em;
   }
 
@@ -960,7 +967,7 @@
 
   .studioHero {
     height: auto;
-    padding: 4em 1.25em 0;
+    padding: 4em 0.75em 0;
   }
 
   .studioBg {
@@ -970,7 +977,7 @@
   .studioCard {
     width: 100%;
     height: auto;
-    padding: 2em 1.5em;
+    padding: 2em 0.75em;
     gap: 2.5em;
     transform: none;
   }
@@ -984,12 +991,12 @@
   }
 
   .studioContent {
-    padding: 0 1.25em 4em;
+    padding: 0 0.75em 4em;
   }
 
   .studioContentInner {
     width: 100%;
-    padding: 2em 1.5em;
+    padding: 2em 0.75em;
     gap: 1.5em;
   }
 
@@ -999,7 +1006,7 @@
   }
 
   .reviewsSection {
-    padding: 3em 1.5em 4em;
+    padding: 3em 0.75em 4em;
   }
 
   .reviewLogo {
@@ -1025,7 +1032,14 @@
   }
 
   .werkwijzeSection {
-    padding: 6em 1.5em 8em;
+    padding: 6em 0.75em 8em;
+  }
+
+  /* Drop the A4-ratio width cap on mobile so the accordion fills the
+     section to its 0.75em edge padding instead of sitting at 88vw with
+     ~6vw of empty space on each side. */
+  .werkwijzeList {
+    width: 100%;
   }
 
   .werkwijzeLabel {
@@ -1037,9 +1051,14 @@
     margin: 0 0 2em;
   }
 
+  .werkwijzeItem {
+    --wz-num: 1.5em;
+    --wz-gap: 1.5em;
+    --wz-pad: 0.5em;
+  }
+
   .werkwijzeTop {
-    gap: 1.5em;
-    padding: 1.5em 0.5em;
+    padding: 1.5em var(--wz-pad);
   }
 
   .werkwijzeH3 {
@@ -1047,12 +1066,13 @@
   }
 
   .werkwijzeBottomContent {
-    padding: 0 0.5em 1.5em calc(1.5em + 1.5em + 0.5em);
+    padding-bottom: 1.5em;
   }
 
   .werkwijzeCta {
     gap: 2em;
     margin-top: 4em;
+    width: 100%;
   }
 
   .werkwijzeCtaText {
@@ -1169,12 +1189,17 @@
     margin: 0 0 1.25em;
   }
 
+  .werkwijzeItem {
+    --wz-num: 1.25em;
+    --wz-gap: 1em;
+    --wz-pad: 0.25em;
+  }
+
   .werkwijzeTop {
-    gap: 1em;
-    padding: 1.25em 0.25em;
+    padding: 1.25em var(--wz-pad);
   }
 
   .werkwijzeBottomContent {
-    padding: 0 0.25em 1.25em calc(1.25em + 1em + 0.25em);
+    padding-bottom: 1.25em;
   }
 }
