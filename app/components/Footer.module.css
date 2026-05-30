@@ -270,10 +270,6 @@
   color: #ffffff;
 }
 
-.bottomSep {
-  color: #ffffff;
-}
-
 /* ── Tablet ── */
 
 @media (max-width: 991px) {
