@@ -63,10 +63,6 @@ const OverMij = () => (
   <PageFX>
     <div className={styles.page}>
       <section className={styles.hero}>
-        <p className={styles.heroMeta}>
-          <span className={styles.heroMetaDot} aria-hidden="true" />
-          Over · V-Creative
-        </p>
         <h1
           data-animation="webgl-text"
           data-webgl-text-mode="hero"

@@ -131,7 +131,7 @@ const CasesIndex = () => (
                   <img
                     data-webgl-media
                     data-webgl-effect="bend"
-                    src="/cases/hal-xiii/hero.webp"
+                    src="/cases/hal-xiii/03.webp"
                     alt="Hal XIII"
                     className={styles.projectImage}
                     loading="lazy"
@@ -169,7 +169,7 @@ const CasesIndex = () => (
                 <img
                   data-webgl-media
                   data-webgl-effect="bend"
-                  src="/cases/vloerverwarming-limburg/hero.webp"
+                  src="/cases/vloerverwarming-limburg/full.webp"
                   alt="Vloerverwarming Limburg"
                   className={styles.projectImage}
                   loading="lazy"

@@ -6,7 +6,6 @@ import Footer from '@/app/components/Footer'
 import LogoMarquee from '@/app/components/LogoMarquee'
 import { useWebGLEffects, useGlobalParallax } from '@/app/lib/useWebGLEffects'
 import { IconButton, IconCircle } from '@/app/components/IconButton'
-import EmbossedLogo from '@/app/components/EmbossedLogo'
 import LazyVideo from '@/app/components/LazyVideo'
 
 const REVIEWS = [
@@ -434,9 +433,12 @@ const TextDemo = () => {
           </div>
           <div className={styles.studioCard}>
             <p className={styles.studioLabel}>Over V-Creative</p>
-            <EmbossedLogo
+            <img
               src="/icons/SVG/vienna_bigloog-nomrla.webp"
+              alt=""
+              aria-hidden="true"
               className={styles.studioLogo}
+              loading="lazy"
             />
             <div className={styles.studioBottomGroup}>
               <h2 className={styles.studioTagline}>

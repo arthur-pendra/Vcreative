@@ -255,7 +255,7 @@ export const CASES: Record<CaseSlug, CaseData> = {
       rest: 'ontent creatie voor\nVloerverwarming Limburg',
     },
     heroTags: ['Contentdag', 'Fotografie', 'Video', 'Website'],
-    heroImage: '/cases/vloerverwarming-limburg/hero.webp',
+    heroImage: '/cases/vloerverwarming-limburg/full.webp',
     sections: [
       {
         label: 'Het startpunt',
@@ -301,7 +301,7 @@ export const CASES: Record<CaseSlug, CaseData> = {
       author: 'Team Vloerverwarming Limburg',
       role: 'Klant sinds 2025',
     },
-    fullBleedImage: '/cases/vloerverwarming-limburg/full.webp',
+    fullBleedImage: '/cases/vloerverwarming-limburg/hero.webp',
     socialItems: [
       {type: 'video', src: '/cases/vloerverwarming-limburg/videos/website.mp4'},
       {type: 'video', src: '/cases/vloerverwarming-limburg/videos/edit-v1.mp4'},

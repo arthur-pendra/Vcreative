@@ -30,9 +30,15 @@ const LazyVideo = ({
     const el = videoRef.current
     if (!el) return
 
+    /* Track whether the video is currently on screen so the
+       visibilitychange handler below knows whether to resume it when
+       the tab comes back to the foreground. */
+    let isIntersecting = false
+
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
+          isIntersecting = entry.isIntersecting
           if (entry.isIntersecting) {
             /* Eerste keer in beeld: trigger de download. Bij elke
                volgende keer in beeld: hervat het afspelen. */
@@ -52,7 +58,24 @@ const LazyVideo = ({
     )
 
     io.observe(el)
-    return () => io.disconnect()
+
+    /* A backgrounded tab keeps decoding autoplay videos otherwise. Pause
+       on hide; resume on show only if the video is still in view. With
+       several reels in a grid this stops a pile of H.264 decoders from
+       running while the user is on another tab. */
+    const onVisibility = () => {
+      if (document.hidden) {
+        el.pause()
+      } else if (isIntersecting) {
+        el.play().catch(() => {})
+      }
+    }
+    document.addEventListener('visibilitychange', onVisibility)
+
+    return () => {
+      io.disconnect()
+      document.removeEventListener('visibilitychange', onVisibility)
+    }
   }, [])
 
   useEffect(() => {

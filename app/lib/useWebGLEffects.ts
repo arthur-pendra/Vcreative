@@ -481,7 +481,36 @@ export function useWebGLEffects() {
       const images: ImageEntry[] = []
       const imageGeometry = new THREE.PlaneGeometry(1, 1, 32, 32)
       registerDisposable(imageGeometry)
+
+      /* TextureLoader sets crossOrigin='anonymous', so the decoded image
+         is origin-clean and safe to upload to WebGL / draw to a canvas.
+         (Reading the raw DOM <img> instead taints the canvas — it has no
+         crossOrigin attribute — and texSubImage2D throws a SecurityError.) */
       const textureLoader = new THREE.TextureLoader()
+
+      /* Cap texture resolution. A client photo can be 1920×2880 — that's
+         ~22 MB of VRAM per texture (width × height × 4 bytes) regardless
+         of how small the webp file is. The quads never render larger than
+         ~display size, so anything past ~1600px on the long edge is wasted
+         GPU memory + upload bandwidth. We downscale the loaded image into a
+         2D canvas and swap it in as the texture's source. */
+      const MAX_TEXTURE_SIZE = 1600
+      const capTexture = (texture: THREE.Texture) => {
+        const src = texture.image as
+          | (CanvasImageSource & {naturalWidth?: number; naturalHeight?: number; width: number; height: number})
+          | undefined
+        if (!src) return
+        const w = src.naturalWidth || src.width
+        const h = src.naturalHeight || src.height
+        const scale = Math.min(1, MAX_TEXTURE_SIZE / Math.max(w, h, 1))
+        if (scale >= 1) return
+        const c = document.createElement('canvas')
+        c.width = Math.max(1, Math.round(w * scale))
+        c.height = Math.max(1, Math.round(h * scale))
+        c.getContext('2d')!.drawImage(src, 0, 0, c.width, c.height)
+        texture.image = c
+        texture.needsUpdate = true
+      }
 
       /* Force lazy-loaded WebGL media to start downloading immediately.
          Without this, <img loading="lazy"> below the fold never completes
@@ -512,14 +541,14 @@ export function useWebGLEffects() {
 
       for (const img of mediaElements) {
         const texture = await textureLoader.loadAsync(img.src)
-        /* Bail the loop if the user already navigated away while this
-           texture was in flight. registerDisposable still handles the
-           texture's own disposal — we just stop creating new materials
-           / meshes that would otherwise orphan. */
+        /* Bail the loop if the user navigated away while this texture was
+           in flight. registerDisposable still frees the texture — we just
+           stop creating materials / meshes that would orphan. */
         if (cancelled) {
           registerDisposable(texture)
           return
         }
+        capTexture(texture)
         registerDisposable(texture)
         const maskEl =
           (img.closest('[data-parallax="trigger"]') as HTMLElement | null) || img
@@ -536,10 +565,13 @@ export function useWebGLEffects() {
           transparent: true,
           uniforms: {
             uTexture: {value: texture},
+            /* Aspect ratio only (drives the cover-UV fit) — the source
+               img and the downscaled texture share it, so the natural
+               dimensions are correct regardless of the texture cap. */
             uTextureSize: {
               value: new THREE.Vector2(
-                texture.image.width,
-                texture.image.height,
+                img.naturalWidth,
+                img.naturalHeight,
               ),
             },
             uQuadSize: {
@@ -660,14 +692,22 @@ export function useWebGLEffects() {
         `,
       }
 
-      const composer = new EffectComposer(renderer)
-      composer.addPass(new RenderPass(scene, camera))
-      const barrelPass = new ShaderPass(barrelShader)
-      barrelPass.renderToScreen = true
-      composer.addPass(barrelPass)
-      /* Stash so cleanup can dispose the composer's render targets +
-         walk the passes (composer.dispose() doesn't cascade to them). */
-      composerRef = composer as unknown as typeof composerRef
+      /* The barrel post-process is a full-viewport extra pass (render
+         target at dpr², then a chromatic-aberration shader pass). It's
+         only meaningful when there's webgl-media on screen, so on
+         text-only pages we skip the composer entirely and render the
+         scene directly — no render target, no second pass. */
+      let composer: InstanceType<typeof EffectComposer> | undefined
+      if (images.length > 0) {
+        composer = new EffectComposer(renderer)
+        composer.addPass(new RenderPass(scene, camera))
+        const barrelPass = new ShaderPass(barrelShader)
+        barrelPass.renderToScreen = true
+        composer.addPass(barrelPass)
+        /* Stash so cleanup can dispose the composer's render targets +
+           walk the passes (composer.dispose() doesn't cascade to them). */
+        composerRef = composer as unknown as typeof composerRef
+      }
 
       let fpsCheckCount = 0
       let fpsFrames = 0
@@ -735,6 +775,12 @@ export function useWebGLEffects() {
             }
           })
 
+          /* Track whether any image quad is on screen this frame so we
+             can skip the barrel composer when only text (or nothing) is
+             visible — e.g. scrolling through long copy, hero or footer. */
+          let anyImageInView = false
+          const VIEW_MARGIN = 200
+
           images.forEach((img) => {
             img.mesh.position.x =
               img.left - screen.width / 2 + img.width / 2
@@ -759,9 +805,16 @@ export function useWebGLEffects() {
               img.height * depthScale,
               1,
             )
+
+            if (
+              img.top < scrollY + screen.height + VIEW_MARGIN &&
+              img.top + img.height > scrollY - VIEW_MARGIN
+            ) {
+              anyImageInView = true
+            }
           })
 
-          if (composer) {
+          if (composer && anyImageInView) {
             composer.render()
           } else {
             renderer.render(scene, camera)
@@ -942,9 +995,8 @@ export function useWebGLEffects() {
       /* Release GPU memory + the WebGL contexts themselves. Without
          this step each client-side nav leaks a full renderer: after
          ~15 navs Chrome hits its context cap and force-loses the
-         oldest (which is usually the MenuOverlay's ink shader sitting
-         in the root layout — the menu then renders blank or throws
-         "Context Lost" the next time it's opened).
+         oldest (e.g. the header/footer Logo3D contexts in the root
+         layout — those then render blank or throw "Context Lost").
          NOTE: renderer.dispose() alone does NOT release the WebGL
          context — it just frees the resources the renderer allocated.
          The context survives until GC reclaims the renderer instance,

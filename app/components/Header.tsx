@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import styles from '@/app/components/Header.module.css'
 import Logo3D from '@/app/components/Logo3D'
-import MenuOverlay from '@/app/components/MenuOverlay'
 
 const ITEMS = [
   { label: 'Projecten', href: '/cases' },
@@ -15,21 +14,11 @@ const ITEMS = [
 
 const Header = () => {
   const [menuVisible, setMenuVisible] = useState(false)
-  /* WebGL ink overlay is desktop-only. On touch/mobile the menu is just
-     the plain DOM dropdown (visible via CSS), so we skip mounting the
-     overlay entirely. Set after mount to avoid a hydration mismatch. */
-  const [showOverlay, setShowOverlay] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
     setMenuVisible(false)
   }, [pathname])
-
-  useEffect(() => {
-    setShowOverlay(
-      window.matchMedia('(hover: hover) and (pointer: fine)').matches,
-    )
-  }, [])
 
   const canHover = () =>
     typeof window !== 'undefined' &&
@@ -51,8 +40,7 @@ const Header = () => {
   }
 
   return (
-    <>
-      <header className={styles.header}>
+    <header className={styles.header}>
         <div
           className={styles.menuContainer}
           onMouseEnter={handleEnter}
@@ -83,7 +71,6 @@ const Header = () => {
                 href={item.href}
                 className={styles.menuItem}
                 tabIndex={menuVisible ? 0 : -1}
-                data-menu-text
               >
                 {item.label}
               </Link>
@@ -99,9 +86,6 @@ const Header = () => {
           contact
         </Link>
       </header>
-
-      {showOverlay && <MenuOverlay hover={menuVisible} />}
-    </>
   )
 }
 

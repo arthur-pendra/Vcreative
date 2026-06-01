@@ -225,7 +225,12 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
         </div>
       </section>
 
-      <figure className={styles.fullBleed} data-parallax="trigger">
+      <figure
+        className={styles.fullBleed}
+        data-parallax="trigger"
+        data-parallax-start="9"
+        data-parallax-end="-9"
+      >
         <div className={styles.parallaxTarget} data-parallax="target">
           <img
             src={data.fullBleedImage}
@@ -257,6 +262,8 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
           >
             <div className={styles.parallaxTarget} data-parallax="target">
               <img
+                data-webgl-media
+                data-webgl-effect="bend"
                 src={next.heroImage}
                 alt={next.name}
                 className={styles.nextCaseImage}

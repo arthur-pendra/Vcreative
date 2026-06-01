@@ -33,27 +33,6 @@
   margin-inline: auto;
 }
 
-.heroMeta {
-  display: flex;
-  align-items: center;
-  gap: 0.75em;
-  font-family: var(--font-secondary);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-regular);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--color-navy);
-  margin: 0;
-}
-
-.heroMetaDot {
-  display: inline-block;
-  width: 0.4em;
-  height: 0.4em;
-  border-radius: var(--radius-full);
-  background: var(--color-accent);
-}
-
 .heroTitle {
   font-family: var(--font-primary);
   font-style: italic;
@@ -74,7 +53,7 @@
   font-size: 1.1em;
   line-height: 0.8;
   display: inline-block;
-  transform: translateY(-0.05em);
+  transform: translateY(-0.22em);
   margin-right: -0.15em;
 }
 
@@ -464,12 +443,21 @@
     --gutter: 0.75em;
   }
 
+  /* Match home + cases: tekst-sectie + hero-figure elk 50vh, samen
+     een schone twee-helften compositie op mobile. */
   .hero {
-    padding: 8em var(--container-pad) var(--rhythm);
+    padding: 6em var(--container-pad) 2em;
+    height: 50vh;
+    min-height: auto;
     gap: 1.5em;
   }
 
-  .heroTitle { font-size: var(--text-2xl); }
+  .heroTitle { font-size: var(--text-3xl); }
+
+  .heroFigure {
+    aspect-ratio: auto;
+    height: 50vh;
+  }
 
   .sectionA .sectionText,
   .sectionA .sectionFigure,
@@ -482,7 +470,9 @@
   }
 
   .sectionA .sectionText { order: 2; }
-  .sectionA .sectionFigure { order: 1; aspect-ratio: 4 / 3; }
+  /* Sectie 01 image verbergen op mobile — direct na de full-width hero
+     image staan twee afbeeldingen achter elkaar wat te druk oogt. */
+  .sectionA .sectionFigure { display: none; }
   .sectionB .sectionFigure { order: 1; aspect-ratio: 4 / 3; }
   .sectionB .sectionText { order: 2; }
   .sectionC .sectionFigure { aspect-ratio: 4 / 3; }
@@ -504,7 +494,7 @@
   }
 
   .hero { padding: 6em var(--container-pad) var(--rhythm); }
-  .heroTitle { font-size: var(--text-xl); }
+  .heroTitle { font-size: var(--text-2xl); }
   .sectionTitle { font-size: var(--text-lg); }
   .ctaTitle { font-size: var(--text-xl); }
 }

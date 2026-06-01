@@ -84,22 +84,13 @@
   line-height: 1;
 }
 
-/* Desktop only: the WebGL ink overlay paints the menu text, so the DOM
-   text is transparent and the menu button flips to white over the ink
-   blob. On touch/mobile there is no overlay — the plain navy dropdown
-   above stays visible and the button keeps its navy colour. */
-@media (hover: hover) and (pointer: fine) {
-  .menuItem {
-    color: transparent;
-  }
-
-  .menuLink[data-hover='true'] {
-    color: #ffffff;
-  }
-
-  .menuLink[data-hover='true'] .menuDot {
-    background: #ffffff;
-  }
+/* Over dark sections the navy menu chrome would be unreadable, so flip
+   the button + dropdown items to white — mirrors the contactLink
+   chrome-tr rule below. AdaptiveChrome sets data-chrome-tl based on what
+   sits behind the top-left corner. */
+:global(body[data-chrome-tl='dark']) .menuLink,
+:global(body[data-chrome-tl='dark']) .menuItem {
+  color: #ffffff;
 }
 
 /* ── Logo (top center) ── */
