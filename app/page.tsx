@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import styles from '@/app/styles/text-demo.module.css'
 import Footer from '@/app/components/Footer'
 import LogoMarquee from '@/app/components/LogoMarquee'
@@ -250,11 +251,18 @@ const TextDemo = () => {
       </section>
       <figure className={styles.heroFigure} data-parallax="trigger">
         <div className={styles.parallaxTarget} data-parallax="target">
-          <img
-            src="/images/hero-pattern.webp"
-            alt="V-Creative hero"
-            className={styles.heroImage}
-          />
+          {/* Overscan-wrapper draagt de 150%/-25% pan-ruimte; Image fill
+              vult deze div 100% (fill verbiedt style.height). */}
+          <div className={styles.heroImage}>
+            <Image
+              src="/images/hero-pattern.webp"
+              alt="V-Creative hero"
+              fill
+              priority
+              sizes="100vw"
+              style={{ objectFit: 'cover' }}
+            />
+          </div>
         </div>
       </figure>
 
@@ -428,13 +436,21 @@ const TextDemo = () => {
         <div className={styles.studioHero}>
           <div className={styles.studioBg}>
             <div className={styles.parallaxTarget}>
-              <img src="/images/hero-pattern.webp" alt="" className={styles.studioBgImage} loading="lazy" />
+              <div className={styles.studioBgImage}>
+                <Image
+                  src="/images/hero-pattern.webp"
+                  alt=""
+                  fill
+                  sizes="100vw"
+                  style={{ objectFit: 'cover' }}
+                />
+              </div>
             </div>
           </div>
           <div className={styles.studioCard}>
             <p className={styles.studioLabel}>Over V-Creative</p>
             <img
-              src="/icons/SVG/vienna_bigloog-nomrla.webp"
+              src="/icons/SVG/logovienna.svg"
               alt=""
               aria-hidden="true"
               className={styles.studioLogo}

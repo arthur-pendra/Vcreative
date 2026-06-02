@@ -1,6 +1,7 @@
 'use client'
 
 import { Fragment } from 'react'
+import Image from 'next/image'
 import Footer from '@/app/components/Footer'
 import LazyVideo from '@/app/components/LazyVideo'
 import { useWebGLEffects, useGlobalParallax } from '@/app/lib/useWebGLEffects'
@@ -58,12 +59,18 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
 
       <figure className={styles.heroFigure} data-parallax="trigger">
         <div className={styles.parallaxTarget} data-parallax="target">
-          <img
-            src={data.heroImage}
-            alt={`${data.name} hero`}
-            className={styles.heroImage}
-            style={data.heroImagePosition ? { objectPosition: data.heroImagePosition } : undefined}
-          />
+          {/* Overscan-wrapper draagt de 150%/-25% pan-ruimte; Image fill
+              vult deze div 100% (fill verbiedt style.height). */}
+          <div className={styles.heroImage}>
+            <Image
+              src={data.heroImage}
+              alt={`${data.name} hero`}
+              fill
+              priority
+              sizes="100vw"
+              style={{ objectFit: 'cover', objectPosition: data.heroImagePosition }}
+            />
+          </div>
         </div>
       </figure>
 
@@ -189,11 +196,12 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
                 </figure>
               ) : (
                 <figure key={i} className={styles.socialItem}>
-                  <img
+                  <Image
                     src={item.src}
                     alt={item.alt ?? ''}
+                    fill
+                    sizes="(max-width: 767px) 50vw, 25vw"
                     className={styles.socialMedia}
-                    loading="lazy"
                   />
                 </figure>
               ),
@@ -232,12 +240,17 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
         data-parallax-end="-9"
       >
         <div className={styles.parallaxTarget} data-parallax="target">
-          <img
-            src={data.fullBleedImage}
-            alt={`${data.name} full bleed`}
-            className={styles.fullBleedImage}
-            loading="lazy"
-          />
+          {/* Overscan-wrapper draagt de 150%/-25% pan-ruimte; next/image
+              fill verbiedt style.height, dus de Image vult deze div 100%. */}
+          <div className={styles.fullBleedImage}>
+            <Image
+              src={data.fullBleedImage}
+              alt={`${data.name} full bleed`}
+              fill
+              sizes="100vw"
+              style={{ objectFit: 'cover' }}
+            />
+          </div>
         </div>
       </figure>
 

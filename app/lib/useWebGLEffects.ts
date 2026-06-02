@@ -497,6 +497,16 @@ export function useWebGLEffects() {
                 start: 'top 95%',
                 end: 'top 35%',
                 scrub: 0.5,
+                /* Eenmalig: zodra de tekst volledig onthuld is (voorbij
+                   het eindpunt gescrold) locken we uReveal op 1 en
+                   disablen we de trigger — terug scrollen bouwt de mask
+                   niet opnieuw op. Zonder dit scrubt de reveal met de
+                   scroll mee terug en "reset" de tekst. */
+                onLeave: (self) => {
+                  t.material.uniforms.uReveal.value = 1
+                  needsRender = true
+                  self.disable(false)
+                },
               },
             }))
           }

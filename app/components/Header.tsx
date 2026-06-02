@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import styles from '@/app/components/Header.module.css'
 
 const ITEMS = [
+  { label: 'Home', href: '/' },
   { label: 'Projecten', href: '/cases' },
   { label: 'Over', href: '/over-mij' },
   { label: 'Start project', href: '/contact' },

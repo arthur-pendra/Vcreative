@@ -373,6 +373,11 @@
   display: block;
   width: 31.68em;
   aspect-ratio: 1 / 1;
+  /* logovienna.svg is portret (124.53 × 166.75) — contain houdt het
+     gecentreerd binnen de vierkante footprint zonder vervorming. */
+  object-fit: contain;
+  /* Flatten naar zwart (zelfde patroon als de klantlogo's). */
+  filter: brightness(0);
   margin: auto 0;
 }
 

@@ -125,8 +125,8 @@ const Footer = () => {
           aria-hidden="true"
           data-animation="webgl-text"
           data-webgl-text-mode="time-trigger"
-          data-webgl-text-duration="4.5"
-          data-webgl-text-start="top bottom"
+          data-webgl-text-duration="3"
+          data-webgl-text-start="top 110%"
           data-webgl-text-bg="#641018"
         >
           <em>creative</em>
