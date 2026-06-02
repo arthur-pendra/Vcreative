@@ -68,7 +68,7 @@ const OverMij = () => (
           data-webgl-text-mode="hero"
           className={styles.heroTitle}
         >
-          <em>V</em>erhalen vertalen
+          <em className="scriptCap">V</em>erhalen vertalen
           <br />
           naar beeld dat blijft
         </h1>
@@ -234,7 +234,7 @@ const OverMij = () => (
           data-webgl-text-bg="#000000"
           className={styles.ctaTitle}
         >
-          <em>K</em>laar om jouw merk
+          <em className="scriptCap">K</em>laar om jouw merk
           <br />
           te laten zien?
         </h2>

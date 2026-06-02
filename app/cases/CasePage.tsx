@@ -14,7 +14,7 @@ const renderTitle = (t: CaseTitle) => {
   const [first, ...rest] = lines
   return (
     <>
-      <em>{t.script}</em>
+      <em className="scriptCap">{t.script}</em>
       {first}
       {rest.map((line, i) => (
         <Fragment key={i}>
@@ -250,7 +250,7 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
           data-animation="webgl-text"
           className={styles.nextCaseTitle}
         >
-          <em>{next.name.charAt(0)}</em>{next.name.slice(1)}
+          <em className="scriptCap">{next.name.charAt(0)}</em>{next.name.slice(1)}
         </h2>
         <a href={`/cases/${next.slug}`} className={styles.nextCaseLink}>
           <figure
@@ -264,6 +264,7 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
               <img
                 data-webgl-media
                 data-webgl-effect="bend"
+                data-webgl-y={next.heroFocusY}
                 src={next.heroImage}
                 alt={next.name}
                 className={styles.nextCaseImage}

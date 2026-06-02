@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import styles from '@/app/components/Header.module.css'
-import Logo3D from '@/app/components/Logo3D'
 
 const ITEMS = [
   { label: 'Projecten', href: '/cases' },
@@ -77,10 +76,6 @@ const Header = () => {
             ))}
           </nav>
         </div>
-
-        <Link href="/" className={styles.logo} aria-label="V-Creative">
-          <Logo3D interaction="mouseTilt" />
-        </Link>
 
         <Link href="/contact" className={styles.contactLink} data-chrome="tr">
           contact

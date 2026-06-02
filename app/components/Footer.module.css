@@ -14,10 +14,40 @@
   border-top: 1px solid var(--border-subtle-inverse);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: 4em;
-  min-height: 80vh;
+  /* Full-screen footer — reads cleaner as the page's closing panel.
+     dvh keeps it to the actually-visible viewport on mobile (browser
+     chrome in/out) instead of vh's static, too-tall value. */
+  min-height: 100vh;
+  min-height: 100dvh;
   overflow: hidden;
+}
+
+/* Nav columns + display word group together near the vertical centre
+   (separated only by the flex gap), and the copyright is pinned to the
+   bottom — the two auto margins split the leftover height evenly above
+   the group and below the word. */
+.topRow {
+  margin-top: auto;
+}
+
+.bottom {
+  margin-top: auto;
+}
+
+/* The WebGL text-reveal overlay (a fixed canvas at z-index 10, painted
+   by useWebGLEffects) covers the full viewport and dissolves a bg-colored
+   mask over the "creative" word. That word's mask box is huge and would
+   otherwise sit over the nav, logo and copyright too. Lift everything
+   EXCEPT the word above the overlay so the dissolve only ever touches the
+   word — the rest stays in front. (Lenis uses native scroll, so no
+   transform wrapper traps these z-indexes below the body-level canvas.)
+   .brandLogo is already absolute and gets its z-index lifted in its own
+   rule below. */
+.topRow,
+.bottom {
+  position: relative;
+  z-index: 11;
 }
 
 .footer :global(.btn-icon-content__bg) {
@@ -69,9 +99,15 @@
      stacking above it. */
   position: absolute;
   left: 50%;
-  top: 50%;
+  /* Anchored on the visible x-height band of the script word rather than
+     the line box — the glyphs sit low in the em with line-height 0.85, so
+     a flat 50% leaves the logo riding too high. The % scales with the
+     text height across breakpoints. */
+  top: 60%;
   transform: translate(-50%, -50%);
-  z-index: 2;
+  /* Above the WebGL reveal overlay (canvas z-index 10) so the dissolving
+     mask passes behind the logo instead of covering it. */
+  z-index: 11;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -213,28 +249,24 @@
 }
 
 .brand {
-  /* Body of the brand name — italic HW Cigars, same as page titles.
-     The actual `font-size` is computed in Footer.tsx so the line spans
-     ~97% of the brand row regardless of viewport. CSS here just sets
-     the typographic defaults.
-     The italic slant + script-C tail push the optical centre of the
-     line to the right of the geometric centre, so we nudge the whole
-     thing left by a small percent to re-balance it visually.
-     Weight 300 = Light. On dark backgrounds subpixel anti-aliasing
-     "halates" and makes cream glyphs look heavier than dark glyphs of
-     the same weight on cream — the font-smoothing overrides switch to
-     grayscale AA, which reads visibly thinner and matches the feel of
-     the dark-on-cream page titles (.projectenTitle etc). */
-  font-family: var(--font-primary);
-  font-style: italic;
+  /* Big "creative" display line in the script face. Sized with vw so it
+     scales with the viewport like a display word should; the em cap in
+     the clamp freezes the size once the container hits its max width
+     (size-font is tied to the capped container), so it never overshoots
+     on ultra-wide screens.
+     On dark backgrounds subpixel anti-aliasing "halates" and makes the
+     cream glyphs look heavier — the font-smoothing overrides switch to
+     grayscale AA so the weight reads true. */
+  font-family: var(--font-script);
+  font-style: normal;
   font-weight: var(--weight-regular);
-  color: #601017;
+  font-size: clamp(4em, 36vw, 36em);
+  color: #591016;
   margin: 0;
   line-height: 0.85;
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: normal;
   text-align: center;
   white-space: nowrap;
-  transform: translateX(-1.5%);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

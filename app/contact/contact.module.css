@@ -43,12 +43,7 @@
   line-height: 0.95;
   margin: 0;
   max-width: 14em;
-}
-
-.title em {
-  font-family: var(--font-script);
-  font-style: normal;
-  font-weight: var(--weight-bold);
+  transform: translateY(-0.25em);
 }
 
 .subtitle {

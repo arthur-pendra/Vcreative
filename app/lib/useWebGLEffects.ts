@@ -207,6 +207,21 @@ export function useWebGLEffects() {
     let cancelled = false
     let needsRender = true
 
+    /* webgl-text is hidden via CSS (opacity:0) until its covering mask is
+       actually painted, so the bare DOM text can't flash in before the
+       mask exists. revealText() flips it visible; the fallback timer is a
+       safety net so the text never stays hidden if init bails early or
+       WebGL fails to initialise. */
+    const revealText = () => {
+      document
+        .querySelectorAll<HTMLElement>('[data-animation="webgl-text"]')
+        .forEach((el) => { el.dataset.webglReady = 'true' })
+    }
+    /* 3s: longer than init's worst-case wait (the up-to-2s Lenis poll
+       below) so the normal reveal always wins; this only fires if init
+       genuinely hangs or WebGL fails. */
+    const revealTextFallback = setTimeout(revealText, 3000)
+
     /* Track everything this hook instance creates so unmount can tear it
        all down. Without this, tweens/triggers from the previous page stay
        in ScrollTrigger.getAll() pointing at detached DOM, which makes
@@ -260,7 +275,12 @@ export function useWebGLEffects() {
          as normal <img> (already the case below). useGlobalParallax
          is a separate hook and keeps running for the scroll-pan. */
       const isTouch = 'ontouchstart' in document.documentElement
-      if (isTouch) return
+      if (isTouch) {
+        /* No masks on touch — show the plain DOM text right away. */
+        revealText()
+        clearTimeout(revealTextFallback)
+        return
+      }
 
       const THREE = await import('three')
       const {getLenisInstance} = await import('@/app/lib/lenis')
@@ -389,6 +409,13 @@ export function useWebGLEffects() {
         texts.forEach((t) => {
           t.isVisible = true
           const mode = t.element.dataset.webglTextMode
+          /* Per-element override for the reveal duration (seconds).
+             Falls back to the time-trigger default of 1.4s. */
+          const revealDuration =
+            parseFloat(t.element.dataset.webglTextDuration || '') || 1.4
+          /* Per-element override for the time-trigger start position
+             (ScrollTrigger syntax). Defaults to 'top 95%'. */
+          const revealStart = t.element.dataset.webglTextStart || 'top 95%'
 
           const remeasure = () => {
             const b = t.element.getBoundingClientRect()
@@ -419,13 +446,13 @@ export function useWebGLEffects() {
             } else {
               triggers.push(ScrollTrigger.create({
                 trigger: t.element,
-                start: 'top 95%',
+                start: revealStart,
                 once: true,
                 onEnter: () => {
                   remeasure()
                   tweens.push(gsap.to(t.material.uniforms.uReveal, {
                     value: 1,
-                    duration: 1.4,
+                    duration: revealDuration,
                     ease: 'power2.inOut',
                     onUpdate: () => { needsRender = true },
                   }))
@@ -471,6 +498,31 @@ export function useWebGLEffects() {
             }))
           }
         })
+      }
+
+      /* Paint the covering masks once, right now — BEFORE the awaited
+         image textures below — then reveal the DOM text. The first
+         update() render is gated behind image loading, so without this
+         the bare text would be exposed during that wait (and as the
+         page-transition overlay fades) instead of dissolving in from
+         under its mask.
+
+         Position the meshes first: their x/y is normally set inside
+         update(), so without this they'd render stacked at the scene
+         origin (screen centre) for this first frame — and stay stuck
+         there if init later aborts (e.g. a failed image texture). */
+      if (!cancelled) {
+        const sY = getScroll()
+        const vw = window.innerWidth
+        const vh = window.innerHeight
+        texts.forEach((t) => {
+          if (!t.isVisible) return
+          t.mesh.position.x = t.bounds.left - vw / 2 + t.bounds.width / 2
+          t.mesh.position.y = -t.y + sY + vh / 2 - t.bounds.height / 2
+        })
+        renderer.render(scene, camera)
+        revealText()
+        clearTimeout(revealTextFallback)
       }
 
       /* WebGL images — desktop only */
@@ -540,7 +592,17 @@ export function useWebGLEffects() {
       if (cancelled) return
 
       for (const img of mediaElements) {
-        const texture = await textureLoader.loadAsync(img.src)
+        let texture: THREE.Texture
+        try {
+          texture = await textureLoader.loadAsync(img.src)
+        } catch {
+          /* Image failed to load (404 / 503 / CORS). Leave it as the
+             plain DOM <img> and skip its WebGL quad. Crucial: one bad URL
+             must NOT abort the whole pipeline — otherwise update() never
+             runs, every text mask freezes mid-screen and no image renders
+             (exactly what a down image host did to this page). */
+          continue
+        }
         /* Bail the loop if the user navigated away while this texture was
            in flight. registerDisposable still frees the texture — we just
            stop creating materials / meshes that would orphan. */
@@ -611,20 +673,27 @@ export function useWebGLEffects() {
       images.forEach((img) => {
         const {effect} = img
 
-        /* Shader-internal parallax — pin u_innerY to neutral when the
-           wrapper opts out, otherwise drift it from -0.1 → 0.1 on scroll. */
+        /* Vertical focal offset. The cover-UV fit centres the texture, so
+           a portrait subject high in the frame (a face) gets cropped out of
+           landscape quads. data-webgl-y shifts the sample point in UV space
+           (positive = toward the top of the image / the head). Default 0
+           keeps the centred behaviour. */
+        const focusY = parseFloat(img.imgElement.dataset.webglY || '0')
+
+        /* Shader-internal parallax — pin u_innerY to the focal point when the
+           wrapper opts out, otherwise drift it ±0.1 around it on scroll. */
         const parallaxDisabled =
           img.element instanceof HTMLElement &&
           img.element.hasAttribute('data-parallax-disabled')
 
         if (parallaxDisabled) {
-          img.material.uniforms.u_innerY.value = 0
+          img.material.uniforms.u_innerY.value = focusY
         } else {
           tweens.push(gsap.fromTo(
             img.material.uniforms.u_innerY,
-            {value: -0.1},
+            {value: focusY - 0.1},
             {
-              value: 0.1,
+              value: focusY + 0.1,
               ease: 'none',
               scrollTrigger: {
                 trigger: img.element,
@@ -968,6 +1037,7 @@ export function useWebGLEffects() {
       }
       if (docResizeObserver) docResizeObserver.disconnect()
       if (remeasureDebounce) clearTimeout(remeasureDebounce)
+      clearTimeout(revealTextFallback)
       remeasureTimeouts.forEach((t) => clearTimeout(t))
       /* Remove the webgl-text-replay / remeasured listeners we added so
          they don't fire against stale closures after navigation. */

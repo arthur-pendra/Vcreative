@@ -93,19 +93,6 @@
   color: #ffffff;
 }
 
-/* ── Logo (top center) ── */
-
-.logo {
-  position: absolute;
-  top: 0.5em;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: auto;
-  transition:
-    opacity 0.55s ease,
-    transform 0.7s cubic-bezier(0.625, 0.05, 0, 1);
-}
-
 .logoMark {
   display: block;
   width: 4.4em;
@@ -163,10 +150,6 @@
   .menuDropdown {
     top: 2.75em;
     left: 1.25em;
-  }
-
-  .logo {
-    top: 0.25em;
   }
 
   .logoMark {

@@ -6,7 +6,7 @@ const NotFound = () => (
     <div className={styles.shell}>
       <p className={styles.code}>404</p>
       <h1 className={styles.title}>
-        <em>D</em>eze pagina is er niet
+        <em className="scriptCap">D</em>eze pagina is er niet
       </h1>
       <p className={styles.subtitle}>
         Misschien is hij verhuisd, weggehaald, of nooit bestaan. Geen zorgen,

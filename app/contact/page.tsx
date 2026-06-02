@@ -32,7 +32,7 @@ const Contact = () => {
           data-animation="webgl-text"
           data-webgl-text-mode="hero"
         >
-          <em>L</em>aat horen waar
+          <em className="scriptCap">L</em>aat horen waar
           <br />
           jij mee bezig bent
         </h1>

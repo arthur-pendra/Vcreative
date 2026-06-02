@@ -35,12 +35,6 @@
   margin: 0;
 }
 
-.title em {
-  font-family: var(--font-script);
-  font-style: normal;
-  font-weight: var(--weight-bold);
-}
-
 .subtitle {
   font-family: var(--font-primary);
   font-size: var(--text-lg);

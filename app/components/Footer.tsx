@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import styles from '@/app/components/Footer.module.css'
 import Logo3D from '@/app/components/Logo3D'
 import { IconButton } from '@/app/components/IconButton'
@@ -25,8 +25,6 @@ const SOCIALS = [
 
 const Footer = () => {
   const [email, setEmail] = useState('')
-  const brandRowRef = useRef<HTMLDivElement>(null)
-  const brandRef = useRef<HTMLParagraphElement>(null)
 
   const submit = () => {
     if (!email) return
@@ -39,37 +37,6 @@ const Footer = () => {
     e.preventDefault()
     submit()
   }
-
-  /* Auto-fit the huge "Vienna Creative" line to the container width.
-     cqi / vw math relies on assumed character widths and keeps missing
-     — instead we measure the rendered text at a 100px reference size
-     and compute the exact font-size that makes the line span ~97% of
-     the container. Re-fits on resize + after fonts load. */
-  useEffect(() => {
-    const row = brandRowRef.current
-    const brand = brandRef.current
-    if (!row || !brand) return
-
-    const fit = () => {
-      brand.style.fontSize = '100px'
-      const naturalWidth = brand.scrollWidth
-      if (!naturalWidth) return
-      const target = row.clientWidth
-      const next = (target / naturalWidth) * 100
-      brand.style.fontSize = `${Math.max(40, next)}px`
-    }
-
-    fit()
-    const ro = new ResizeObserver(fit)
-    ro.observe(row)
-
-    /* Fallback + re-fit after custom fonts swap in */
-    if (typeof document !== 'undefined' && document.fonts?.ready) {
-      document.fonts.ready.then(fit).catch(() => {})
-    }
-
-    return () => ro.disconnect()
-  }, [])
 
   return (
     <footer className={styles.footer} data-theme="dark">
@@ -149,12 +116,20 @@ const Footer = () => {
         </nav>
       </div>
 
-      <div className={styles.brandRow} ref={brandRowRef}>
+      <div className={styles.brandRow}>
         <Link href="/" className={styles.brandLogo} aria-label="V-Creative">
           <Logo3D interaction="mouseTilt" hoverSpin={false} className={styles.logoMark} />
         </Link>
-        <p className={styles.brand} aria-hidden="true" ref={brandRef}>
-          <em>C</em>reative
+        <p
+          className={styles.brand}
+          aria-hidden="true"
+          data-animation="webgl-text"
+          data-webgl-text-mode="time-trigger"
+          data-webgl-text-duration="4.5"
+          data-webgl-text-start="top bottom"
+          data-webgl-text-bg="#641018"
+        >
+          <em>creative</em>
         </p>
       </div>
 

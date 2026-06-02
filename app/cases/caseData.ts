@@ -40,6 +40,11 @@ export type CaseData = {
   /* `object-position` voor `heroImage` — handig om de crop te
      verschuiven wanneer de standaard center het onderwerp afsnijdt. */
   heroImagePosition?: string
+  /* Verticale focal-offset (UV-units, positief = naar de bovenkant/het
+     hoofd) voor de WebGL-crop van `heroImage` in de "volgende case"-preview.
+     Nodig omdat de WebGL-laag het beeld centreert en `object-position`
+     negeert. Default (leeg) = gecentreerd. */
+  heroFocusY?: number
   sections: [CaseSection, CaseSection] | [CaseSection, CaseSection, CaseSection]
   quote: {
     logo: string
@@ -64,6 +69,7 @@ export const CASES: Record<CaseSlug, CaseData> = {
     heroTags: ['Strategie', 'Contentcreatie', 'Fotografie', 'Maandelijks beheer'],
     heroImage: '/cases/hair-by-kim/01.webp',
     heroImagePosition: '50% 15%',
+    heroFocusY: 0.13,
     sections: [
       {
         label: 'Het startpunt',

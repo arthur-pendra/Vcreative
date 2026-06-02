@@ -158,6 +158,40 @@ body {
   background: var(--color-cream);
 }
 
+/* WebGL noise-mask text starts hidden so the bare DOM text can't flash
+   in before its cream mask is painted over it — most visible during page
+   transitions, where it would otherwise appear as the transition overlay
+   fades. useWebGLEffects sets data-webgl-ready the moment the covering
+   mask is on screen (or immediately on touch, where there is no mask). A
+   fallback timer in that hook guarantees text never stays hidden. */
+[data-animation="webgl-text"] {
+  opacity: 0;
+}
+
+[data-animation="webgl-text"][data-webgl-ready="true"] {
+  opacity: 1;
+}
+
+/* ------------------------- Script title initial -------------------------
+   Single source of truth for the decorative nautica capital that opens a
+   title (the <em> wrapping the first letter). Centralises how the script
+   cap matches the HW Cigars italic body so every title reads identically
+   instead of drifting per page. All values are em-based, so it scales with
+   whatever font-size the title sets. Add the `scriptCap` class to the <em>.
+   (The footer's full-word "creative" mark is a separate case and keeps its
+   own .brand em rule.) */
+.scriptCap {
+  font-family: var(--font-script);
+  font-style: normal;
+  font-weight: var(--weight-bold);
+  text-transform: none;
+  font-size: 1.1em;
+  line-height: 0.8;
+  display: inline-block;
+  margin-right: -0.15em;
+  transform: translateY(0);
+}
+
 /* ------------------------- Reduced motion -------------------------
    Honor users who request fewer animations: kills GSAP/Lenis-driven
    transforms, transitions, and animations across the board. WebGL

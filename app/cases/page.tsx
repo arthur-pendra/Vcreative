@@ -26,15 +26,8 @@ const CasesIndex = () => (
           data-animation="webgl-text"
           data-webgl-text-mode="hero"
         >
-          <em>W</em>erk dat ik
-          <br />
-          met trots deel
+          <em className="scriptCap">C</em>reative projecten
         </h1>
-        <p className={styles.subtitle}>
-          Een selectie van merken die ik mocht helpen, van strategie tot
-          wekelijkse contentstroom. Elke case laat zien hoe een eigen ritme
-          het verschil maakt.
-        </p>
       </header>
 
       <section className={styles.cases}>
@@ -55,6 +48,7 @@ const CasesIndex = () => (
                 <img
                   data-webgl-media
                   data-webgl-effect="bend"
+                  data-webgl-y="0.13"
                   src="/cases/hair-by-kim/01.webp"
                   alt="Hair by Kim"
                   className={styles.projectImage}

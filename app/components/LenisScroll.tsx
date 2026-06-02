@@ -25,6 +25,16 @@ const LenisScroll = () => {
     let scrollTriggerRef:
       | typeof import('gsap/ScrollTrigger')['ScrollTrigger']
       | undefined
+    /* Flipped by cleanup. init() awaits its dynamic imports, so under
+       React StrictMode (dev) the mount→unmount→mount cycle runs cleanup
+       BEFORE the first init resolves — at which point lenis/tickerFn are
+       still undefined, so cleanup can't tear them down. Without this
+       guard the superseded init then goes on to create a SECOND Lenis +
+       ticker fn that never gets cleaned up, leaving two instances both
+       driving window.scrollTo + ScrollTrigger.update every frame (janky
+       scroll). The guard makes the stale init bail before it builds
+       anything. */
+    let cancelled = false
 
     const init = async () => {
       if (
@@ -39,6 +49,7 @@ const LenisScroll = () => {
         import('gsap'),
         import('gsap/ScrollTrigger'),
       ])
+      if (cancelled) return
       const gsap = gsapMod.default
       gsap.registerPlugin(ScrollTrigger)
       gsapRef = gsap
@@ -72,6 +83,7 @@ const LenisScroll = () => {
     init()
 
     return () => {
+      cancelled = true
       if (tickerFn && gsapRef) gsapRef.ticker.remove(tickerFn)
       if (lenis && scrollTriggerUpdate) lenis.off('scroll', scrollTriggerUpdate)
       if (onStRefresh && scrollTriggerRef) {

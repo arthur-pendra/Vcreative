@@ -237,7 +237,7 @@ const TextDemo = () => {
           data-webgl-text-mode="hero"
           className={styles.heroText}
         >
-          <em>J</em>ij runt je bedrijf
+          <em className="scriptCap">J</em>ij runt je bedrijf
           <br />
           ik regel je socials
         </h1>
@@ -267,7 +267,7 @@ const TextDemo = () => {
               2008 / 2026
             </p>
             <h2 className={styles.projectenTitle} data-animation="webgl-text">
-              <em>C</em>reative projecten
+              <em className="scriptCap">C</em>reative projecten
             </h2>
             <ul className={styles.projectenCategories}>
               <li className={styles.projectenCategory}>Beauty</li>
@@ -442,7 +442,7 @@ const TextDemo = () => {
             />
             <div className={styles.studioBottomGroup}>
               <h2 className={styles.studioTagline}>
-                <em>M</em>ijn missie is om jouw merk écht zichtbaar te maken.
+                <em className="scriptCap">M</em>ijn missie is om jouw merk écht zichtbaar te maken.
               </h2>
             </div>
           </div>
@@ -486,7 +486,7 @@ const TextDemo = () => {
       <section className={styles.werkwijzeSection}>
         <p className={styles.werkwijzeLabel}>Werkwijze</p>
         <h2 className={styles.werkwijzeTitle} data-animation="webgl-text">
-          <em>I</em>n{' '}
+          <em className="scriptCap">I</em>n{' '}
           <span className={styles.werkwijzeCount}>
             ({String(WERKWIJZE_STEPS.length).padStart(2, '0')})
           </span>{' '}
@@ -538,7 +538,7 @@ const TextDemo = () => {
             />
           </figure>
           <p className={styles.werkwijzeCtaText}>
-            <em>Z</em>et mij aan het werk met jouw unieke merk.
+            <em className="scriptCap">Z</em>et mij aan het werk met jouw unieke merk.
           </p>
           <IconButton href="/contact" className={styles.werkwijzeCtaButton}>
             Start jouw project

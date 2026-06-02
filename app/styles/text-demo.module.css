@@ -29,18 +29,6 @@
   letter-spacing: var(--tracking-tight);
 }
 
-.heroText em {
-  font-family: var(--font-script);
-  font-style: normal;
-  font-weight: var(--weight-bold);
-  text-transform: none;
-  font-size: 1.1em;
-  line-height: 0.8;
-  display: inline-block;
-  transform: translateY(-0.22em);
-  margin-right: -0.15em;
-}
-
 .heroSubtitle {
   color: var(--color-navy);
   text-align: center;
@@ -163,13 +151,6 @@
   line-height: 0.95;
   letter-spacing: var(--tracking-tight);
   margin: 0;
-}
-
-.projectenTitle em {
-  font-family: var(--font-script);
-  font-style: normal;
-  font-weight: var(--weight-bold);
-  text-transform: none;
 }
 
 .projectenCategories {
@@ -404,13 +385,6 @@
   color: var(--color-navy);
   margin: 0;
   max-width: 14em;
-}
-
-.studioTagline em {
-  font-family: var(--font-script);
-  font-style: normal;
-  font-weight: var(--weight-bold);
-  text-transform: none;
 }
 
 .studioBottomGroup {
@@ -672,13 +646,6 @@
   max-width: 14em;
 }
 
-.werkwijzeTitle em {
-  font-family: var(--font-script);
-  font-style: normal;
-  font-weight: var(--weight-bold);
-  text-transform: none;
-}
-
 .werkwijzeCount {
   display: inline;
   color: var(--color-accent);
@@ -846,13 +813,6 @@
   margin: 0.5em 0 0;
   color: var(--color-navy);
   max-width: 14em;
-}
-
-.werkwijzeCtaText em {
-  font-family: var(--font-script);
-  font-style: normal;
-  font-weight: var(--weight-bold);
-  text-transform: none;
 }
 
 /* ── Tablet ── */
