@@ -40,7 +40,7 @@ float noise(vec2 p) {
 float fbm(vec2 p) {
   float value = 0.0;
   float amp = 0.5;
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < 3; i++) {
     value += amp * noise(p);
     p *= 2.0;
     amp *= 0.5;
@@ -49,18 +49,21 @@ float fbm(vec2 p) {
 }
 
 void main() {
+  float progress = uReveal * 1.5 - 0.25;
+
+  // Rusttoestand vóór de reveal: de mask dekt de tekst volledig af,
+  // dus de dure noise hoeft hier niet berekend te worden.
+  if (progress <= -0.15) {
+    gl_FragColor = vec4(uColor, 1.0);
+    return;
+  }
+
   vec2 uv = vUv * uAspect * 8.0;
   float n1 = fbm(uv);
   float n1b = fbm(uv + vec2(5.2, 1.3));
   vec2 warped = uv + vec2(n1, n1b) * 0.4;
-  float n2 = fbm(warped + vec2(1.7, 9.2));
-  float n2b = fbm(warped + vec2(8.3, 2.8));
-  vec2 warped2 = warped + vec2(n2, n2b) * 0.4;
-  float n3 = fbm(warped2);
-  float fine = fbm(vUv * 28.0 + vec2(n2, n3) * 0.2);
-  float n = n3 * 0.55 + fine * 0.45;
+  float n = fbm(warped + vec2(1.7, 9.2));
 
-  float progress = uReveal * 1.5 - 0.25;
   float mask = smoothstep(progress - 0.15, progress + 0.15, n);
   if (mask < 0.01) discard;
   gl_FragColor = vec4(uColor, mask);
@@ -835,20 +838,32 @@ export function useWebGLEffects() {
             canvas!.style.height = vh + 'px'
           }
 
+          const VIEW_MARGIN = 200
+
           texts.forEach((t) => {
-            if (t.isVisible) {
-              t.mesh.position.x =
-                t.bounds.left - vw / 2 + t.bounds.width / 2
-              t.mesh.position.y =
-                -t.y + scrollY + vh / 2 - t.bounds.height / 2
-            }
+            if (!t.isVisible) return
+            t.mesh.position.x =
+              t.bounds.left - vw / 2 + t.bounds.width / 2
+            t.mesh.position.y =
+              -t.y + scrollY + vh / 2 - t.bounds.height / 2
+
+            /* Cull masks die niks bijdragen aan dit frame: buiten (een
+               marge rond) de viewport, of volledig onthuld (uReveal≈1 →
+               de shader discard't toch elke pixel). Hierdoor draait de
+               zware noise-shader alleen nog voor de masks die nu echt
+               in beeld dissolven. Scrub-modes zetten visible vanzelf
+               weer true zodra uReveal bij omhoog scrollen onder 1 zakt. */
+            const reveal = t.material.uniforms.uReveal.value as number
+            const inView =
+              t.y < scrollY + vh + VIEW_MARGIN &&
+              t.y + t.bounds.height > scrollY - VIEW_MARGIN
+            t.mesh.visible = inView && reveal < 0.999
           })
 
           /* Track whether any image quad is on screen this frame so we
              can skip the barrel composer when only text (or nothing) is
              visible — e.g. scrolling through long copy, hero or footer. */
           let anyImageInView = false
-          const VIEW_MARGIN = 200
 
           images.forEach((img) => {
             img.mesh.position.x =
