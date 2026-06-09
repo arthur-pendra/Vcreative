@@ -277,19 +277,13 @@ export function useWebGLEffects() {
     const init = async () => {
       await document.fonts.ready
 
-      /* Mobile/touch: skip the entire WebGL text + image pipeline.
-         The per-element renderers were heavy (5–10 contexts per case
-         page) and visually didn't read well on small screens. Text
-         elements stay as plain DOM, [data-webgl-media] images render
-         as normal <img> (already the case below). useGlobalParallax
-         is a separate hook and keeps running for the scroll-pan. */
+      /* Touch devices DO run the text overlay (the noise-mask scroll
+         reveal). Only the heavier per-image WebGL is skipped further
+         down (mediaElements is emptied on touch), so [data-webgl-media]
+         images stay as plain <img> — that was the expensive part (5–10
+         contexts per case page), the single full-screen text canvas is
+         cheap enough for mobile. */
       const isTouch = 'ontouchstart' in document.documentElement
-      if (isTouch) {
-        /* No masks on touch — show the plain DOM text right away. */
-        revealText()
-        clearTimeout(revealTextFallback)
-        return
-      }
 
       const THREE = await import('three')
       const {getLenisInstance} = await import('@/app/lib/lenis')
@@ -545,9 +539,14 @@ export function useWebGLEffects() {
 
       /* WebGL images — desktop only */
 
-      const mediaElements = Array.from(
-        document.querySelectorAll<HTMLImageElement>('[data-webgl-media]'),
-      )
+      /* Images stay as plain <img> on touch — only the text overlay runs
+         there. An empty list short-circuits the eager-load, texture load,
+         mesh build, parallax and barrel composer below. */
+      const mediaElements = isTouch
+        ? ([] as HTMLImageElement[])
+        : Array.from(
+            document.querySelectorAll<HTMLImageElement>('[data-webgl-media]'),
+          )
       const images: ImageEntry[] = []
       const imageGeometry = new THREE.PlaneGeometry(1, 1, 32, 32)
       registerDisposable(imageGeometry)
