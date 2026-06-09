@@ -43,16 +43,6 @@
   cursor: pointer;
 }
 
-.menuDot {
-  display: inline-block;
-  width: 0.35em;
-  height: 0.35em;
-  border-radius: var(--radius-full);
-  background: var(--color-accent);
-  vertical-align: middle;
-  margin-right: 0.5em;
-}
-
 /* ── Dropdown ── */
 
 .menuDropdown {

@@ -13,7 +13,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 2em;
+  gap: 1.5em;
 }
 
 .label {
@@ -26,13 +26,6 @@
   align-items: center;
   gap: 0.5em;
   margin: 0;
-}
-
-.labelDot {
-  width: 0.4em;
-  height: 0.4em;
-  border-radius: var(--radius-full);
-  background: var(--color-accent);
 }
 
 .title {
@@ -150,13 +143,6 @@
   opacity: 0.65;
 }
 
-.infoBlockDot {
-  width: 0.4em;
-  height: 0.4em;
-  border-radius: var(--radius-full);
-  background: var(--color-accent);
-}
-
 .infoText {
   font-family: var(--font-primary);
   font-size: var(--text-lg);
@@ -175,7 +161,7 @@
 }
 
 .infoSecondary {
-  font-family: var(--font-secondary);
+  font-family: var(--font-primary);
   font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
   margin: 0;

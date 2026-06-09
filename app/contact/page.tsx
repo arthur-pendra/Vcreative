@@ -24,7 +24,6 @@ const Contact = () => {
     <div className={styles.page}>
       <header className={styles.hero}>
         <p className={styles.label}>
-          <span className={styles.labelDot} aria-hidden="true" />
           Contact
         </p>
         <h1
@@ -107,7 +106,6 @@ const Contact = () => {
         <aside className={styles.infoCol}>
           <div className={styles.infoBlock}>
             <p className={styles.infoLabel}>
-              <span className={styles.infoBlockDot} aria-hidden="true" />
               Direct
             </p>
             <p className={styles.infoText}>
@@ -120,7 +118,6 @@ const Contact = () => {
 
           <div className={styles.infoBlock}>
             <p className={styles.infoLabel}>
-              <span className={styles.infoBlockDot} aria-hidden="true" />
               Werkgebied
             </p>
             <p className={styles.infoSecondary}>
@@ -130,7 +127,6 @@ const Contact = () => {
 
           <div className={styles.infoBlock}>
             <p className={styles.infoLabel}>
-              <span className={styles.infoBlockDot} aria-hidden="true" />
               Reactietijd
             </p>
             <p className={styles.infoSecondary}>

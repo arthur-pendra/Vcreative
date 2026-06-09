@@ -125,8 +125,8 @@ const Footer = () => {
           aria-hidden="true"
           data-animation="webgl-text"
           data-webgl-text-mode="time-trigger"
-          data-webgl-text-duration="3"
-          data-webgl-text-start="top 110%"
+          data-webgl-text-duration="1.6"
+          data-webgl-text-start="top 130%"
           data-webgl-text-bg="#641018"
         >
           <em>creative</em>
@@ -135,6 +135,14 @@ const Footer = () => {
 
       <div className={styles.bottom}>
         <span>© 2026 Vienna Wachelder</span>
+        <a
+          href="https://pendra.studio"
+          target="_blank"
+          rel="noreferrer"
+          className={styles.credit}
+        >
+          Website door Pendra.studio
+        </a>
       </div>
     </footer>
   )

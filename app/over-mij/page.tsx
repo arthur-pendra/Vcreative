@@ -226,7 +226,6 @@ const OverMij = () => (
 
       <section className={styles.cta} data-theme="dark">
         <p className={styles.ctaLabel}>
-          <span className={styles.ctaLabelDot} aria-hidden="true" />
           Samenwerken
         </p>
         <h2

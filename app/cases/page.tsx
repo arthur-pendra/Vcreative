@@ -18,7 +18,6 @@ const CasesIndex = () => (
     <div className={styles.page}>
       <header className={styles.hero}>
         <p className={styles.label}>
-          <span className={styles.labelDot} aria-hidden="true" />
           Cases
         </p>
         <h1

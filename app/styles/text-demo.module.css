@@ -135,13 +135,6 @@
   gap: 0.75em;
 }
 
-.projectenLabelDot {
-  width: 0.4em;
-  height: 0.4em;
-  border-radius: var(--radius-full);
-  background: var(--color-accent);
-}
-
 .projectenTitle {
   font-family: var(--font-primary);
   font-style: italic;
@@ -151,38 +144,6 @@
   line-height: 0.95;
   letter-spacing: var(--tracking-tight);
   margin: 0;
-}
-
-.projectenCategories {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5em 0;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-width: 17em;
-  font-family: var(--font-secondary);
-  font-size: var(--text-md);
-  font-weight: var(--weight-regular);
-  color: var(--color-navy);
-  letter-spacing: var(--tracking-tight);
-}
-
-.projectenCategory {
-  display: inline-flex;
-  align-items: center;
-}
-
-.projectenCategory + .projectenCategory::before {
-  content: '';
-  display: inline-block;
-  width: 0.4em;
-  height: 0.4em;
-  border-radius: var(--radius-full);
-  background: var(--color-accent);
-  margin: 0 1em;
 }
 
 .projectItem {
@@ -570,7 +531,7 @@
 }
 
 .reviewAuthor {
-  font-family: var(--font-secondary);
+  font-family: var(--font-primary);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
   color: var(--color-navy);
@@ -578,13 +539,6 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
-}
-
-.reviewAuthorDot {
-  width: 0.4em;
-  height: 0.4em;
-  border-radius: var(--radius-full);
-  background: var(--color-accent);
 }
 
 .reviewRole {
@@ -638,7 +592,7 @@
   font-weight: var(--weight-regular);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  margin: 0 0 8em;
+  margin: 0 0 1.5em;
 }
 
 .werkwijzeTitle {
@@ -647,7 +601,7 @@
   font-size: var(--text-3xl);
   font-weight: var(--weight-regular);
   line-height: 0.95;
-  margin: 0 0 3em;
+  margin: 0 0 2em;
   max-width: 14em;
 }
 
@@ -770,7 +724,7 @@
 }
 
 .werkwijzeP {
-  font-family: var(--font-secondary);
+  font-family: var(--font-primary);
   font-size: var(--text-sm);
   font-weight: var(--weight-regular);
   line-height: var(--leading-loose);
@@ -875,15 +829,6 @@
 
   .projectenTitle {
     font-size: var(--text-3xl);
-  }
-
-  .projectenCategories {
-    font-size: var(--text-xs);
-    max-width: 20em;
-  }
-
-  .projectenCategory + .projectenCategory::before {
-    margin: 0 0.75em;
   }
 
   .projectenRow {

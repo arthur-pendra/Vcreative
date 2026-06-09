@@ -52,7 +52,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0;
+  gap: 0.3em 0;
   font-family: var(--font-secondary);
   font-size: var(--text-xs);
   font-weight: var(--weight-medium);
@@ -66,14 +66,10 @@
   align-items: center;
 }
 
+/* Streepje tussen opsomming-items (i.p.v. een bolletje). */
 .heroTag + .heroTag::before {
-  content: '';
-  display: inline-block;
-  width: 0.3em;
-  height: 0.3em;
-  border-radius: var(--radius-full);
-  background: var(--color-accent);
-  margin: 0 1em;
+  content: '–';
+  margin: 0 0.6em;
 }
 
 /* ── Full-width hero image ── */
@@ -171,7 +167,7 @@
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--color-navy);
-  margin: 0 0 1.25em;
+  margin: 0 0 1.5em;
   display: inline-flex;
   align-items: center;
   gap: 0.75em;
@@ -201,7 +197,7 @@
 }
 
 .sectionBody {
-  font-family: var(--font-secondary);
+  font-family: var(--font-primary);
   font-size: var(--text-sm);
   font-weight: var(--weight-regular);
   line-height: var(--leading-loose);
@@ -294,7 +290,7 @@
 
 .workflowCopy {
   grid-column: 1 / -1;
-  font-family: var(--font-secondary);
+  font-family: var(--font-primary);
   font-size: var(--text-sm);
   font-weight: var(--weight-regular);
   line-height: var(--leading-loose);
@@ -313,7 +309,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 2.5em;
+  gap: 1.5em;
 }
 
 .ctaLabel {
@@ -327,13 +323,6 @@
   display: inline-flex;
   align-items: center;
   gap: 0.75em;
-}
-
-.ctaLabelDot {
-  width: 0.4em;
-  height: 0.4em;
-  border-radius: var(--radius-full);
-  background: var(--color-accent);
 }
 
 .ctaTitle {

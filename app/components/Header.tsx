@@ -55,7 +55,6 @@ const Header = () => {
             data-hover={menuVisible}
             data-chrome="tl"
           >
-            <span className={styles.menuDot} />
             {menuVisible ? 'sluiten' : 'menu'}
           </button>
 

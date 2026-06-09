@@ -38,7 +38,6 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
     <div className={styles.page}>
       <section className={styles.hero}>
         <p className={styles.heroMeta}>
-          <span className={styles.heroMetaDot} aria-hidden="true" />
           Case · {data.year}
         </p>
         <h1
@@ -181,7 +180,6 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
       {data.socialItems && data.socialItems.length > 0 && (
         <section className={styles.socialSection}>
           <p className={styles.socialLabel}>
-            <span className={styles.socialLabelDot} aria-hidden="true" />
             Op de socials
           </p>
           <div className={styles.socialGrid}>
@@ -226,7 +224,6 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
             &ldquo;{data.quote.text}&rdquo;
           </blockquote>
           <p className={styles.quoteAuthor}>
-            <span className={styles.quoteAuthorDot} aria-hidden="true" />
             {data.quote.author}
           </p>
           <p className={styles.quoteRole}>{data.quote.role}</p>
@@ -256,7 +253,6 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
 
       <section className={styles.nextCase}>
         <p className={styles.nextCaseLabel}>
-          <span className={styles.nextCaseLabelDot} aria-hidden="true" />
           Volgende case
         </p>
         <h2

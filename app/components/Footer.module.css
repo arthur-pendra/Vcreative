@@ -85,7 +85,7 @@
 }
 
 .newsletterBody {
-  font-family: var(--font-secondary);
+  font-family: var(--font-primary);
   font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
   color: #ffffff;
@@ -140,7 +140,7 @@
   background: rgba(250, 248, 242, 0.08);
   padding: 1em 1.5em;
   border-radius: var(--radius-pill);
-  font-family: var(--font-secondary);
+  font-family: var(--font-primary);
   font-size: var(--text-sm);
   color: #ffffff;
   outline: none;
@@ -208,8 +208,9 @@
 .colHead {
   font-family: var(--font-secondary);
   font-size: var(--text-xs);
-  font-weight: var(--weight-medium);
-  letter-spacing: var(--tracking-normal);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
   color: rgba(250, 248, 242, 0.45);
   margin: 0;
 }
@@ -221,7 +222,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-  font-family: var(--font-secondary);
+  font-family: var(--font-primary);
   font-size: var(--text-sm);
   font-weight: var(--weight-regular);
 }
@@ -296,10 +297,20 @@
   align-items: center;
   gap: 0.6em;
   padding-top: 0.5em;
-  font-family: var(--font-secondary);
+  font-family: var(--font-primary);
   font-size: var(--text-xs);
   font-weight: var(--weight-regular);
   color: #ffffff;
+}
+
+.credit {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color var(--duration-fast);
+}
+
+.credit:hover {
+  color: var(--color-accent);
 }
 
 /* ── Tablet ── */
@@ -316,24 +327,48 @@
 
 @media (max-width: 767px) {
   .footer {
-    padding: 3.5em 0.75em 1.5em;
+    padding: 6.5em 0.75em 1.5em;
     padding-bottom: max(1.5em, env(safe-area-inset-bottom));
-    gap: 3em;
+    gap: 2em;
+    /* Verdeel de drie blokken (nieuwsbrief + nav, artwork, credit) over
+       de volledige hoogte zodat de footer als full-screen sluitpaneel
+       leest in plaats van samengeklonterd onderaan met leegte bovenin. */
+    justify-content: space-between;
   }
 
   .topRow {
-    gap: 2em;
+    gap: 2.5em;
+    margin-top: 0;
+  }
+
+  .brandRow {
+    margin-top: 0;
+  }
+
+  .bottom {
+    margin-top: 0;
+    padding-top: 2em;
+  }
+
+  /* Wat meer lucht binnen de blokken — alleen spacing, fontgroottes
+     blijven de standaardwaardes. */
+  .newsletter {
+    gap: 1.25em;
+  }
+
+  .colList {
+    gap: 0.75em;
   }
 
   .logoMark {
-    width: 9.6em;
+    width: 13em;
   }
 
   .columns {
     /* Two columns op mobile: Diensten + Contact. Socials worden
        verborgen om de footer strakker te houden. */
     grid-template-columns: repeat(2, 1fr);
-    gap: 2em 0.75em;
+    gap: 2em 1.5em;
   }
 
   .colSocials {
@@ -341,7 +376,11 @@
   }
 
   .brand {
-    font-size: clamp(4em, 30vw, 12em);
+    /* Breed maar niet full-bleed: het woord springt aan beide kanten net
+       binnen de footer-padding in (ratio glyphs ≈ 2.03), zodat het dezelfde
+       ademruimte langs de rand houdt als de rest van de footer i.p.v. tegen
+       de rand te plakken. De em-cap voorkomt overschieten op brede mobiles. */
+    font-size: clamp(4em, 43vw, 20em);
   }
 }
 

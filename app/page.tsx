@@ -271,19 +271,11 @@ const TextDemo = () => {
         <section className={styles.projectenSection}>
           <header className={styles.projectenHeader}>
             <p className={styles.projectenLabel}>
-              <span className={styles.projectenLabelDot} aria-hidden="true" />
               2008 / 2026
             </p>
             <h2 className={styles.projectenTitle} data-animation="webgl-text">
               <em className="scriptCap">C</em>reative projecten
             </h2>
-            <ul className={styles.projectenCategories}>
-              <li className={styles.projectenCategory}>Beauty</li>
-              <li className={styles.projectenCategory}>Lifestyle</li>
-              <li className={styles.projectenCategory}>Horeca</li>
-              <li className={styles.projectenCategory}>Retail</li>
-              <li className={styles.projectenCategory}>Wellness</li>
-            </ul>
           </header>
 
           <article className={`${styles.projectItem} ${styles.projectFull}`}>
@@ -553,7 +545,7 @@ const TextDemo = () => {
               ariaLabel="Viënna introductie"
             />
           </figure>
-          <p className={styles.werkwijzeCtaText}>
+          <p className={styles.werkwijzeCtaText} data-animation="webgl-text">
             <em className="scriptCap">Z</em>et mij aan het werk met jouw unieke merk.
           </p>
           <IconButton href="/contact" className={styles.werkwijzeCtaButton}>
@@ -600,7 +592,6 @@ const TextDemo = () => {
             />
           </div>
           <p className={styles.reviewAuthor}>
-            <span className={styles.reviewAuthorDot} aria-hidden="true" />
             {currentReview.author}
           </p>
           <p className={styles.reviewRole}>{currentReview.role}</p>
