@@ -514,7 +514,7 @@ const TextDemo = () => {
             />
           </figure>
           <p className={styles.werkwijzeCtaText} data-animation="webgl-text">
-            <em className="scriptCap">Z</em>et mij aan het werk met jouw unieke merk.
+            <em className="scriptCap">T</em>ijd om jouw merk in beeld te brengen.
           </p>
           <IconButton href="/contact" className={styles.werkwijzeCtaButton}>
             Start jouw project
