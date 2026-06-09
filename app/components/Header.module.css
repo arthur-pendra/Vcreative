@@ -117,7 +117,7 @@
   /* Same font-size as the menu/contact chrome so this `top` lines up with
      them; the translate centres the small mark on the chrome text line. */
   font-size: 0.65em;
-  transform: translate(-50%, calc(-50% + 0.6em));
+  transform: translate(-50%, calc(-50% + 1.1em));
   width: 4.8em;
   aspect-ratio: 88.17 / 103.55;
   pointer-events: auto;
