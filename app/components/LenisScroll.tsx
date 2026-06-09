@@ -56,8 +56,12 @@ const LenisScroll = () => {
       scrollTriggerRef = ScrollTrigger
 
       lenis = new Lenis({
-        // iOS Safari: disable touch smoothing to avoid address-bar flicker
-        syncTouch: false,
+        /* Smooth (rAF-driven) scroll on touch too, so the page content and
+           the WebGL text overlay move in the same loop — the noise mask
+           stays glued to the text on mobile instead of wobbling against the
+           native compositor scroll. Trade-off: can reintroduce a little iOS
+           address-bar movement during scroll. */
+        syncTouch: true,
       })
       setLenisInstance(lenis)
 

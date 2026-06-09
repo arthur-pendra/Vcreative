@@ -308,19 +308,14 @@ export function useWebGLEffects() {
       }
       lenisRef = lenis as LenisLike | null
 
-      /* On touch the page scrolls NATIVELY (Lenis syncTouch is off), so the
-         DOM text moves with window.scrollY instantly. Driving the overlay off
-         lenis.animatedScroll (a smoothed/lerped value) lags the real scroll,
-         so the mask drifts off the text while scrolling (the "wobble"). Read
-         the native scroll directly on touch so the mask stays glued; desktop
-         keeps the Lenis-driven value so both layers share one update. */
-      const getScroll = () =>
-        isTouch || !lenis ? window.scrollY : lenis.animatedScroll
-      const getScrollRaw = () =>
-        isTouch || !lenis ? window.scrollY : lenis.actualScroll
+      /* Lenis drives the scroll on desktop AND touch (syncTouch), so the
+         page content and this overlay both move on lenis.animatedScroll in
+         one rAF loop — the mask stays glued to the text. */
+      const getScroll = () => lenis ? lenis.animatedScroll : window.scrollY
+      const getScrollRaw = () => lenis ? lenis.actualScroll : window.scrollY
 
       scrollHandler = () => { needsRender = true }
-      if (lenis && !isTouch) {
+      if (lenis) {
         lenis.on('scroll', scrollHandler)
       } else {
         window.addEventListener('scroll', scrollHandler, { passive: true })
@@ -844,11 +839,7 @@ export function useWebGLEffects() {
       const update = () => {
         checkFPS()
 
-        /* Touch renders every frame so the mask reads the freshest native
-           window.scrollY at paint time (no scroll-event timing gaps). Cheap
-           once text is revealed — those meshes are culled below. Desktop
-           stays event-gated via needsRender. */
-        if (needsRender || isTouch) {
+        if (needsRender) {
           const scrollY = getScroll()
 
           const vw = window.innerWidth
