@@ -20,53 +20,59 @@ precision highp float;
 uniform float uReveal;
 uniform vec3 uColor;
 uniform vec2 uAspect;
+uniform vec2 uSize;
 varying vec2 vUv;
 
-float hash(vec2 p) {
-  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+float random(vec2 co) {
+  highp float a = 12.9898;
+  highp float b = 78.233;
+  highp float c = 43758.5453;
+  highp float dt = dot(co.xy, vec2(a, b));
+  highp float sn = mod(dt, 3.14);
+  return fract(sin(sn) * c);
 }
 
-float noise(vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
+// Value noise (Morgan McGuire) — fijne korrel, zelfde familie als de
+// menu-inkt. Verstoort de rand van de reveal-veeg i.p.v. de tekst zelf
+// op te lossen (dat gaf de oude radiale "olievlek").
+float noise(in vec2 st) {
+  vec2 i = floor(st);
+  vec2 f = fract(st);
+  float a = random(i);
+  float b = random(i + vec2(1.0, 0.0));
+  float c = random(i + vec2(0.0, 1.0));
+  float d = random(i + vec2(1.0, 1.0));
   vec2 u = f * f * (3.0 - 2.0 * f);
-  float a = hash(i);
-  float b = hash(i + vec2(1.0, 0.0));
-  float c = hash(i + vec2(0.0, 1.0));
-  float d = hash(i + vec2(1.0, 1.0));
-  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
-}
-
-float fbm(vec2 p) {
-  float value = 0.0;
-  float amp = 0.5;
-  for (int i = 0; i < 3; i++) {
-    value += amp * noise(p);
-    p *= 2.0;
-    amp *= 0.5;
-  }
-  return value;
+  return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
 }
 
 void main() {
-  float progress = uReveal * 1.5 - 0.25;
-
-  // Rusttoestand vóór de reveal: de mask dekt de tekst volledig af,
-  // dus de dure noise hoeft hier niet berekend te worden.
-  if (progress <= -0.15) {
+  // Rusttoestand vóór de reveal: de mask dekt de tekst volledig af.
+  if (uReveal <= 0.001) {
     gl_FragColor = vec4(uColor, 1.0);
     return;
   }
 
-  vec2 uv = vUv * uAspect * 8.0;
-  float n1 = fbm(uv);
-  float n1b = fbm(uv + vec2(5.2, 1.3));
-  vec2 warped = uv + vec2(n1, n1b) * 0.4;
-  float n = fbm(warped + vec2(1.7, 9.2));
+  float smoothness = 0.5;
 
-  float mask = smoothstep(progress - 0.15, progress + 0.15, n);
-  if (mask < 0.01) discard;
-  gl_FragColor = vec4(uColor, mask);
+  // Reveal-front: radiale afstand vanaf de linkerbovenhoek (0,1),
+  // aspect-gecorrigeerd en genormaliseerd zodat de rechtsonder-hoek op 1
+  // ligt. De veeg loopt zo van linksboven naar rechtsonder.
+  vec2 ratio = vec2(1.0, 1.0 / uAspect.x);
+  float maxDist = length(ratio) * 0.75;
+  float dist = length((vUv - vec2(0.0, 1.0)) * ratio * 0.75) / maxDist;
+
+  // Noise-korrel rafelt de rand van de veeg organisch open. Schaal op
+  // pixelgrootte (zoals unseen: ~0.08/px) zodat de korrel overal even fijn
+  // is, los van hoe groot het tekstblok is.
+  float n = noise(vUv * uSize * 0.08);
+
+  float p = mix(-smoothness, 1.0 + smoothness, uReveal);
+  float edge = smoothstep(p - smoothness, p + smoothness, n);
+  float q = smoothstep(uReveal - edge, uReveal, dist);
+
+  if (q < 0.01) discard;
+  gl_FragColor = vec4(uColor, q);
 }
 `
 
@@ -398,6 +404,7 @@ export function useWebGLEffects() {
               uReveal: new THREE.Uniform(0),
               uColor: {value: getMaskColor(element)},
               uAspect: {value: new THREE.Vector2(aspect, 1.0)},
+              uSize: {value: new THREE.Vector2(paddedW, paddedH)},
             },
           })
           registerDisposable(material)
@@ -413,9 +420,9 @@ export function useWebGLEffects() {
           t.isVisible = true
           const mode = t.element.dataset.webglTextMode
           /* Per-element override for the reveal duration (seconds).
-             Falls back to the time-trigger default of 1.4s. */
+             Defaults to a calm 3.5s (unseen's webgl text reveal timing). */
           const revealDuration =
-            parseFloat(t.element.dataset.webglTextDuration || '') || 1.4
+            parseFloat(t.element.dataset.webglTextDuration || '') || 3.5
           /* Per-element override for the time-trigger start position
              (ScrollTrigger syntax). Defaults to 'top 95%'. */
           const revealStart = t.element.dataset.webglTextStart || 'top 95%'
@@ -428,6 +435,7 @@ export function useWebGLEffects() {
             const pH = b.height * (1 + PAD_Y * 2)
             t.mesh.scale.set(pW, pH, 1)
             ;(t.material.uniforms.uAspect.value as THREE.Vector2).set(pW / pH, 1.0)
+            ;(t.material.uniforms.uSize.value as THREE.Vector2).set(pW, pH)
             needsRender = true
           }
 
@@ -456,7 +464,7 @@ export function useWebGLEffects() {
                   tweens.push(gsap.to(t.material.uniforms.uReveal, {
                     value: 1,
                     duration: revealDuration,
-                    ease: 'power2.inOut',
+                    ease: 'power2.out',
                     onUpdate: () => { needsRender = true },
                   }))
                 },
@@ -488,25 +496,22 @@ export function useWebGLEffects() {
               {el: t.element, type: 'webgl-text-remeasured', fn: onRemeasuredT},
             )
           } else {
-            tweens.push(gsap.to(t.material.uniforms.uReveal, {
-              value: 1,
-              ease: 'none',
-              onUpdate: () => { needsRender = true },
-              scrollTrigger: {
-                trigger: t.element,
-                start: 'top 95%',
-                end: 'top 35%',
-                scrub: 0.5,
-                /* Eenmalig: zodra de tekst volledig onthuld is (voorbij
-                   het eindpunt gescrold) locken we uReveal op 1 en
-                   disablen we de trigger — terug scrollen bouwt de mask
-                   niet opnieuw op. Zonder dit scrubt de reveal met de
-                   scroll mee terug en "reset" de tekst. */
-                onLeave: (self) => {
-                  t.material.uniforms.uReveal.value = 1
-                  needsRender = true
-                  self.disable(false)
-                },
+            /* Default: speel de reveal één keer af zodra de tekst in beeld
+               scrollt en draai 'm nooit meer terug — identiek aan
+               time-trigger, zodat alle webgl-tekst overal hetzelfde werkt
+               (geen scrub die met op/neer scrollen mee in- en uit-animeert). */
+            triggers.push(ScrollTrigger.create({
+              trigger: t.element,
+              start: revealStart,
+              once: true,
+              onEnter: () => {
+                remeasure()
+                tweens.push(gsap.to(t.material.uniforms.uReveal, {
+                  value: 1,
+                  duration: revealDuration,
+                  ease: 'power2.out',
+                  onUpdate: () => { needsRender = true },
+                }))
               },
             }))
           }
