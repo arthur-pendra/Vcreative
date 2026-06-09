@@ -331,6 +331,7 @@ const TextDemo = () => {
                     <img
                       data-webgl-media
                       data-webgl-effect="bend"
+                      data-webgl-y="0.13"
                       src="/cases/hair-by-kim/01.webp"
                       alt="Hair by Kim"
                       className={`${styles.projectImage} ${styles.projectImageTop}`}
