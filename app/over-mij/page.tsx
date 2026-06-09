@@ -84,9 +84,10 @@ const OverMij = () => (
       <figure className={styles.heroFigure} data-parallax="trigger">
         <div className={styles.parallaxTarget} data-parallax="target">
           <img
-            src="https://picsum.photos/seed/vienna-portrait/1920/823"
+            src="/images/hero_overmij.png"
             alt="Vienna aan het werk"
             className={styles.heroImage}
+            style={{ objectPosition: 'center 28%' }}
           />
         </div>
       </figure>
@@ -122,9 +123,11 @@ const OverMij = () => (
               <img
                 data-webgl-media
                 data-webgl-effect="bend"
-                src="https://picsum.photos/seed/vienna-studio/900/1125"
-                alt="Vienna in de studio"
+                data-webgl-y="0.18"
+                src="/images/overmij2.jpeg"
+                alt="Vienna met de camera in de studio"
                 className={styles.sectionImage}
+                style={{ objectPosition: 'center 22%' }}
                 loading="lazy"
               />
             </div>
@@ -142,9 +145,11 @@ const OverMij = () => (
               <img
                 data-webgl-media
                 data-webgl-effect="bend"
-                src="https://picsum.photos/seed/vienna-work/1200/900"
-                alt="Content voorbeelden"
+                data-webgl-y="0.12"
+                src="/images/overmij3.jpeg"
+                alt="Vienna aan het werk met laptop en camera"
                 className={styles.sectionImage}
+                style={{ objectPosition: 'center 28%' }}
                 loading="lazy"
               />
             </div>
@@ -185,9 +190,11 @@ const OverMij = () => (
               <img
                 data-webgl-media
                 data-webgl-effect="bend"
-                src="https://picsum.photos/seed/vienna-process/1920/840"
-                alt="Werkwijze"
+                data-webgl-y="0.18"
+                src="/images/overmij2.jpeg"
+                alt="Vienna in de studio"
                 className={styles.sectionImage}
+                style={{ objectPosition: 'center 22%' }}
                 loading="lazy"
               />
             </div>
