@@ -303,16 +303,6 @@
   color: #ffffff;
 }
 
-.credit {
-  color: #ffffff;
-  text-decoration: none;
-  transition: color var(--duration-fast);
-}
-
-.credit:hover {
-  color: var(--color-accent);
-}
-
 /* ── Tablet ── */
 
 @media (max-width: 991px) {

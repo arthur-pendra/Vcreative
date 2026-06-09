@@ -134,14 +134,6 @@ const Footer = () => {
 
       <div className={styles.bottom}>
         <span>© 2026 Vienna Wachelder</span>
-        <a
-          href="https://pendra.studio"
-          target="_blank"
-          rel="noreferrer"
-          className={styles.credit}
-        >
-          Website door Pendra.studio
-        </a>
       </div>
     </footer>
   )
