@@ -6,6 +6,9 @@ import styles from '@/app/components/Loader.module.css'
 
 /* Keep in sync with the .loader opacity transition in Loader.module.css. */
 const FADE_MS = 800
+/* Brief beat between the logo finishing its wipe-out and the cream lifting,
+   so the reveal doesn't step on the tail of the logo animation. */
+const HOLD_MS = 350
 /* Safety net: fade out even if the 3D model never loads (so the site is
    never permanently hidden behind the loader). Generous enough to outlast
    the full enter → spin → exit timeline plus model load time. */
@@ -24,9 +27,12 @@ const Loader = () => {
   const startFade = () => {
     if (startedRef.current) return
     startedRef.current = true
-    unlockScroll()
-    setFading(true)
-    window.setTimeout(() => setDone(true), FADE_MS)
+    /* Hold a beat after the logo wipes out, then lift the cream overlay. */
+    window.setTimeout(() => {
+      unlockScroll()
+      setFading(true)
+      window.setTimeout(() => setDone(true), FADE_MS)
+    }, HOLD_MS)
   }
 
   useEffect(() => {
