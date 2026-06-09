@@ -237,7 +237,7 @@ const TextDemo = () => {
               fill
               priority
               sizes="100vw"
-              style={{ objectFit: 'cover', objectPosition: 'center 25%' }}
+              style={{ objectFit: 'cover', objectPosition: 'center 15%' }}
             />
           </div>
         </div>
