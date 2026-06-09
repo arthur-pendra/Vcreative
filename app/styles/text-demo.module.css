@@ -315,7 +315,7 @@
 
 .studioLogo {
   display: block;
-  width: 31.68em;
+  width: 24em;
   aspect-ratio: 1 / 1;
   /* Big_Logo.svg is portret (124.53 × 166.75) — contain houdt het
      gecentreerd binnen de vierkante footprint zonder vervorming. */
@@ -847,7 +847,7 @@
   }
 
   .studioLogo {
-    width: 23.1em;
+    width: 18em;
   }
 
   .studioTagline {
@@ -990,7 +990,7 @@
   }
 
   .studioLogo {
-    width: 18.16em;
+    width: 14em;
   }
 
   .studioTagline {
