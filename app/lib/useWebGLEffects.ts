@@ -308,14 +308,17 @@ export function useWebGLEffects() {
       }
       lenisRef = lenis as LenisLike | null
 
-      /* Lenis drives the scroll on desktop AND touch (syncTouch), so the
-         page content and this overlay both move on lenis.animatedScroll in
-         one rAF loop — the mask stays glued to the text. */
-      const getScroll = () => lenis ? lenis.animatedScroll : window.scrollY
-      const getScrollRaw = () => lenis ? lenis.actualScroll : window.scrollY
+      /* Touch scrolls NATIVELY (Lenis syncTouch is off → native feel), so
+         the DOM text moves with window.scrollY instantly. Read that directly
+         on touch so the mask tracks the real scroll instead of Lenis'
+         lerped value. Desktop keeps the Lenis-driven value. */
+      const getScroll = () =>
+        isTouch || !lenis ? window.scrollY : lenis.animatedScroll
+      const getScrollRaw = () =>
+        isTouch || !lenis ? window.scrollY : lenis.actualScroll
 
       scrollHandler = () => { needsRender = true }
-      if (lenis) {
+      if (lenis && !isTouch) {
         lenis.on('scroll', scrollHandler)
       } else {
         window.addEventListener('scroll', scrollHandler, { passive: true })
@@ -839,7 +842,10 @@ export function useWebGLEffects() {
       const update = () => {
         checkFPS()
 
-        if (needsRender) {
+        /* Touch renders every frame so the mask reads the freshest native
+           window.scrollY at paint time (no scroll-event timing gaps).
+           Cheap once text is revealed — those meshes are culled. */
+        if (needsRender || isTouch) {
           const scrollY = getScroll()
 
           const vw = window.innerWidth
