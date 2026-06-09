@@ -14,7 +14,7 @@ const Contact = () => {
   const submit = () => {
     const body = `${message}\n\nGroet,\n${name}\n${email}`
     const subject = `Nieuw bericht van ${name || 'website'}`
-    window.location.href = `mailto:hallo@v-creative.nl?subject=${encodeURIComponent(
+    window.location.href = `mailto:info@vcreative.nl?subject=${encodeURIComponent(
       subject,
     )}&body=${encodeURIComponent(body)}`
   }
@@ -109,10 +109,10 @@ const Contact = () => {
               Direct
             </p>
             <p className={styles.infoText}>
-              <a href="mailto:hallo@v-creative.nl">hallo@v-creative.nl</a>
+              <a href="mailto:info@vcreative.nl">info@vcreative.nl</a>
             </p>
             <p className={styles.infoText}>
-              <a href="tel:+31612345678">+31 (0) 6 12 34 56 78</a>
+              <a href="tel:+31641493806">+31 6 41 49 38 06</a>
             </p>
           </div>
 

@@ -7,7 +7,7 @@ import styles from '@/app/over-mij/over-mij.module.css'
 export const metadata: Metadata = {
   title: 'Over mij',
   description:
-    'Vienna Wachelder. Verhalen vertalen naar beeld dat blijft. Vanuit Heerlen, voor ondernemers door heel Nederland.',
+    'Vienna Wachelder. Ik maak beeld dat laat zien wie je bent. Vanuit Heerlen, voor ondernemers door heel Nederland.',
 }
 
 const HERO_TAGS = ['Sinds 2019', 'Vanuit Heerlen', 'Voor heel Nederland']
@@ -25,19 +25,19 @@ const DELIVERABLES = [
 const WORKFLOW = [
   {
     name: 'Intake',
-    copy: 'We starten met een gesprek over wie je bent en wie je wilt bereiken. Niet om een template in te vullen, maar om een toon te vinden.',
+    copy: 'We beginnen met een gesprek over wie je bent en wat je wilt bereiken. Zo bepalen we samen de richting.',
   },
   {
     name: 'Content',
-    copy: 'Ik fotografeer, film, monteer en schrijf. Op locatie als het kan, in de studio als het moet. Persoonlijk, nooit standaard.',
+    copy: 'Vervolgens maak ik de content: fotografie, video, montage en teksten. Altijd afgestemd op jouw merk.',
   },
   {
     name: 'Plaatsen',
-    copy: 'Alles wordt gepland en geplaatst. Jij hoeft geen captions meer te bedenken om 22:00.',
+    copy: 'Ik plan alles in en zet het voor je live, zodat jij je geen zorgen hoeft te maken over de planning.',
   },
   {
     name: 'Bijsturen',
-    copy: 'Maandelijks kijken we wat werkt en wat beter kan. Geen rapportage-theater, wel scherpe keuzes.',
+    copy: 'Elke maand kijken we samen wat werkt en wat beter kan, en sturen we waar nodig bij.',
   },
 ]
 
@@ -68,9 +68,9 @@ const OverMij = () => (
           data-webgl-text-mode="hero"
           className={styles.heroTitle}
         >
-          <em className="scriptCap">V</em>erhalen vertalen
+          <em className="scriptCap">B</em>eeld dat laat zien
           <br />
-          naar beeld dat blijft
+          wie je bent
         </h1>
         <ul className={styles.heroTags}>
           {HERO_TAGS.map((tag) => (
@@ -100,20 +100,17 @@ const OverMij = () => (
               Mijn verhaal
             </p>
             <h2 data-animation="webgl-text" className={styles.sectionTitle}>
-              Trage groei,
+              Persoonlijk en betrokken,
               <br />
-              content die blijft hangen
+              van begin af aan
             </h2>
             <p className={styles.sectionBody}>
-              Wat ooit begon met een camera in mijn hand op familiefeesten,
-              groeide uit tot een studio voor merken die iets te vertellen
-              hebben.
+              Ik ben Vienna, contentmaker vanuit Heerlen. Ik help ondernemers
+              en merken om hun verhaal te vertalen naar sterk beeld.
             </p>
             <p className={styles.sectionBody}>
-              Vanuit Heerlen werk ik met ondernemers door heel Nederland, van
-              beauty tot horeca tot tattoo studio&rsquo;s. Wat ze gemeen
-              hebben: ze willen hun verhaal serieus nemen, niet alleen vaker
-              posten.
+              Van fotografie tot video en social media: ik werk persoonlijk en
+              betrokken, zodat je merk online laat zien wie het is.
             </p>
           </div>
           <figure
@@ -158,14 +155,14 @@ const OverMij = () => (
               Wat ik doe
             </p>
             <h2 data-animation="webgl-text" className={styles.sectionTitle}>
-              Van eerste concept
+              Alles voor je content,
               <br />
-              tot maandelijks ritme
+              van begin tot eind
             </h2>
             <p className={styles.sectionBody}>
-              Ik neem het hele creatieve traject over, van fotografie en video
-              tot editing, captions, planning en analyse. Op locatie als het
-              kan, in de studio als het moet.
+              Fotografie, video, montage, teksten en planning &mdash; ik
+              verzorg het hele creatieve traject. Op locatie of in de studio,
+              altijd afgestemd op jouw merk.
             </p>
             <ul className={styles.chips}>
               {DELIVERABLES.map((d) => (

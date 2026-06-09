@@ -13,13 +13,13 @@ const SERVICES = [
 ]
 
 const CONTACT = [
-  { label: 'hallo@v-creative.nl', href: 'mailto:hallo@v-creative.nl' },
-  { label: '+31 (0) 6 12 34 56 78', href: 'tel:+31612345678' },
+  { label: 'info@vcreative.nl', href: 'mailto:info@vcreative.nl' },
+  { label: '+31 6 41 49 38 06', href: 'tel:+31641493806' },
 ]
 
 const SOCIALS = [
-  { label: 'Instagram', href: 'https://instagram.com/' },
-  { label: 'LinkedIn', href: 'https://linkedin.com/' },
+  { label: 'Instagram', href: 'https://www.instagram.com/vienna.wachelder' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/viënna-wachelder-70276110b' },
   { label: 'Pinterest', href: 'https://pinterest.com/' },
 ]
 
@@ -30,7 +30,7 @@ const Footer = () => {
     if (!email) return
     const subject = encodeURIComponent('Nieuwsbrief aanmelding')
     const body = encodeURIComponent(`Graag op de hoogte blijven: ${email}`)
-    window.location.href = `mailto:hallo@v-creative.nl?subject=${subject}&body=${body}`
+    window.location.href = `mailto:info@vcreative.nl?subject=${subject}&body=${body}`
   }
 
   const onSubmit = (e: React.FormEvent) => {

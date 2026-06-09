@@ -206,7 +206,7 @@
   }
 
   .title {
-    font-size: var(--text-2xl);
+    font-size: var(--text-3xl);
   }
 
   .cases {
@@ -231,7 +231,7 @@
   }
 
   .title {
-    font-size: var(--text-xl);
+    font-size: var(--text-2xl);
   }
 
   .cases {
