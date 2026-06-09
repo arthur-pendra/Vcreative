@@ -348,7 +348,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.6em;
-  font-family: var(--font-secondary);
+  font-family: var(--font-primary);
   font-size: var(--text-sm);
   letter-spacing: var(--tracking-wide);
   color: #ffffff;

@@ -252,9 +252,6 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
       </figure>
 
       <section className={styles.nextCase}>
-        <p className={styles.nextCaseLabel}>
-          Volgende case
-        </p>
         <h2
           data-animation="webgl-text"
           className={styles.nextCaseTitle}
@@ -282,6 +279,7 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
               />
             </div>
           </figure>
+          <span className={styles.nextCaseLabel}>Volgende case</span>
         </a>
       </section>
 

@@ -74,7 +74,7 @@
 
   --tracking-tight: 0.01em;
   --tracking-normal: 0.05em;
-  --tracking-wide: 0.08em;
+  --tracking-wide: 0.1em;
   --tracking-widest: 0.12em;
 
   --leading-snug: 1.3;
@@ -422,6 +422,30 @@ textarea:focus-visible {
 }
 [data-theme='dark'] .btn-icon-icon__wrap {
   color: #ffffff;
+}
+
+/* On hover the accent bg wipes up and reads near-black, swallowing the
+   navy text + navy circle. Invert the foreground in step with the wipe:
+   text and circle go white, the arrow goes black on the now-white circle
+   so the whole pill stays legible. */
+[data-theme='dark'] .btn-icon-content__text,
+[data-theme='dark'] .btn-icon-icon__wrap {
+  transition: color 0.525s cubic-bezier(0.625, 0.05, 0, 1);
+}
+[data-theme='dark'] .btn-icon-icon__bg {
+  transition: background-color 0.525s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-theme='dark'] .btn-icon-link:hover .btn-icon-content__text {
+    color: #ffffff;
+  }
+  [data-theme='dark'] .btn-icon-link:hover .btn-icon-icon__bg {
+    background-color: #ffffff;
+  }
+  [data-theme='dark'] .btn-icon-link:hover .btn-icon-icon__wrap {
+    color: var(--color-navy);
+  }
 }
 
 @media (max-width: 767px) {
