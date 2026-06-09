@@ -118,7 +118,7 @@
      them; the translate centres the small mark on the chrome text line. */
   font-size: 0.65em;
   transform: translate(-50%, calc(-50% + 0.6em));
-  width: 2.4em;
+  width: 4.8em;
   aspect-ratio: 88.17 / 103.55;
   pointer-events: auto;
   display: block;
