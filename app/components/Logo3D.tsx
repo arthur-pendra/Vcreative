@@ -294,8 +294,11 @@ const Logo3D = ({
           pearlMaterial.uniforms.uOpacity.value = mount.opacity
         }
 
-        model.rotation.y = tiltY + spin + mount.angle
-        model.rotation.x = tiltX
+        // Loader coin-flip rides the X axis (tumbles over the top); the
+        // hover spin stays on Y. mount.angle is 0 for every non-loader logo,
+        // so this leaves the header/footer/menu logos unchanged.
+        model.rotation.y = tiltY + spin
+        model.rotation.x = tiltX + mount.angle
         model.scale.setScalar(fit * scaleMul * mount.scale)
         renderer.render(scene, camera)
 
@@ -387,18 +390,17 @@ const Logo3D = ({
          something to fade from. */
       if (spinOnMount) {
         const gsap = (await import('gsap')).default
-        mount.angle = 0
+        // Start facing the BACK so it's already mid-flip on the first frame.
+        mount.angle = Math.PI
         mount.scale = ENTER_SCALE
         mount.opacity = 0
         pearlMaterial.uniforms.uOpacity.value = 0
         mountActive = true
 
-        const ENTER = 0.7 // quick pop-in from the back
-        const SPIN = 1.4
-        const EXIT = 0.55 // quick wipe-out
-        // Whole turns so the logo lands straight (front), never on its thin
-        // flat side.
-        const TURNS = 2
+        const ENTER = 0.6 // fade/scale in while it's already flipping up
+        const FLIP_IN = 1.7 // back → front, decelerating into a slow-mo
+        const FLIP_OUT = 1.05 // front → back, accelerating away
+        const EXIT = 0.6 // fade/recede out as it flips away
 
         mountTl = gsap.timeline({
           onComplete: () => {
@@ -408,20 +410,17 @@ const Logo3D = ({
           },
         })
         mountTl
-          // pop in from the back: opacity + scale, eased out
-          .to(mount, { opacity: 1, duration: ENTER, ease: 'power3.out' }, 0)
+          // fade + scale in while already mid-flip (coming from the back)
+          .to(mount, { opacity: 1, duration: ENTER, ease: 'power2.out' }, 0)
           .to(mount, { scale: 1, duration: ENTER, ease: 'power3.out' }, 0)
-          // one smooth power spin across the WHOLE motion (accelerate in,
-          // settle out) so enter → spin → exit read as a single flowing
-          // gesture; whole turns so it still lands straight (front)
-          .to(
-            mount,
-            { angle: TURNS * Math.PI * 2, duration: ENTER + SPIN + EXIT, ease: 'power2.inOut' },
-            0,
-          )
-          // wipe out + recede a little, eased in — while front-facing
-          .to(mount, { opacity: 0, duration: EXIT, ease: 'power3.in' }, ENTER + SPIN)
-          .to(mount, { scale: EXIT_SCALE, duration: EXIT, ease: 'power3.in' }, ENTER + SPIN)
+          // coin-flip UP: from the back, decelerating hard into a slow-mo as
+          // the face comes over the top to the front (fast away → slow at top)
+          .to(mount, { angle: 2 * Math.PI, duration: FLIP_IN, ease: 'power3.out' }, 0)
+          // coin-flip BACK: accelerate away from the front, back to the back
+          .to(mount, { angle: 3 * Math.PI, duration: FLIP_OUT, ease: 'power3.in' }, FLIP_IN)
+          // fade + recede out as it flips away to the back
+          .to(mount, { opacity: 0, duration: EXIT, ease: 'power2.in' }, FLIP_IN + FLIP_OUT - EXIT)
+          .to(mount, { scale: EXIT_SCALE, duration: EXIT, ease: 'power3.in' }, FLIP_IN + FLIP_OUT - EXIT)
       }
 
       ensureLoop()
