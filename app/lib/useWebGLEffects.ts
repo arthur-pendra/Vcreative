@@ -1167,9 +1167,9 @@ export function useGlobalParallax() {
             const scrubAttr = trigger.getAttribute('data-parallax-scrub')
             const scrub = scrubAttr ? parseFloat(scrubAttr) : true
 
-            /* In-flow (formerly disabled) images pan subtler than the
-               full-bleed ones so the drift stays gentle next to text. */
-            const range = disabled ? 2 : 3
+            /* In-flow (formerly disabled) images get a touch more drift on
+               touch so the parallax reads clearly; full-bleed keep 3. */
+            const range = disabled ? 3.5 : 3
             const startAttr = trigger.getAttribute('data-parallax-start')
             const startVal = startAttr !== null ? parseFloat(startAttr) : range
 
