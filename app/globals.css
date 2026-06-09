@@ -158,6 +158,32 @@ body {
   background: var(--color-cream);
 }
 
+/* Solid cream behind the iOS safe areas — the top status-bar/Dynamic
+   Island ("pil boven") and the bottom home-indicator. viewport-fit:cover
+   runs page content under those regions, so without this they show the
+   content through and read as a transparent notch strip. Painted above the
+   chrome and non-interactive; collapse to 0 height where there's no inset. */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  left: 0;
+  right: 0;
+  background: var(--color-cream);
+  z-index: 60;
+  pointer-events: none;
+}
+
+body::before {
+  top: 0;
+  height: env(safe-area-inset-top, 0px);
+}
+
+body::after {
+  bottom: 0;
+  height: env(safe-area-inset-bottom, 0px);
+}
+
 /* WebGL noise-mask text starts hidden so the bare DOM text can't flash
    in before its cream mask is painted over it — most visible during page
    transitions, where it would otherwise appear as the transition overlay

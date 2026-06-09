@@ -44,7 +44,9 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#faf8f2",
+  /* Site-cream so the iOS Safari top status-bar + bottom toolbar tint to
+     match the page instead of a near-white bar that reads as off/transparent. */
+  themeColor: "#F2EBD9",
 }
 
 const RootLayout = ({
