@@ -249,7 +249,7 @@ const Logo3D = ({
                       (power3.in).
          The render loop just reads `mount`; GSAP owns the values. The
          timeline is built in the spinOnMount block below. */
-      const ENTER_SCALE = 0.5 // start size (further "back")
+      const ENTER_SCALE = 0.35 // start size (further "back") so it flies in
       const EXIT_SCALE = 0.62 // recede target
       let mountActive = false
       const mount = { angle: 0, scale: 1, opacity: 1 }
@@ -387,17 +387,17 @@ const Logo3D = ({
          something to fade from. */
       if (spinOnMount) {
         const gsap = (await import('gsap')).default
-        mount.angle = 0
+        // Start facing the BACK and already mid-spin, so it turns its way in
+        // while fading + scaling up — reads like it flies in from behind.
+        mount.angle = Math.PI
         mount.scale = ENTER_SCALE
         mount.opacity = 0
         pearlMaterial.uniforms.uOpacity.value = 0
         mountActive = true
 
-        const ENTER = 0.7 // quick pop-in from the back
+        const ENTER = 0.9 // calm rise-in (fade + scale up) while already spinning
         const SPIN = 1.4
-        const EXIT = 0.55 // quick wipe-out
-        // Whole turns so the logo lands straight (front), never on its thin
-        // flat side.
+        const EXIT = 0.55 // wipe-out
         const TURNS = 2
 
         mountTl = gsap.timeline({
@@ -413,10 +413,10 @@ const Logo3D = ({
           .to(mount, { scale: 1, duration: ENTER, ease: 'power3.out' }, 0)
           // steady, constant-tempo spin across the whole motion (ease none)
           // so it never accelerates or eases to a stop — just keeps turning
-          // at the same speed; whole turns so it still lands straight (front)
+          // at the same speed, starting already mid-spin from the back
           .to(
             mount,
-            { angle: TURNS * Math.PI * 2, duration: ENTER + SPIN + EXIT, ease: 'none' },
+            { angle: Math.PI + TURNS * Math.PI * 2, duration: ENTER + SPIN + EXIT, ease: 'none' },
             0,
           )
           // wipe out + recede a little, eased in — while front-facing

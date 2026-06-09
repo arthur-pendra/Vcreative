@@ -20,14 +20,14 @@
 }
 
 .logo {
-  /* Medium, centred — scales gently across screens. Portrait aspect of
+  /* Smaller, centred — scales gently across screens. Portrait aspect of
      the logo mark so the canvas matches the model. */
-  width: clamp(7em, 22vw, 11em);
+  width: clamp(5em, 15vw, 8em);
   aspect-ratio: 88.92 / 104.29;
 }
 
 @media (max-width: 767px) {
   .logo {
-    width: clamp(6em, 34vw, 9em);
+    width: clamp(4.5em, 24vw, 7em);
   }
 }
