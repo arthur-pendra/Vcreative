@@ -573,7 +573,7 @@
 
   .hero { padding: 6em var(--container-pad) var(--rhythm); }
   .heroTitle { font-size: var(--text-2xl); }
-  .sectionTitle { font-size: var(--text-lg); }
+  .sectionTitle { font-size: var(--text-xl); }
   .quoteText { font-size: var(--text-md); }
   .nextCaseTitle { font-size: var(--text-xl); }
 }

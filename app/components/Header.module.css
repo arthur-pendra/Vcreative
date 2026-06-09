@@ -48,11 +48,14 @@
 .menuDropdown {
   position: absolute;
   top: 3.75em;
-  left: 2.15em;
+  /* Lijn de items exact uit op de "menu/sluiten" tekst. Die knop heeft
+     font-size:0.65em, dus z'n left:2.75em rekent in kleinere em-eenheden;
+     de dropdown staat op 1em, dus we schalen hetzelfde getal met 0.65. */
+  left: calc(2.75em * 0.65);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.35em;
+  gap: 0.6em;
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
@@ -89,6 +92,14 @@
 .header[data-menu-open='true'] .menuLink,
 .header[data-menu-open='true'] .menuItem {
   color: var(--color-navy);
+}
+
+/* De WebGL-ink-overlay schildert de menu-items zelf (navy tekst op de
+   cream ink). Verberg daarom de DOM-tekst van de items zodra de overlay
+   actief is — de links blijven volledig klikbaar en toegankelijk, maar de
+   tekst verschijnt niet dubbel naast de geschilderde versie. */
+.header[data-overlay='true'] .menuItem {
+  color: transparent;
 }
 
 .logoMark {
@@ -147,7 +158,7 @@
 
   .menuDropdown {
     top: 2.75em;
-    left: 1.25em;
+    left: calc(1.25em * 0.65);
   }
 
   .logoMark {
@@ -169,7 +180,7 @@
 
   .menuDropdown {
     top: 2.5em;
-    left: 1.25em;
+    left: calc(1.25em * 0.65);
   }
 
   .contactLink {
