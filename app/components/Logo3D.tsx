@@ -393,10 +393,12 @@ const Logo3D = ({
         pearlMaterial.uniforms.uOpacity.value = 0
         mountActive = true
 
-        const ENTER = 0.7 // quick pop-in from the back
-        const SPIN = 1.4
-        const EXIT = 0.55 // quick wipe-out
-        const TURNS = 2.25
+        const ENTER = 0.7 // quick pop-in from the back, front-facing
+        const SPIN = 1.6
+        const EXIT = 0.55 // quick wipe-out, front-facing
+        // Whole turns so the logo starts AND ends straight (front), never
+        // resting on its thin/flat side.
+        const TURNS = 2
 
         mountTl = gsap.timeline({
           onComplete: () => {
@@ -409,14 +411,14 @@ const Logo3D = ({
           // pop in from the back: opacity + scale, eased out
           .to(mount, { opacity: 1, duration: ENTER, ease: 'power3.out' }, 0)
           .to(mount, { scale: 1, duration: ENTER, ease: 'power3.out' }, 0)
-          // one smooth power spin across the whole motion (accelerate in,
-          // settle out) so it never reads as a flat, constant-speed turn
+          // spin only in the MIDDLE — pops in straight, turns whole rotations
+          // (power ease: accelerate in, settle out), lands straight again
           .to(
             mount,
-            { angle: TURNS * Math.PI * 2, duration: ENTER + SPIN + EXIT, ease: 'power2.inOut' },
-            0,
+            { angle: TURNS * Math.PI * 2, duration: SPIN, ease: 'power2.inOut' },
+            ENTER,
           )
-          // wipe out + recede a little, eased in
+          // wipe out + recede a little, eased in — while front-facing
           .to(mount, { opacity: 0, duration: EXIT, ease: 'power3.in' }, ENTER + SPIN)
           .to(mount, { scale: EXIT_SCALE, duration: EXIT, ease: 'power3.in' }, ENTER + SPIN)
       }
