@@ -277,13 +277,16 @@ export function useWebGLEffects() {
     const init = async () => {
       await document.fonts.ready
 
-      /* Touch devices DO run the text overlay (the noise-mask scroll
-         reveal). Only the heavier per-image WebGL is skipped further
-         down (mediaElements is emptied on touch), so [data-webgl-media]
-         images stay as plain <img> — that was the expensive part (5–10
-         contexts per case page), the single full-screen text canvas is
-         cheap enough for mobile. */
+      /* Touch/mobile: skip the WebGL text overlay entirely. A fixed canvas
+         can't perfectly track native scroll, so the noise-mask reveal read
+         as wobbly on mobile — show the plain DOM text instead. (The image
+         parallax in useGlobalParallax still runs; so does the menu overlay.) */
       const isTouch = 'ontouchstart' in document.documentElement
+      if (isTouch) {
+        revealText()
+        clearTimeout(revealTextFallback)
+        return
+      }
 
       const THREE = await import('three')
       const {getLenisInstance} = await import('@/app/lib/lenis')
