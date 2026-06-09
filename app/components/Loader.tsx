@@ -7,8 +7,9 @@ import styles from '@/app/components/Loader.module.css'
 /* Keep in sync with the .loader opacity transition in Loader.module.css. */
 const FADE_MS = 800
 /* Safety net: fade out even if the 3D model never loads (so the site is
-   never permanently hidden behind the loader). */
-const FALLBACK_MS = 4000
+   never permanently hidden behind the loader). Generous enough to outlast
+   the full enter → spin → exit timeline plus model load time. */
+const FALLBACK_MS = 9000
 
 const Loader = () => {
   const [fading, setFading] = useState(false)

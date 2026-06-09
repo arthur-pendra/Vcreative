@@ -112,6 +112,10 @@ const Logo3D = ({
 
       const pearlMaterial = new THREE.ShaderMaterial({
         side: THREE.DoubleSide,
+        /* Transparent so the intro loader can fade the logo in from the
+           back and out again. uOpacity stays 1.0 for every other usage, so
+           the header / footer / menu logos render fully opaque as before. */
+        transparent: true,
         uniforms: {
           uMatcap: { value: matcap },
           uIridescence: { value: iridescence },
@@ -120,6 +124,7 @@ const Logo3D = ({
           uRimBoost: { value: 1.1 },
           uSpecBoost: { value: 1.6 },
           uBaseLift: { value: 0.04 },
+          uOpacity: { value: 1.0 },
         },
         vertexShader: /* glsl */ `
           varying vec3 vNormal;
@@ -139,6 +144,7 @@ const Logo3D = ({
           uniform float uRimBoost;
           uniform float uSpecBoost;
           uniform float uBaseLift;
+          uniform float uOpacity;
           varying vec3 vNormal;
           varying vec3 vViewPosition;
 
@@ -178,7 +184,7 @@ const Logo3D = ({
             // sharp rim flash for that wet-pearl gloss
             col += iri * pow(fres, 5.0) * uRimBoost;
 
-            gl_FragColor = vec4(col, 1.0);
+            gl_FragColor = vec4(col, uOpacity);
           }
         `,
       })
@@ -228,10 +234,36 @@ const Logo3D = ({
          layers the spin on top of the tilt lerp so the cursor follow
          keeps working underneath. */
       let spinStart = -1
-      let mountSpinPending = false
       const SPIN_DURATION_MS = 1400
       const easeInOutCubic = (t: number) =>
         t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+      const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
+      const easeInCubic = (t: number) => t * t * t
+      const smoothstep = (t: number) => t * t * (3 - 2 * t)
+
+      /* Intro mount timeline (loader only). A single smooth motion in three
+         beats, all layered on top of the resting orientation:
+           1. ENTER  — the logo fades in from the back: it scales up from
+                       small (reads as "coming forward") while opacity lifts.
+           2. BODY   — it spins a full turn and keeps rotating at speed.
+           3. EXIT   — it fades out and recedes a little (scales back down)
+                       before onSpinComplete fires, so the cream overlay only
+                       fades once the logo animation has fully finished.
+         Rotation runs off a velocity ramp integrated per frame, so the spin
+         accelerates in and never jumps speed between beats. */
+      const ENTER_MS = 1100
+      const BODY_MS = 1800
+      const EXIT_MS = 1100
+      const SPIN_SPEED = 3.0 // rad/s once up to speed
+      const ENTER_SCALE = 0.5 // start size (further "back")
+      const EXIT_SCALE = 0.62 // recede target
+      let mountActive = false
+      let mountStart = 0
+      let mountLastT = 0
+      let mountAngle = 0
+      let mountScale = 1
+      let mountOpacity = 1
+      let mountDone = false
 
       let continuousMode = false
       let tiltY = 0
@@ -264,19 +296,54 @@ const Logo3D = ({
           scaleMul = 1 - Math.sin(t * Math.PI) * SCALE_DIP
           if (t >= 1) {
             spinStart = -1
-            if (mountSpinPending) {
-              mountSpinPending = false
-              onSpinCompleteRef.current?.()
-            }
           }
         }
 
-        model.rotation.y = tiltY + spin
+        if (mountActive) {
+          const now = performance.now()
+          const elapsed = now - mountStart
+          // dt clamped so a tab switch / dropped frame can't jump the spin
+          const dt = Math.min((now - mountLastT) / 1000, 0.05)
+          mountLastT = now
+
+          // velocity ramps up over the enter beat, then holds steady — so
+          // the turn accelerates in and keeps spinning without a speed jump
+          const w =
+            elapsed < ENTER_MS
+              ? SPIN_SPEED * smoothstep(elapsed / ENTER_MS)
+              : SPIN_SPEED
+          mountAngle += w * dt
+
+          if (elapsed < ENTER_MS) {
+            const p = easeOutCubic(elapsed / ENTER_MS)
+            mountOpacity = p
+            mountScale = ENTER_SCALE + (1 - ENTER_SCALE) * p
+          } else if (elapsed < ENTER_MS + BODY_MS) {
+            mountOpacity = 1
+            mountScale = 1
+          } else if (elapsed < ENTER_MS + BODY_MS + EXIT_MS) {
+            const p = easeInCubic((elapsed - ENTER_MS - BODY_MS) / EXIT_MS)
+            mountOpacity = 1 - p
+            mountScale = 1 - (1 - EXIT_SCALE) * p
+          } else {
+            mountOpacity = 0
+            mountScale = EXIT_SCALE
+            if (!mountDone) {
+              mountDone = true
+              mountActive = false
+              // logo animation fully done → let the loader fade the cream out
+              onSpinCompleteRef.current?.()
+            }
+          }
+          pearlMaterial.uniforms.uOpacity.value = mountOpacity
+        }
+
+        model.rotation.y = tiltY + spin + mountAngle
         model.rotation.x = tiltX
-        model.scale.setScalar(fit * scaleMul)
+        model.scale.setScalar(fit * scaleMul * mountScale)
         renderer.render(scene, camera)
 
-        if (continuousMode || spinStart >= 0
+        if (continuousMode || spinStart >= 0 || mountActive
           || Math.abs(targetRotY - tiltY) > 0.0005
           || Math.abs(targetRotX - tiltX) > 0.0005) {
           raf = requestAnimationFrame(animate)
@@ -359,10 +426,16 @@ const Logo3D = ({
         }
       }
 
-      /* Intro loader: one 360° turn the moment the model is ready. */
+      /* Intro loader: run the full enter → spin → exit timeline the moment
+         the model is ready. Start hidden so the fade-in from the back has
+         something to fade from. */
       if (spinOnMount) {
-        spinStart = performance.now()
-        mountSpinPending = true
+        mountActive = true
+        mountStart = performance.now()
+        mountLastT = mountStart
+        mountOpacity = 0
+        mountScale = ENTER_SCALE
+        pearlMaterial.uniforms.uOpacity.value = 0
       }
 
       ensureLoop()
