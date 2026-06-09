@@ -83,6 +83,14 @@
   color: #ffffff;
 }
 
+/* When the menu is open the cream ink blob fills the top-left corner, so
+   the chrome must read as navy there even over dark sections — otherwise
+   the chrome-tl white flip above leaves white text on the cream blob. */
+.header[data-menu-open='true'] .menuLink,
+.header[data-menu-open='true'] .menuItem {
+  color: var(--color-navy);
+}
+
 .logoMark {
   display: block;
   width: 4.4em;
