@@ -162,12 +162,9 @@ const TextDemo = () => {
       ctx = gsap.context(() => {
         const hero = document.querySelector(`.${styles.studioHero}`) as HTMLElement | null
         const card = document.querySelector(`.${styles.studioCard}`) as HTMLElement | null
-        const bg = document.querySelector(`.${styles.studioBg}`) as HTMLElement | null
-        const bgInner = bg?.querySelector(`.${styles.parallaxTarget}`) as HTMLElement | null
-        if (!hero || !card || !bg) return
+        if (!hero || !card) return
 
         gsap.set(card, {scale: 0.35, transformOrigin: 'center center'})
-        gsap.set(bg, {opacity: 1})
 
         /* Pin only — keeps the hero fixed through the scale animation.
            Start/end are constants (relative to the viewport), not to
@@ -182,10 +179,9 @@ const TextDemo = () => {
           anticipatePin: 1,
         })
 
-        /* Scale + fade timeline spans from viewport entry (top bottom)
-           through the end of the pin (+=230% = 100vh entry + 130% pin).
-           Split in two phases so the card fully settles before unpin:
-           - Entry (0 → 0.435 of timeline): linear warmup 0.35 → 0.5
+        /* Scale timeline — the cream card grows from small to full over the
+           dark section background (no background image anymore).
+           - Entry (0 → 0.435): linear warmup 0.35 → 0.5
            - Pin growth (0.435 → 0.785): power2.out settle to 1.0
            - Hold (0.785 → 1.0): stays at 1.0 until the pin releases. */
         const tl = gsap.timeline({
@@ -198,25 +194,6 @@ const TextDemo = () => {
         })
         tl.fromTo(card, {scale: 0.35}, {scale: 0.5, ease: 'none', duration: 0.435}, 0)
         tl.to(card, {scale: 1, ease: 'power2.out', duration: 0.35}, 0.435)
-        tl.to(bg, {opacity: 0, ease: 'power2.out', duration: 0.2}, 0.5)
-
-        /* Parallax drift on the studio bg — matches the scale timeline */
-        if (bgInner) {
-          gsap.fromTo(
-            bgInner,
-            {yPercent: -15},
-            {
-              yPercent: 15,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: hero,
-                start: 'top bottom',
-                end: '+=230%',
-                scrub: true,
-              },
-            },
-          )
-        }
       })
     })()
 
@@ -255,12 +232,12 @@ const TextDemo = () => {
               vult deze div 100% (fill verbiedt style.height). */}
           <div className={styles.heroImage}>
             <Image
-              src="/images/hero-pattern.webp"
-              alt="V-Creative hero"
+              src="/images/overmij2.webp"
+              alt="Vienna met de camera in de studio"
               fill
               priority
               sizes="100vw"
-              style={{ objectFit: 'cover' }}
+              style={{ objectFit: 'cover', objectPosition: 'center 25%' }}
             />
           </div>
         </div>
@@ -427,23 +404,10 @@ const TextDemo = () => {
 
       <section className={styles.studioSection} data-theme="dark">
         <div className={styles.studioHero}>
-          <div className={styles.studioBg}>
-            <div className={styles.parallaxTarget}>
-              <div className={styles.studioBgImage}>
-                <Image
-                  src="/images/hero-pattern.webp"
-                  alt=""
-                  fill
-                  sizes="100vw"
-                  style={{ objectFit: 'cover' }}
-                />
-              </div>
-            </div>
-          </div>
           <div className={styles.studioCard}>
             <p className={styles.studioLabel}>Over V-Creative</p>
             <img
-              src="/icons/SVG/logovienna.svg"
+              src="/icons/SVG/Big_Logo.svg"
               alt=""
               aria-hidden="true"
               className={styles.studioLogo}
@@ -540,10 +504,12 @@ const TextDemo = () => {
 
         <div className={styles.werkwijzeCta}>
           <figure className={styles.werkwijzeCtaFigure}>
-            <LazyVideo
-              src="/videos/vienna-introductie.mp4"
+            <img
+              src="/images/werkwijze-cta.webp"
+              alt="Vienna met de camera"
               className={styles.werkwijzeCtaImage}
-              ariaLabel="Viënna introductie"
+              style={{ objectPosition: 'center 20%' }}
+              loading="lazy"
             />
           </figure>
           <p className={styles.werkwijzeCtaText} data-animation="webgl-text">

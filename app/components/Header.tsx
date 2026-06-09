@@ -92,6 +92,15 @@ const Header = () => {
           </nav>
         </div>
 
+        <Link
+          href="/"
+          className={styles.homeLogo}
+          aria-label="Home — V-Creative"
+          data-chrome="tc"
+        >
+          <img src="/icons/SVG/V_Logo.svg" alt="V-Creative" />
+        </Link>
+
         <Link href="/contact" className={styles.contactLink} data-chrome="tr">
           contact
         </Link>

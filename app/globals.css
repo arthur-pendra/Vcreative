@@ -47,7 +47,7 @@
   --size-font: calc(var(--size-container) / (var(--size-container-ideal) / var(--size-unit)));
 
   /* Colors */
-  --color-cream: #F2EBD9;
+  --color-cream: #faf8f2;
   --color-navy: #000000;
   --color-accent: #641018;
   --color-blue: #101644;

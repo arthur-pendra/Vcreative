@@ -108,6 +108,40 @@
   aspect-ratio: 88.92 / 104.29;
 }
 
+/* ── Home logo (top centre) — always visible, links to home ── */
+
+.homeLogo {
+  position: absolute;
+  top: 2.75em;
+  left: 50%;
+  /* Same font-size as the menu/contact chrome so this `top` lines up with
+     them; the translate centres the small mark on the chrome text line. */
+  font-size: 0.65em;
+  transform: translate(-50%, calc(-50% + 0.6em));
+  width: 2.4em;
+  aspect-ratio: 88.17 / 103.55;
+  pointer-events: auto;
+  display: block;
+  transition: opacity var(--duration-fast);
+}
+
+.homeLogo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* The SVG is black: render it navy on light sections, white on dark ones
+     (mirrors the menu/contact chrome flip via AdaptiveChrome's tc corner). */
+  filter: brightness(0);
+}
+
+:global(body[data-chrome-tc='dark']) .homeLogo img {
+  filter: brightness(0) invert(1);
+}
+
+.homeLogo:hover {
+  opacity: 0.6;
+}
+
 /* ── Contact (top right) ── */
 
 .contactLink {
@@ -170,12 +204,20 @@
     right: 1.25em;
     font-size: 0.65em;
   }
+
+  .homeLogo {
+    top: 1.75em;
+  }
 }
 
 @media (max-width: 479px) {
   .menuLink {
     top: 1.5em;
     left: 1.25em;
+  }
+
+  .homeLogo {
+    top: 1.5em;
   }
 
   .menuDropdown {

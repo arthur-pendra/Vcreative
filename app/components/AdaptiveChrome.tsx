@@ -20,11 +20,12 @@ import { useEffect } from 'react'
      - Pathname change re-runs after a small delay so the new route's
        dark sections are in the DOM before we measure. */
 
-type Corner = 'tl' | 'tr' | 'bl' | 'br'
-const CORNERS: Corner[] = ['tl', 'tr', 'bl', 'br']
+type Corner = 'tl' | 'tr' | 'tc' | 'bl' | 'br'
+const CORNERS: Corner[] = ['tl', 'tr', 'tc', 'bl', 'br']
 const ATTR = {
   tl: 'chromeTl',
   tr: 'chromeTr',
+  tc: 'chromeTc',
   bl: 'chromeBl',
   br: 'chromeBr',
 } as const

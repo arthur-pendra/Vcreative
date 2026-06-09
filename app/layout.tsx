@@ -28,16 +28,14 @@ export const metadata: Metadata = {
   authors: [{ name: "Vienna Wachelder" }],
   openGraph: {
     title: "V-Creative · Social media partner voor merken met karakter",
-    description:
-      "Strategie, fotografie en maandelijks contentbeheer voor merken die hun verhaal serieus nemen.",
+    description: "Jij runt je bedrijf, ik regel je socials.",
     locale: "nl_NL",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "V-Creative",
-    description:
-      "Social media partner voor merken met karakter. Vanuit Heerlen, op locatie in heel Nederland.",
+    description: "Jij runt je bedrijf, ik regel je socials.",
   },
 }
 
@@ -47,7 +45,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
   /* Site-cream so the iOS Safari top status-bar + bottom toolbar tint to
      match the page instead of a near-white bar that reads as off/transparent. */
-  themeColor: "#F2EBD9",
+  themeColor: "#faf8f2",
 }
 
 const RootLayout = ({

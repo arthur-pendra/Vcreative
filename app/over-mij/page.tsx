@@ -84,7 +84,7 @@ const OverMij = () => (
       <figure className={styles.heroFigure} data-parallax="trigger">
         <div className={styles.parallaxTarget} data-parallax="target">
           <img
-            src="/images/hero_overmij.png"
+            src="/images/hero_overmij.webp"
             alt="Vienna aan het werk"
             className={styles.heroImage}
             style={{ objectPosition: 'center 28%' }}
@@ -124,7 +124,7 @@ const OverMij = () => (
                 data-webgl-media
                 data-webgl-effect="bend"
                 data-webgl-y="0.18"
-                src="/images/overmij2.jpeg"
+                src="/images/overmij2.webp"
                 alt="Vienna met de camera in de studio"
                 className={styles.sectionImage}
                 style={{ objectPosition: 'center 22%' }}
@@ -146,7 +146,7 @@ const OverMij = () => (
                 data-webgl-media
                 data-webgl-effect="bend"
                 data-webgl-y="0.12"
-                src="/images/overmij3.jpeg"
+                src="/images/overmij3.webp"
                 alt="Vienna aan het werk met laptop en camera"
                 className={styles.sectionImage}
                 style={{ objectPosition: 'center 28%' }}
@@ -191,7 +191,7 @@ const OverMij = () => (
                 data-webgl-media
                 data-webgl-effect="bend"
                 data-webgl-y="0.18"
-                src="/images/overmij2.jpeg"
+                src="/images/overmij2.webp"
                 alt="Vienna in de studio"
                 className={styles.sectionImage}
                 style={{ objectPosition: 'center 22%' }}
