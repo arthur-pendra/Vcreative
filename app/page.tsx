@@ -232,12 +232,12 @@ const TextDemo = () => {
               vult deze div 100% (fill verbiedt style.height). */}
           <div className={styles.heroImage}>
             <Image
-              src="/images/overmij2.webp"
-              alt="Vienna met de camera in de studio"
+              src="/images/hero_home.webp"
+              alt="Vienna met de camera"
               fill
               priority
               sizes="100vw"
-              style={{ objectFit: 'cover', objectPosition: 'center 15%' }}
+              style={{ objectFit: 'cover', objectPosition: 'center 30%' }}
             />
           </div>
         </div>
