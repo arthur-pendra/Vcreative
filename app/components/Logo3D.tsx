@@ -397,7 +397,7 @@ const Logo3D = ({
 
         const ENTER = 0.9 // calm rise-in (fade + scale up) while already spinning
         const SPIN = 1.4
-        const EXIT = 0.55 // wipe-out
+        const EXIT = 0.8 // wipe-out — longer so the fade fully completes, smooth
         const TURNS = 2
 
         mountTl = gsap.timeline({
@@ -419,9 +419,10 @@ const Logo3D = ({
             { angle: Math.PI + TURNS * Math.PI * 2, duration: ENTER + SPIN + EXIT, ease: 'none' },
             0,
           )
-          // wipe out + recede a little, eased in — while front-facing
-          .to(mount, { opacity: 0, duration: EXIT, ease: 'power3.in' }, ENTER + SPIN)
-          .to(mount, { scale: EXIT_SCALE, duration: EXIT, ease: 'power3.in' }, ENTER + SPIN)
+          // wipe out + recede a little while still spinning — a gentle ease so
+          // the logo fades all the way out smoothly instead of snapping away
+          .to(mount, { opacity: 0, duration: EXIT, ease: 'power2.in' }, ENTER + SPIN)
+          .to(mount, { scale: EXIT_SCALE, duration: EXIT, ease: 'power2.in' }, ENTER + SPIN)
       }
 
       ensureLoop()

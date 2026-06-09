@@ -11,8 +11,8 @@ import Loader from "@/app/components/Loader"
 
 export const metadata: Metadata = {
   title: {
-    default: "V-Creative · Social media partner voor merken met karakter",
-    template: "%s · V-Creative",
+    default: "V Creative · Content en strategie",
+    template: "%s · V Creative",
   },
   description:
     "Vienna helpt ondernemers en merken hun verhaal vertalen naar content die werkt. Strategie, fotografie en maandelijks contentbeheer vanuit Heerlen.",

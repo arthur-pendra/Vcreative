@@ -7,7 +7,6 @@ import styles from '@/app/components/Header.module.css'
 import MenuOverlay from '@/app/components/MenuOverlay'
 
 const ITEMS = [
-  { label: 'Home', href: '/' },
   { label: 'Projecten', href: '/cases' },
   { label: 'Over', href: '/over-mij' },
   { label: 'Start project', href: '/contact' },
