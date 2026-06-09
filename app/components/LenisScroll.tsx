@@ -62,10 +62,6 @@ const LenisScroll = () => {
            native compositor scroll. Trade-off: can reintroduce a little iOS
            address-bar movement during scroll. */
         syncTouch: true,
-        /* Tighter than the 0.075 default so the touch drag tracks the
-           finger more closely and reads closer to native scroll, while
-           still being Lenis-driven (keeps the overlay glued). */
-        syncTouchLerp: 0.15,
       })
       setLenisInstance(lenis)
 
