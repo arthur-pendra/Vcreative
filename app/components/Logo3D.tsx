@@ -237,33 +237,23 @@ const Logo3D = ({
       const SPIN_DURATION_MS = 1400
       const easeInOutCubic = (t: number) =>
         t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
-      const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
-      const easeInCubic = (t: number) => t * t * t
-      const smoothstep = (t: number) => t * t * (3 - 2 * t)
 
-      /* Intro mount timeline (loader only). A single smooth motion in three
-         beats, all layered on top of the resting orientation:
-           1. ENTER  — the logo fades in from the back: it scales up from
-                       small (reads as "coming forward") while opacity lifts.
-           2. BODY   — it spins a full turn and keeps rotating at speed.
-           3. EXIT   — it fades out and recedes a little (scales back down)
-                       before onSpinComplete fires, so the cream overlay only
-                       fades once the logo animation has fully finished.
-         Rotation runs off a velocity ramp integrated per frame, so the spin
-         accelerates in and never jumps speed between beats. */
-      const ENTER_MS = 1100
-      const BODY_MS = 1800
-      const EXIT_MS = 1100
-      const SPIN_SPEED = 3.0 // rad/s once up to speed
+      /* Intro mount timeline (loader only) — driven by GSAP so the whole
+         motion rides a Power ease instead of the flat, "cheap"-feeling spin:
+           1. ENTER — the logo pops in from the back: it scales up from small
+                      (reads as "coming forward") while opacity lifts. Quick,
+                      eased out (power3.out).
+           2. SPIN  — it turns a couple of times on a power2.inOut, so the
+                      spin accelerates in and settles out smoothly.
+           3. EXIT  — it wipes out and recedes a little, quick and eased in
+                      (power3.in).
+         The render loop just reads `mount`; GSAP owns the values. The
+         timeline is built in the spinOnMount block below. */
       const ENTER_SCALE = 0.5 // start size (further "back")
       const EXIT_SCALE = 0.62 // recede target
       let mountActive = false
-      let mountStart = 0
-      let mountLastT = 0
-      let mountAngle = 0
-      let mountScale = 1
-      let mountOpacity = 1
-      let mountDone = false
+      const mount = { angle: 0, scale: 1, opacity: 1 }
+      let mountTl: ReturnType<(typeof import('gsap'))['default']['timeline']> | undefined
 
       let continuousMode = false
       let tiltY = 0
@@ -299,48 +289,14 @@ const Logo3D = ({
           }
         }
 
+        // GSAP owns the intro values; just push them to the model each frame
         if (mountActive) {
-          const now = performance.now()
-          const elapsed = now - mountStart
-          // dt clamped so a tab switch / dropped frame can't jump the spin
-          const dt = Math.min((now - mountLastT) / 1000, 0.05)
-          mountLastT = now
-
-          // velocity ramps up over the enter beat, then holds steady — so
-          // the turn accelerates in and keeps spinning without a speed jump
-          const w =
-            elapsed < ENTER_MS
-              ? SPIN_SPEED * smoothstep(elapsed / ENTER_MS)
-              : SPIN_SPEED
-          mountAngle += w * dt
-
-          if (elapsed < ENTER_MS) {
-            const p = easeOutCubic(elapsed / ENTER_MS)
-            mountOpacity = p
-            mountScale = ENTER_SCALE + (1 - ENTER_SCALE) * p
-          } else if (elapsed < ENTER_MS + BODY_MS) {
-            mountOpacity = 1
-            mountScale = 1
-          } else if (elapsed < ENTER_MS + BODY_MS + EXIT_MS) {
-            const p = easeInCubic((elapsed - ENTER_MS - BODY_MS) / EXIT_MS)
-            mountOpacity = 1 - p
-            mountScale = 1 - (1 - EXIT_SCALE) * p
-          } else {
-            mountOpacity = 0
-            mountScale = EXIT_SCALE
-            if (!mountDone) {
-              mountDone = true
-              mountActive = false
-              // logo animation fully done → let the loader fade the cream out
-              onSpinCompleteRef.current?.()
-            }
-          }
-          pearlMaterial.uniforms.uOpacity.value = mountOpacity
+          pearlMaterial.uniforms.uOpacity.value = mount.opacity
         }
 
-        model.rotation.y = tiltY + spin + mountAngle
+        model.rotation.y = tiltY + spin + mount.angle
         model.rotation.x = tiltX
-        model.scale.setScalar(fit * scaleMul * mountScale)
+        model.scale.setScalar(fit * scaleMul * mount.scale)
         renderer.render(scene, camera)
 
         if (continuousMode || spinStart >= 0 || mountActive
@@ -427,15 +383,42 @@ const Logo3D = ({
       }
 
       /* Intro loader: run the full enter → spin → exit timeline the moment
-         the model is ready. Start hidden so the fade-in from the back has
+         the model is ready. Start hidden so the pop-in from the back has
          something to fade from. */
       if (spinOnMount) {
-        mountActive = true
-        mountStart = performance.now()
-        mountLastT = mountStart
-        mountOpacity = 0
-        mountScale = ENTER_SCALE
+        const gsap = (await import('gsap')).default
+        mount.angle = 0
+        mount.scale = ENTER_SCALE
+        mount.opacity = 0
         pearlMaterial.uniforms.uOpacity.value = 0
+        mountActive = true
+
+        const ENTER = 0.7 // quick pop-in from the back
+        const SPIN = 1.4
+        const EXIT = 0.55 // quick wipe-out
+        const TURNS = 2.25
+
+        mountTl = gsap.timeline({
+          onComplete: () => {
+            mountActive = false
+            // logo motion done → loader waits a beat, then lifts the cream
+            onSpinCompleteRef.current?.()
+          },
+        })
+        mountTl
+          // pop in from the back: opacity + scale, eased out
+          .to(mount, { opacity: 1, duration: ENTER, ease: 'power3.out' }, 0)
+          .to(mount, { scale: 1, duration: ENTER, ease: 'power3.out' }, 0)
+          // one smooth power spin across the whole motion (accelerate in,
+          // settle out) so it never reads as a flat, constant-speed turn
+          .to(
+            mount,
+            { angle: TURNS * Math.PI * 2, duration: ENTER + SPIN + EXIT, ease: 'power2.inOut' },
+            0,
+          )
+          // wipe out + recede a little, eased in
+          .to(mount, { opacity: 0, duration: EXIT, ease: 'power3.in' }, ENTER + SPIN)
+          .to(mount, { scale: EXIT_SCALE, duration: EXIT, ease: 'power3.in' }, ENTER + SPIN)
       }
 
       ensureLoop()
@@ -454,6 +437,7 @@ const Logo3D = ({
 
       cleanup = () => {
         cancelAnimationFrame(raf)
+        mountTl?.kill()
         window.removeEventListener('resize', handleResize)
         detachInteraction?.()
         meshes.forEach((m) => m.geometry?.dispose())
