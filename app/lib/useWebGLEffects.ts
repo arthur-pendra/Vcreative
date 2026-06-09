@@ -1204,6 +1204,22 @@ export function useGlobalParallax() {
                 },
               },
             )
+
+            /* Touch only: a calm fade-in from the cream page background as the
+               image scrolls into view (mobile has no WebGL mask reveal). */
+            if (isTouch) {
+              gsap.set(target, {opacity: 0})
+              gsap.to(target, {
+                opacity: 1,
+                duration: 1.1,
+                ease: 'power2.out',
+                scrollTrigger: {
+                  trigger,
+                  start: 'top 88%',
+                  once: true,
+                },
+              })
+            }
           })
       })
     })()
