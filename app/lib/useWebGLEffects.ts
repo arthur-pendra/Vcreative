@@ -1206,8 +1206,10 @@ export function useGlobalParallax() {
             )
 
             /* Touch only: a calm fade-in from the cream page background as the
-               image scrolls into view (mobile has no WebGL mask reveal). */
-            if (isTouch) {
+               image scrolls into view (mobile has no WebGL mask reveal).
+               Only on the in-flow / padded images (data-parallax-disabled) —
+               NOT the full-bleed ones. Videos get the same fade separately. */
+            if (isTouch && disabled) {
               gsap.set(target, {opacity: 0})
               gsap.to(target, {
                 opacity: 1,
@@ -1221,6 +1223,23 @@ export function useGlobalParallax() {
               })
             }
           })
+
+        /* Touch only: same calm fade-in for any element opted in with
+           [data-fade-in] — used for videos and other in-flow media that
+           aren't part of the parallax-trigger system. */
+        if (isTouch) {
+          document
+            .querySelectorAll<HTMLElement>('[data-fade-in]')
+            .forEach((el) => {
+              gsap.set(el, {opacity: 0})
+              gsap.to(el, {
+                opacity: 1,
+                duration: 1.1,
+                ease: 'power2.out',
+                scrollTrigger: {trigger: el, start: 'top 88%', once: true},
+              })
+            })
+        }
       })
     })()
 

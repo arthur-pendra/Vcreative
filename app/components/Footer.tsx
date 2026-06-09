@@ -6,10 +6,11 @@ import styles from '@/app/components/Footer.module.css'
 import Logo3D from '@/app/components/Logo3D'
 import { IconButton } from '@/app/components/IconButton'
 
-const SERVICES = [
-  { label: 'Strategie', href: '/over-mij#diensten' },
-  { label: 'Content', href: '/over-mij#diensten' },
-  { label: 'Maandelijks beheer', href: '/over-mij#diensten' },
+const MENU = [
+  { label: 'Home', href: '/' },
+  { label: 'Projecten', href: '/cases' },
+  { label: 'Over', href: '/over-mij' },
+  { label: 'Start project', href: '/contact' },
 ]
 
 const CONTACT = [
@@ -71,9 +72,9 @@ const Footer = () => {
 
         <nav className={styles.columns} aria-label="Footer">
           <div className={styles.col}>
-            <p className={styles.colHead}>Diensten</p>
+            <p className={styles.colHead}>Menu</p>
             <ul className={styles.colList}>
-              {SERVICES.map((l) => (
+              {MENU.map((l) => (
                 <li key={l.label}>
                   <Link href={l.href} className={styles.link}>
                     {l.label}

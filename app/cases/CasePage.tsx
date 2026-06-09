@@ -185,7 +185,7 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
           <div className={styles.socialGrid}>
             {data.socialItems.map((item, i) =>
               item.type === 'video' ? (
-                <figure key={i} className={styles.socialItem}>
+                <figure key={i} className={styles.socialItem} data-fade-in>
                   <LazyVideo
                     src={item.src}
                     poster={item.poster}
@@ -193,7 +193,7 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
                   />
                 </figure>
               ) : (
-                <figure key={i} className={styles.socialItem}>
+                <figure key={i} className={styles.socialItem} data-fade-in>
                   <Image
                     src={item.src}
                     alt={item.alt ?? ''}

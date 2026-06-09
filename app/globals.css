@@ -137,6 +137,8 @@
 
 html {
   height: 100%;
+  /* No grey tap-highlight box on touch when tapping links/buttons/text. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 html,

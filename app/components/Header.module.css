@@ -209,6 +209,21 @@
     top: 1.75em;
     width: 3.8em;
   }
+
+  /* On mobile the menu chrome stays black over every dark section EXCEPT the
+     footer — undo the white flip for non-footer dark sections. */
+  :global(body[data-chrome-tl='dark']:not([data-chrome-tl-footer='true'])) .menuLink,
+  :global(body[data-chrome-tl='dark']:not([data-chrome-tl-footer='true'])) .menuItem {
+    color: var(--color-navy);
+  }
+
+  :global(body[data-chrome-tr='dark']:not([data-chrome-tr-footer='true'])) .contactLink {
+    color: var(--color-navy);
+  }
+
+  :global(body[data-chrome-tc='dark']:not([data-chrome-tc-footer='true'])) .homeLogo img {
+    filter: brightness(0);
+  }
 }
 
 @media (max-width: 479px) {

@@ -43,7 +43,10 @@ const AdaptiveChrome = () => {
 
       const darks = Array.from(
         document.querySelectorAll<HTMLElement>('[data-theme="dark"]'),
-      ).map((el) => el.getBoundingClientRect())
+      ).map((el) => ({
+        rect: el.getBoundingClientRect(),
+        footer: el.tagName === 'FOOTER',
+      }))
 
       const body = document.body
 
@@ -58,9 +61,12 @@ const AdaptiveChrome = () => {
         const cy = r.top + r.height / 2
 
         let theme: 'dark' | 'light' = 'light'
+        let overFooter = false
         for (const d of darks) {
-          if (cx >= d.left && cx <= d.right && cy >= d.top && cy <= d.bottom) {
+          const r = d.rect
+          if (cx >= r.left && cx <= r.right && cy >= r.top && cy <= r.bottom) {
             theme = 'dark'
+            overFooter = d.footer
             break
           }
         }
@@ -69,6 +75,14 @@ const AdaptiveChrome = () => {
            that could force style recalculation on every frame. */
         if (body.dataset[ATTR[corner]] !== theme) {
           body.dataset[ATTR[corner]] = theme
+        }
+        /* Separate flag: is this corner over the FOOTER specifically? On
+           mobile the menu chrome stays black over every dark section except
+           the footer, so the CSS needs to tell them apart. */
+        const footerKey = `${ATTR[corner]}Footer`
+        const footerVal = overFooter ? 'true' : 'false'
+        if (body.dataset[footerKey] !== footerVal) {
+          body.dataset[footerKey] = footerVal
         }
       }
     }

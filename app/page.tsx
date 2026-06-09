@@ -7,7 +7,6 @@ import Footer from '@/app/components/Footer'
 import LogoMarquee from '@/app/components/LogoMarquee'
 import { useWebGLEffects, useGlobalParallax } from '@/app/lib/useWebGLEffects'
 import { IconButton, IconCircle } from '@/app/components/IconButton'
-import LazyVideo from '@/app/components/LazyVideo'
 
 const REVIEWS = [
   {
@@ -511,6 +510,7 @@ const TextDemo = () => {
               className={styles.werkwijzeCtaImage}
               style={{ objectPosition: 'center 20%' }}
               loading="lazy"
+              data-fade-in
             />
           </figure>
           <p className={styles.werkwijzeCtaText} data-animation="webgl-text">
