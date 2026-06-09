@@ -7,6 +7,7 @@ import ScrollProgress from "@/app/components/ScrollProgress"
 import YearStamp from "@/app/components/YearStamp"
 import AdaptiveChrome from "@/app/components/AdaptiveChrome"
 import DynamicCursor from "@/app/components/DynamicCursor"
+import Loader from "@/app/components/Loader"
 
 export const metadata: Metadata = {
   title: {
@@ -69,6 +70,7 @@ const RootLayout = ({
           <AdaptiveChrome />
           <DynamicCursor />
           <PageTransition />
+          <Loader />
         </body>
     </html>
   )

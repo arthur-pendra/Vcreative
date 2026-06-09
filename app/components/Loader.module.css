@@ -1,0 +1,33 @@
+/* First-load intro: full-screen cream panel with the 3D logo centered.
+   The logo spins once (Logo3D spinOnMount), then the whole panel — logo
+   included — fades out to reveal the site underneath. */
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--color-cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.8s ease;
+}
+
+.fading {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.logo {
+  /* Medium, centred — scales gently across screens. Portrait aspect of
+     the logo mark so the canvas matches the model. */
+  width: clamp(7em, 22vw, 11em);
+  aspect-ratio: 88.92 / 104.29;
+}
+
+@media (max-width: 767px) {
+  .logo {
+    width: clamp(6em, 34vw, 9em);
+  }
+}

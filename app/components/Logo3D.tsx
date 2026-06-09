@@ -14,6 +14,12 @@ type Props = {
   /* mouseTilt only: trigger a 360° spin on pointer enter. Footer
      opts out so the logo only follows the cursor subtly. */
   hoverSpin?: boolean
+  /* Play one eased 360° spin as soon as the model is ready (used by the
+     intro loader), regardless of interaction mode. */
+  spinOnMount?: boolean
+  /* Fired once when the spinOnMount turn finishes — lets the loader
+     fade out exactly when the spin lands. */
+  onSpinComplete?: () => void
 }
 
 const Logo3D = ({
@@ -21,8 +27,14 @@ const Logo3D = ({
   className,
   matcap: matcapSrc = '/icons/3D/project-model-matcap.png',
   hoverSpin = true,
+  spinOnMount = false,
+  onSpinComplete,
 }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null)
+  /* Held in a ref so the animate loop (created once in the effect) always
+     calls the latest callback without re-running the effect. */
+  const onSpinCompleteRef = useRef(onSpinComplete)
+  onSpinCompleteRef.current = onSpinComplete
 
   useEffect(() => {
     const container = containerRef.current
@@ -216,6 +228,7 @@ const Logo3D = ({
          layers the spin on top of the tilt lerp so the cursor follow
          keeps working underneath. */
       let spinStart = -1
+      let mountSpinPending = false
       const SPIN_DURATION_MS = 1400
       const easeInOutCubic = (t: number) =>
         t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
@@ -249,7 +262,13 @@ const Logo3D = ({
           )
           spin = easeInOutCubic(t) * Math.PI * 2
           scaleMul = 1 - Math.sin(t * Math.PI) * SCALE_DIP
-          if (t >= 1) spinStart = -1
+          if (t >= 1) {
+            spinStart = -1
+            if (mountSpinPending) {
+              mountSpinPending = false
+              onSpinCompleteRef.current?.()
+            }
+          }
         }
 
         model.rotation.y = tiltY + spin
@@ -338,6 +357,12 @@ const Logo3D = ({
           zone.removeEventListener('mouseleave', onLeave as EventListener)
           if (hoverSpin) container.removeEventListener('pointerenter', onHoverEnter)
         }
+      }
+
+      /* Intro loader: one 360° turn the moment the model is ready. */
+      if (spinOnMount) {
+        spinStart = performance.now()
+        mountSpinPending = true
       }
 
       ensureLoop()
