@@ -1140,15 +1140,21 @@ export function useGlobalParallax() {
       gsap.registerPlugin(ScrollTrigger)
       if (cancelled) return
 
+      const isTouch =
+        'ontouchstart' in document.documentElement ||
+        navigator.maxTouchPoints > 0
+
       ctx = gsap.context(() => {
         document
           .querySelectorAll<HTMLElement>('[data-parallax="trigger"]')
           .forEach((trigger) => {
-            /* Opt-out: keep [data-parallax="trigger"] on the wrapper so the
-               WebGL mask still uses it for bounds, but skip the scroll
-               animation. Used on smaller in-flow images where the parallax
-               drift looks busy next to text. */
-            if (trigger.hasAttribute('data-parallax-disabled')) return
+            /* Opt-out wrapper: keeps [data-parallax="trigger"] so the WebGL
+               mask still uses it for bounds. On DESKTOP these in-flow images
+               get their parallax from the WebGL shader, so skip the CSS drift
+               here. On TOUCH there's no WebGL image, so give them a subtle CSS
+               parallax instead of leaving them static. */
+            const disabled = trigger.hasAttribute('data-parallax-disabled')
+            if (disabled && !isTouch) return
 
             const target =
               trigger.querySelector<HTMLElement>('[data-parallax="target"]') ||
@@ -1161,11 +1167,14 @@ export function useGlobalParallax() {
             const scrubAttr = trigger.getAttribute('data-parallax-scrub')
             const scrub = scrubAttr ? parseFloat(scrubAttr) : true
 
+            /* In-flow (formerly disabled) images pan subtler than the
+               full-bleed ones so the drift stays gentle next to text. */
+            const range = disabled ? 2 : 3
             const startAttr = trigger.getAttribute('data-parallax-start')
-            const startVal = startAttr !== null ? parseFloat(startAttr) : 3
+            const startVal = startAttr !== null ? parseFloat(startAttr) : range
 
             const endAttr = trigger.getAttribute('data-parallax-end')
-            const endVal = endAttr !== null ? parseFloat(endAttr) : -3
+            const endVal = endAttr !== null ? parseFloat(endAttr) : -range
 
             const scrollStartRaw =
               trigger.getAttribute('data-parallax-scroll-start') || 'top bottom'
