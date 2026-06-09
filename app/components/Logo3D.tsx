@@ -411,12 +411,12 @@ const Logo3D = ({
           // pop in from the back: opacity + scale, eased out
           .to(mount, { opacity: 1, duration: ENTER, ease: 'power3.out' }, 0)
           .to(mount, { scale: 1, duration: ENTER, ease: 'power3.out' }, 0)
-          // one smooth power spin across the WHOLE motion (accelerate in,
-          // settle out) so enter → spin → exit read as a single flowing
-          // gesture; whole turns so it still lands straight (front)
+          // steady, constant-tempo spin across the whole motion (ease none)
+          // so it never accelerates or eases to a stop — just keeps turning
+          // at the same speed; whole turns so it still lands straight (front)
           .to(
             mount,
-            { angle: TURNS * Math.PI * 2, duration: ENTER + SPIN + EXIT, ease: 'power2.inOut' },
+            { angle: TURNS * Math.PI * 2, duration: ENTER + SPIN + EXIT, ease: 'none' },
             0,
           )
           // wipe out + recede a little, eased in — while front-facing
