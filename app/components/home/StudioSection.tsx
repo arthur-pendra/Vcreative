@@ -95,28 +95,6 @@ const StudioSection = () => {
             <IconButton href="/over-mij" className={styles.studioCta}>
               Ontmoet Vienna
             </IconButton>
-            <a
-              className={styles.studioDownload}
-              href="/v-creative-brochure.pdf"
-              download
-            >
-              <svg
-                className={styles.studioDownloadIcon}
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M8 2.5V11.5M8 11.5L4 7.5M8 11.5L12 7.5M2.5 13.5H13.5"
-                  stroke="currentColor"
-                  strokeWidth="1.25"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              Alle diensten in de brochure
-            </a>
           </div>
         </div>
       </div>

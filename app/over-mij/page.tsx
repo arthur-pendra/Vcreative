@@ -42,24 +42,6 @@ const WORKFLOW = [
   },
 ]
 
-const DownloadIcon = () => (
-  <svg
-    className={styles.ctaDownloadIcon}
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 16 16"
-    fill="none"
-    aria-hidden="true"
-  >
-    <path
-      d="M8 2.5V11.5M8 11.5L4 7.5M8 11.5L12 7.5M2.5 13.5H13.5"
-      stroke="currentColor"
-      strokeWidth="1.25"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-)
-
 const OverMij = () => (
   <PageFX>
     <div className={ed.page}>
@@ -246,14 +228,6 @@ const OverMij = () => (
           <IconButton href="/contact" ariaLabel="Naar contactpagina">
             Start jouw project
           </IconButton>
-          <a
-            className={styles.ctaDownload}
-            href="/v-creative-brochure.pdf"
-            download
-          >
-            <DownloadIcon />
-            Download de brochure
-          </a>
         </div>
       </section>
 
