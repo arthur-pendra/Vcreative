@@ -231,7 +231,7 @@ const TextDemo = () => {
               vult deze div 100% (fill verbiedt style.height). */}
           <div className={styles.heroImage}>
             <Image
-              src="/images/image00005.jpeg"
+              src="/images/vienna-hero.webp"
               alt="Vienna met de camera"
               fill
               priority

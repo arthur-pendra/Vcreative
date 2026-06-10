@@ -9,7 +9,6 @@ const SKIP = new Set([
   'icons/3D/iri-32.png',
   'icons/3D/project-model-matcap.png',
   'icons/SVG/vienna_bigloog-nomrla.png',
-  'noises/mask-noise.png',
 ])
 
 const MAX_W = 1920
