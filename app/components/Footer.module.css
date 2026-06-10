@@ -230,12 +230,15 @@
 .link {
   color: #ffffff;
   text-decoration: none;
-  transition: color var(--duration-fast);
+  transition: opacity var(--duration-fast);
   overflow-wrap: anywhere;
 }
 
+/* Niet de accent-kleur als hover: de footer-achtergrond ís de
+   accent-kleur, dus dat maakte de tekst onleesbaar. Zelfde
+   opacity-patroon als de header/contact-links. */
 .link:hover {
-  color: var(--color-accent);
+  opacity: 0.6;
 }
 
 /* ── Huge brand name ── */

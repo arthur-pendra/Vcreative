@@ -482,7 +482,10 @@
 .werkwijzeTop {
   display: grid;
   grid-template-columns: var(--wz-num) 1fr auto;
-  align-items: center;
+  /* Baseline i.p.v. center: wanneer de titel over twee regels loopt
+     blijven nummer en plus-icoon strak op de EERSTE regel staan —
+     precies zoals het oogt bij een titel van één regel. */
+  align-items: baseline;
   gap: var(--wz-gap);
   padding: 2em var(--wz-pad);
   width: 100%;

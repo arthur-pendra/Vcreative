@@ -313,7 +313,10 @@ textarea:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 0.75em;
-  padding: 1em 1em 1em 1.5em;
+  /* Kleinere verticale/rechter padding + grotere circle (zie
+     .btn-icon-icon): de pill blijft even hoog, maar de circle vult
+     hem beter en zit dichter op de rand. */
+  padding: 0.75em 0.75em 0.75em 1.5em;
   background: var(--color-navy);
   color: #ffffff;
   border-radius: 999em;
@@ -339,8 +342,8 @@ textarea:focus-visible {
   position: relative;
   z-index: 1;
   flex: none;
-  width: 1.75em;
-  height: 1.75em;
+  width: 2.25em;
+  height: 2.25em;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -374,9 +377,9 @@ textarea:focus-visible {
 
 .btn-icon-icon__arrow {
   flex: none;
-  width: 1.75em;
+  width: 2.25em;
   height: 100%;
-  padding: 0.35em;
+  padding: 0.5em;
 }
 
 .btn-icon-content__bg {
