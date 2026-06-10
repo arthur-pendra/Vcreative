@@ -2,9 +2,11 @@
 
 import { Fragment } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import Footer from '@/app/components/Footer'
 import LazyVideo from '@/app/components/LazyVideo'
-import { useWebGLEffects, useGlobalParallax } from '@/app/lib/useWebGLEffects'
+import PageFX from '@/app/components/PageFX'
+import { hideImageOnError } from '@/app/lib/hideImageOnError'
 import { CASES, type CaseSlug, type CaseTitle } from './caseData'
 import styles from './case.module.css'
 
@@ -31,10 +33,8 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
   const data = CASES[slug]
   const next = CASES[data.nextSlug]
 
-  useGlobalParallax()
-  useWebGLEffects()
-
   return (
+    <PageFX>
     <div className={styles.page}>
       <section className={styles.hero}>
         <p className={styles.heroMeta}>
@@ -208,27 +208,30 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
         </section>
       )}
 
-      <section className={styles.quoteSection}>
-        <div className={styles.quoteCard}>
-          <img
-            src={data.quote.logo}
-            alt=""
-            aria-hidden="true"
-            className={styles.quoteLogo}
-            loading="lazy"
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).style.visibility = 'hidden'
-            }}
-          />
-          <blockquote className={styles.quoteText}>
-            &ldquo;{data.quote.text}&rdquo;
-          </blockquote>
-          <p className={styles.quoteAuthor}>
-            {data.quote.author}
-          </p>
-          <p className={styles.quoteRole}>{data.quote.role}</p>
-        </div>
-      </section>
+      {/* Quote-blok verschijnt pas zodra de klant echte copy heeft
+          aangeleverd — placeholder-quotes ("TODO naam") horen niet
+          zichtbaar te zijn voor bezoekers. */}
+      {!data.quote.placeholder && (
+        <section className={styles.quoteSection}>
+          <div className={styles.quoteCard}>
+            <img
+              src={data.quote.logo}
+              alt=""
+              aria-hidden="true"
+              className={styles.quoteLogo}
+              loading="lazy"
+              onError={hideImageOnError}
+            />
+            <blockquote className={styles.quoteText}>
+              &ldquo;{data.quote.text}&rdquo;
+            </blockquote>
+            <p className={styles.quoteAuthor}>
+              {data.quote.author}
+            </p>
+            <p className={styles.quoteRole}>{data.quote.role}</p>
+          </div>
+        </section>
+      )}
 
       <figure
         className={styles.fullBleed}
@@ -258,7 +261,7 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
         >
           <em className="scriptCap">{next.name.charAt(0)}</em>{next.name.slice(1)}
         </h2>
-        <a href={`/cases/${next.slug}`} className={styles.nextCaseLink}>
+        <Link href={`/cases/${next.slug}`} className={styles.nextCaseLink}>
           <figure
             className={styles.nextCaseFigure}
             data-parallax="trigger"
@@ -280,11 +283,12 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
             </div>
           </figure>
           <span className={styles.nextCaseLabel}>Volgende case</span>
-        </a>
+        </Link>
       </section>
 
       <Footer />
     </div>
+    </PageFX>
   )
 }
 

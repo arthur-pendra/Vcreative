@@ -1,7 +1,8 @@
-/* All case content lives here. The shared `CasePage` component renders
-   whatever's in CASES[slug], and each slug has its own thin page.tsx
-   that hands the slug to CasePage. Add a case → add an entry here and a
-   folder with a one-line page.tsx. */
+/* All case content lives here — single source of truth. De dynamische
+   route app/cases/[slug] rendert CASES[slug] (incl. metadata), het
+   ProjectsGrid op home + /cases leest `card`, en de reviews-carousel
+   leest `quote`. Case toevoegen = één entry hier + een plek in de
+   layout-arrays van home en /cases. */
 
 export type CaseSlug =
   | 'hair-by-kim'
@@ -34,6 +35,8 @@ export type CaseData = {
   slug: CaseSlug
   year: string
   name: string
+  /* Korte samenvatting voor de projectkaart op home en /cases. */
+  card: { summary: string }
   heroTitle: CaseTitle
   heroTags: string[]
   heroImage: string
@@ -51,6 +54,9 @@ export type CaseData = {
     text: string
     author: string
     role: string
+    /* true zolang de klant nog geen echte quote heeft aangeleverd —
+       het quote-blok en de homepage-review worden dan niet getoond. */
+    placeholder?: boolean
   }
   fullBleedImage: string
   socialItems?: SocialItem[]
@@ -62,6 +68,10 @@ export const CASES: Record<CaseSlug, CaseData> = {
     slug: 'hair-by-kim',
     year: '2026',
     name: 'Hair by Kim',
+    card: {
+      summary:
+        'Social media beheer voor Hair by Kim. Strategie, fotografie en contentcreatie die het merk laat groeien.',
+    },
     heroTitle: {
       script: 'S',
       rest: 'ocial media beheer\nvoor Hair by Kim',
@@ -130,6 +140,11 @@ export const CASES: Record<CaseSlug, CaseData> = {
     slug: 'fgs',
     year: '2026',
     name: 'FGS',
+    card: {
+      /* TODO copy klant — korte beschrijving van de FGS case */
+      summary:
+        'Content creatie voor FGS. Industrieel vakmanschap met 125 jaar geschiedenis vertaald naar beeld en video.',
+    },
     heroTitle: {
       script: 'C',
       rest: 'ontent creatie\nvoor FGS',
@@ -164,11 +179,13 @@ export const CASES: Record<CaseSlug, CaseData> = {
       },
     ],
     quote: {
+      /* TODO copy klant — echte quote aanleveren; tot die tijd verbergt
+         placeholder:true het quote-blok én de homepage-review. */
       logo: '/logos/fgs.webp',
-      text:
-        'TODO copy klant — quote van FGS over de samenwerking met Viënna.',
+      text: 'TODO copy klant — quote van FGS over de samenwerking met Viënna.',
       author: 'TODO naam',
       role: 'TODO rol bij FGS',
+      placeholder: true,
     },
     fullBleedImage: '/cases/fgs/hero.webp',
     socialItems: [
@@ -190,6 +207,10 @@ export const CASES: Record<CaseSlug, CaseData> = {
     slug: 'hal-xiii',
     year: '2026',
     name: 'Hal XIII',
+    card: {
+      summary:
+        'Maandelijks beheer voor Hal XIII. Energie en kracht vertaald naar beeld en video.',
+    },
     heroTitle: {
       script: 'M',
       rest: 'aandelijks beheer\nvoor Hal XIII',
@@ -256,6 +277,11 @@ export const CASES: Record<CaseSlug, CaseData> = {
     slug: 'vloerverwarming-limburg',
     year: '2026',
     name: 'Vloerverwarming Limburg',
+    card: {
+      /* TODO copy klant — korte beschrijving van de VVL case */
+      summary:
+        'Content creatie voor Vloerverwarming Limburg. Vakmanschap op locatie vertaald naar foto en video.',
+    },
     heroTitle: {
       script: 'C',
       rest: 'ontent creatie voor\nVloerverwarming Limburg',
