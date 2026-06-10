@@ -17,7 +17,7 @@ import { setLenisInstance } from '@/app/lib/lenis'
    client-side navigations — no teardown/setup on every route change. */
 const LenisScroll = () => {
   useEffect(() => {
-    let lenis: any
+    let lenis: import('lenis').default | undefined
     let tickerFn: ((time: number) => void) | undefined
     let scrollTriggerUpdate: (() => void) | undefined
     let onStRefresh: (() => void) | undefined
@@ -55,21 +55,22 @@ const LenisScroll = () => {
       gsapRef = gsap
       scrollTriggerRef = ScrollTrigger
 
-      lenis = new Lenis({
+      const instance = new Lenis({
         /* Native touch scroll on mobile (no smoothing) so it feels like a
            normal/native website rather than the stiff lerped smooth-scroll.
            Desktop wheel stays smooth. The WebGL text overlay tracks the
            native scroll directly (window.scrollY, see useWebGLEffects). */
         syncTouch: false,
       })
-      setLenisInstance(lenis)
+      lenis = instance
+      setLenisInstance(instance)
 
       // Feed Lenis scroll events straight into ScrollTrigger
       scrollTriggerUpdate = () => ScrollTrigger.update()
-      lenis.on('scroll', scrollTriggerUpdate)
+      instance.on('scroll', scrollTriggerUpdate)
 
       // Drive Lenis from the GSAP ticker (seconds → milliseconds)
-      tickerFn = (time: number) => lenis.raf(time * 1000)
+      tickerFn = (time: number) => instance.raf(time * 1000)
       gsap.ticker.add(tickerFn)
       gsap.ticker.lagSmoothing(0)
 

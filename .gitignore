@@ -46,4 +46,8 @@ next-env.d.ts
 # raw video sources kept outside the build (re-encoded mp4s live in /public)
 /source/videos-original/
 
-.vercel
+# claude code (lokale sessie-config)
+.claude/
+
+# design-referenties (screenshots/inspiratie — niet mee in git)
+/docs/reference/

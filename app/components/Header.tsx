@@ -20,12 +20,18 @@ const Header = () => {
   const [showOverlay, setShowOverlay] = useState(false)
   const pathname = usePathname()
 
+  /* State-updates via timeout-0 zodat ze niet synchroon in het effect
+     vallen (react-hooks/set-state-in-effect — voorkomt cascading
+     renders). Gedrag is identiek: menu dicht na navigatie, overlay
+     mount pas client-side (geen hydration mismatch). */
   useEffect(() => {
-    setMenuVisible(false)
+    const t = setTimeout(() => setMenuVisible(false), 0)
+    return () => clearTimeout(t)
   }, [pathname])
 
   useEffect(() => {
-    setShowOverlay(true)
+    const t = setTimeout(() => setShowOverlay(true), 0)
+    return () => clearTimeout(t)
   }, [])
 
   const canHover = () =>

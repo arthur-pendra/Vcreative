@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# V-Creative
 
-## Getting Started
+Portfolio- en bedrijfssite van Viënna Wachelder — content en strategie voor merken met karakter. Gebouwd met Next.js (App Router), GSAP + Lenis voor de scroll-choreografie en Three.js voor de WebGL-laag (tekst-reveals, ink-menu, 3D-logo, image-bend).
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, TypeScript, CSS Modules)
+- **GSAP + ScrollTrigger** — scroll-animaties, pinning, parallax
+- **Lenis** — smooth scrolling, gekoppeld aan de GSAP-ticker
+- **Three.js** — noise-mask tekst-reveals, ink-menu, pearl-logo (draco-gecomprimeerd GLB)
+- **sharp / ffmpeg** — lokale asset-pipeline (zie Scripts)
+
+## Ontwikkelen
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # dev-server op 0.0.0.0 — bewust, zodat je op je telefoon
+                   # via het LAN kunt meetesten (zie allowedDevOrigins in next.config.ts)
+npm run build      # productie-build
+npm run lint       # eslint
+npm run typecheck  # tsc --noEmit
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts (asset-pipeline)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run optimize:images   # alle png/jpg in public/ → webp (max 1920px, q85), verwijdert origineel
+npm run optimize:videos   # mp4's in public/ comprimeren (vereist ffmpeg)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Na `optimize:images` moet je verwijzingen in de code zelf bijwerken naar `.webp`. Ruwe videobronnen horen in `source/videos-original/` (gitignored).
 
-## Learn More
+## Structuur
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+  page.tsx           Homepage
+  cases/             Cases-index + caseData.ts (alle case-content) + detailroutes
+  over-mij/          Over-pagina
+  contact/           Contactpagina
+  components/        Gedeelde UI (Header, MenuOverlay, Loader, DynamicCursor, …)
+  lib/               Lenis-singleton, WebGL-effects hook
+docs/                Content-overzicht, sitemap, design-referenties (reference/ is gitignored)
+public/
+  cases/             Case-fotografie en -video's (webp/mp4, door de pipeline gehaald)
+  fonts/             HW Cigars (display) + PP Mori (sans)
+  icons/3D/          VIENNA_LOGO.glb + matcap/iridescence textures
+  draco/             Draco-decoder voor de GLTF-loader
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Conventies
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Sizing in `em`, nooit vaste `px`** — Figma-waardes ÷ 16 (zie `CLAUDE.md`). Het Osmo fluid-scaling systeem in `globals.css` zet `--size-font` op `body`; alles schaalt mee.
+- **WebGL-tekst-reveals**: element markeren met `data-animation="webgl-text"`; modes via `data-webgl-text-mode`.
+- **Parallax**: `data-parallax="trigger"` om een wrapper, `data-parallax="target"` op het bewegende element.
+- **Case toevoegen**: entry in `app/cases/caseData.ts` + assets in `public/cases/<slug>/`.
 
-## Deploy on Vercel
+## Aandachtspunten vóór livegang
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **HW Cigars draait op een trial-licentie** (`public/fonts/HW Cigars Trial/`) — definitieve licentie kopen en de productie-cuts plaatsen.
+- Op `/cases/fgs` en `/cases/vloerverwarming-limburg` staat nog **"TODO copy klant"**-placeholder-tekst.
+- Telefoonnummer en social-links deels placeholder.

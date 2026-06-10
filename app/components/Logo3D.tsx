@@ -306,7 +306,7 @@ const Logo3D = ({
         }
       }
 
-      let continuousStart = performance.now()
+      const continuousStart = performance.now()
       let continuousUpdate = (_t: number) => {}
 
       if (interaction === 'idle') {

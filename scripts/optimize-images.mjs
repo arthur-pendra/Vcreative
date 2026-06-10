@@ -1,6 +1,5 @@
 import sharp from 'sharp'
 import {readdir, stat, unlink} from 'node:fs/promises'
-import {existsSync} from 'node:fs'
 import path from 'node:path'
 
 const ROOT = path.resolve(process.cwd(), 'public')
