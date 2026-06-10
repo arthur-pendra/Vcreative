@@ -7,6 +7,12 @@ import { isTouchDevice } from '@/app/lib/device'
    ([data-parallax="target"]) from startVal → endVal on scroll. */
 export function useGlobalParallax() {
   useEffect(() => {
+    /* prefers-reduced-motion: geen parallax-drift en geen fade-ins
+       (die zetten opacity eerst op 0) — content blijft gewoon staan. */
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return
+    }
+
     let ctx: ReturnType<typeof import('gsap')['default']['context']> | undefined
     let cancelled = false
 

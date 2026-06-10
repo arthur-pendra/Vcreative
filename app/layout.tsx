@@ -68,9 +68,14 @@ const RootLayout = ({
         <link rel="stylesheet" href="https://use.typekit.net/uvq1lml.css" />
       </head>
       <body>
+        {/* Eerste focusbare element: laat toetsenbordgebruikers het
+            menu/chrome overslaan. Alleen zichtbaar bij focus. */}
+        <a href="#main" className="skipLink">
+          Naar inhoud
+        </a>
         <LenisScroll />
         <Header />
-        {children}
+        <main id="main">{children}</main>
         <YearStamp />
         <ScrollProgress />
         <AdaptiveChrome />

@@ -64,10 +64,18 @@ const fragmentShader = /* glsl */ `
 
 type Props = {
   hover: boolean
+  /* Aangeroepen als de WebGL-init faalt (geen context beschikbaar) —
+     de Header valt dan terug op de zichtbare DOM-dropdown in plaats
+     van transparante menutekst die op de overlay wacht. */
+  onError?: () => void
 }
 
-const MenuOverlay = ({ hover }: Props) => {
+const MenuOverlay = ({ hover, onError }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null)
+  /* In een ref zodat het init-effect (eenmalig) altijd de laatste
+     callback ziet zonder her-runs op een nieuwe functie-identiteit. */
+  const onErrorRef = useRef(onError)
+  onErrorRef.current = onError
   const materialRef = useRef<{ uniforms: { uReveal: { value: number } } } | null>(null)
   const renderRef = useRef<(() => void) | null>(null)
   const paintTextRef = useRef<(() => void) | null>(null)
@@ -88,11 +96,20 @@ const MenuOverlay = ({ hover }: Props) => {
       const width = window.innerWidth
       const height = window.innerHeight
 
-      const renderer = new THREE.WebGLRenderer({
-        alpha: true,
-        antialias: false,
-        powerPreference: 'high-performance',
-      })
+      /* WebGLRenderer kan throwen op apparaten/browsers zonder WebGL
+         (privacy-instellingen, software rendering uit, context-limiet).
+         Zonder vangnet bleef de menutekst dan permanent onzichtbaar. */
+      let renderer: InstanceType<typeof THREE.WebGLRenderer>
+      try {
+        renderer = new THREE.WebGLRenderer({
+          alpha: true,
+          antialias: false,
+          powerPreference: 'high-performance',
+        })
+      } catch {
+        onErrorRef.current?.()
+        return
+      }
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
       renderer.setSize(width, height, false)
 

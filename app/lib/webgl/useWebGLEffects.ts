@@ -127,6 +127,15 @@ export function useWebGLEffects() {
     const restoreElements: Array<{el: HTMLElement, prop: string, val: string}> = []
 
     const init = async () => {
+      /* prefers-reduced-motion: geen masks, geen scroll-tweens, geen
+         2s Lenis-poll — toon de statische eindstand meteen. (Lenis
+         zelf start ook al niet, zie LenisScroll.) */
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        revealText()
+        clearTimeout(revealTextFallback)
+        return
+      }
+
       await document.fonts.ready
 
       /* Touch/mobile: skip the WebGL text overlay entirely. A fixed canvas

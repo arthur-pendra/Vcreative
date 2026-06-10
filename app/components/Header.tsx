@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styles from '@/app/components/Header.module.css'
 import MenuOverlay from '@/app/components/MenuOverlay'
 import { NAV_ITEMS } from '@/app/lib/navigation'
@@ -11,8 +11,12 @@ const Header = () => {
   const [menuVisible, setMenuVisible] = useState(false)
   /* The WebGL ink overlay paints the menu text and is the visual menu on
      both desktop and mobile. Mounted after mount (client-only) to avoid a
-     hydration mismatch; until then the plain DOM dropdown is the fallback. */
+     hydration mismatch; until then the plain DOM dropdown is the fallback.
+     Faalt de WebGL-init (geen context beschikbaar), dan zet onOverlayError
+     dit terug — anders blijft de menutekst onzichtbaar (de CSS maakt
+     .menuItem transparant zodra data-overlay='true'). */
   const [showOverlay, setShowOverlay] = useState(false)
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
   const pathname = usePathname()
 
   /* State-updates via timeout-0 zodat ze niet synchroon in het effect
@@ -29,6 +33,20 @@ const Header = () => {
     return () => clearTimeout(t)
   }, [])
 
+  /* Escape sluit het menu en geeft focus terug aan de knop —
+     toetsenbordgebruikers kunnen er anders niet meer uit. */
+  useEffect(() => {
+    if (!menuVisible) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMenuVisible(false)
+        menuButtonRef.current?.focus()
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [menuVisible])
+
   const canHover = () =>
     typeof window !== 'undefined' &&
     window.matchMedia('(hover: hover) and (pointer: fine)').matches
@@ -43,10 +61,15 @@ const Header = () => {
     setMenuVisible(false)
   }
 
+  /* Klik/Enter togglet het menu op élk apparaat. Op hover-apparaten
+     opent het menu meestal al via mouseenter, maar zonder deze toggle
+     was de knop voor toetsenbordgebruikers een no-op en bleven de
+     nav-links (tabIndex -1) volledig onbereikbaar. */
   const handleClick = () => {
-    if (canHover()) return
     setMenuVisible((v) => !v)
   }
+
+  const handleOverlayError = useCallback(() => setShowOverlay(false), [])
 
   return (
     <>
@@ -61,6 +84,7 @@ const Header = () => {
           onMouseLeave={handleLeave}
         >
           <button
+            ref={menuButtonRef}
             type="button"
             className={styles.menuLink}
             onClick={handleClick}
@@ -106,7 +130,9 @@ const Header = () => {
         </Link>
       </header>
 
-      {showOverlay && <MenuOverlay hover={menuVisible} />}
+      {showOverlay && (
+        <MenuOverlay hover={menuVisible} onError={handleOverlayError} />
+      )}
     </>
   )
 }
