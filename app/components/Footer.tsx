@@ -5,12 +5,7 @@ import { useState } from 'react'
 import styles from '@/app/components/Footer.module.css'
 import Logo3D from '@/app/components/Logo3D'
 import { IconButton } from '@/app/components/IconButton'
-
-const MENU = [
-  { label: 'Projecten', href: '/cases' },
-  { label: 'Over', href: '/over-mij' },
-  { label: 'Start project', href: '/contact' },
-]
+import { NAV_ITEMS } from '@/app/lib/navigation'
 
 const CONTACT = [
   { label: 'info@vcreative.nl', href: 'mailto:info@vcreative.nl' },
@@ -73,7 +68,7 @@ const Footer = () => {
           <div className={styles.col}>
             <p className={styles.colHead}>Menu</p>
             <ul className={styles.colList}>
-              {MENU.map((l) => (
+              {NAV_ITEMS.map((l) => (
                 <li key={l.label}>
                   <Link href={l.href} className={styles.link}>
                     {l.label}

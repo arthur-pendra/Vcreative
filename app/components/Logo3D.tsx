@@ -3,14 +3,13 @@
 import { useEffect, useRef } from 'react'
 import type * as THREE from 'three'
 import styles from '@/app/components/Header.module.css'
+import { isTouchDevice } from '@/app/lib/device'
+
+const MATCAP_SRC = '/icons/3D/project-model-matcap.png'
 
 type Props = {
-  interaction?: 'idle' | 'mouseTilt' | 'auto'
+  interaction?: 'idle' | 'mouseTilt'
   className?: string
-  /* Override the default matcap (pearl tint) — used by the menu
-     background logo to render the model in a darker tone against
-     the navy ink. */
-  matcap?: string
   /* mouseTilt only: trigger a 360° spin on pointer enter. Footer
      opts out so the logo only follows the cursor subtly. */
   hoverSpin?: boolean
@@ -25,7 +24,6 @@ type Props = {
 const Logo3D = ({
   interaction = 'idle',
   className,
-  matcap: matcapSrc = '/icons/3D/project-model-matcap.png',
   hoverSpin = true,
   spinOnMount = false,
   onSpinComplete,
@@ -50,9 +48,7 @@ const Logo3D = ({
 
       if (cancelled) return
 
-      const isTouch =
-        'ontouchstart' in document.documentElement ||
-        navigator.maxTouchPoints > 0
+      const isTouch = isTouchDevice()
       // touch devices: dial back the supersample so battery / heat stays sane
       const SUPERSAMPLE = isTouch ? 1.25 : 2
       const dpr = Math.min(window.devicePixelRatio * SUPERSAMPLE, isTouch ? 3 : 4)
@@ -91,7 +87,7 @@ const Logo3D = ({
 
       const texLoader = new THREE.TextureLoader()
       const [matcap, iridescence] = await Promise.all([
-        texLoader.loadAsync(matcapSrc),
+        texLoader.loadAsync(MATCAP_SRC),
         texLoader.loadAsync('/icons/3D/iri-32.png'),
       ])
       matcap.colorSpace = THREE.SRGBColorSpace
@@ -307,19 +303,13 @@ const Logo3D = ({
       }
 
       const continuousStart = performance.now()
-      let continuousUpdate = (_t: number) => {}
+      let continuousUpdate: (t: number) => void = () => {}
 
       if (interaction === 'idle') {
         continuousMode = true
         continuousUpdate = (t: number) => {
           targetRotY = Math.sin(t * 0.35) * 0.025
           targetRotX = Math.sin(t * 0.25 + 1.0) * 0.015
-        }
-      } else if (interaction === 'auto') {
-        continuousMode = true
-        continuousUpdate = (t: number) => {
-          targetRotY = t * 0.95 + Math.sin(t * 0.43) * 0.5
-          targetRotX = t * 1.35 + Math.sin(t * 0.61 + 1.7) * 0.55
         }
       } else if (isTouch) {
         continuousMode = true
@@ -463,7 +453,9 @@ const Logo3D = ({
       cancelled = true
       cleanup?.()
     }
-  }, [])
+    /* Deze props zijn in de praktijk literals per call-site; mochten ze
+       ooit wisselen dan herbouwt het effect de renderer via de cleanup. */
+  }, [interaction, hoverSpin, spinOnMount])
 
   return (
     <div

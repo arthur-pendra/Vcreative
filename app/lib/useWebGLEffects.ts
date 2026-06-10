@@ -2,6 +2,9 @@
 
 import { useEffect } from 'react'
 import type * as THREE from 'three'
+import type Lenis from 'lenis'
+import { COLOR_CREAM, hexToRgb01 } from '@/app/lib/colors'
+import { isTouchDevice } from '@/app/lib/device'
 
 /* ── Text Overlay Shader (bg-colored mask dissolves to reveal DOM text) ── */
 
@@ -191,12 +194,6 @@ type GsapTween = {
   scrollTrigger?: { kill: () => void } | null
 }
 type GsapScrollTrigger = { kill: () => void }
-type LenisLike = {
-  on: (event: string, cb: (e?: unknown) => void) => void
-  off: (event: string, cb: (e?: unknown) => void) => void
-  animatedScroll: number
-  actualScroll: number
-}
 
 export function useWebGLEffects() {
   useEffect(() => {
@@ -243,7 +240,7 @@ export function useWebGLEffects() {
        dev, fast navigation) and fire the reveal tween several times
        per click. */
     const domListeners: Array<{el: HTMLElement, type: string, fn: EventListener}> = []
-    let lenisRef: LenisLike | null = null
+    let lenisRef: Lenis | null = null
 
     /* Every GPU-backed resource this hook creates goes in here. Without
        this, unmount only removed the canvas from the DOM — the WebGL
@@ -281,7 +278,7 @@ export function useWebGLEffects() {
          can't perfectly track native scroll, so the noise-mask reveal read
          as wobbly on mobile — show the plain DOM text instead. (The image
          parallax in useGlobalParallax still runs; so does the menu overlay.) */
-      const isTouch = 'ontouchstart' in document.documentElement
+      const isTouch = isTouchDevice()
       if (isTouch) {
         revealText()
         clearTimeout(revealTextFallback)
@@ -309,7 +306,7 @@ export function useWebGLEffects() {
           if (lenis) break
         }
       }
-      lenisRef = lenis as LenisLike | null
+      lenisRef = lenis
 
       /* Touch scrolls NATIVELY (Lenis syncTouch is off → native feel), so
          the DOM text moves with window.scrollY instantly. Read that directly
@@ -370,7 +367,7 @@ export function useWebGLEffects() {
 
       /* Mask color = background it dissolves from. Defaults to cream; elements
          on dark sections can override via data-webgl-text-bg="#332f29". */
-      const CREAM_RGB = new THREE.Vector3(0xfa / 255, 0xf8 / 255, 0xf2 / 255)
+      const CREAM_RGB = new THREE.Vector3(...hexToRgb01(COLOR_CREAM))
       const getMaskColor = (element: HTMLElement) => {
         const attr = element.dataset.webglTextBg
         if (!attr) return CREAM_RGB.clone()
@@ -1149,9 +1146,7 @@ export function useGlobalParallax() {
       gsap.registerPlugin(ScrollTrigger)
       if (cancelled) return
 
-      const isTouch =
-        'ontouchstart' in document.documentElement ||
-        navigator.maxTouchPoints > 0
+      const isTouch = isTouchDevice()
 
       ctx = gsap.context(() => {
         document

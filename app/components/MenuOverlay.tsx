@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import type * as THREE from 'three'
 import styles from '@/app/components/MenuOverlay.module.css'
+import { COLOR_CREAM, hexToRgb01 } from '@/app/lib/colors'
 
 const vertexShader = /* glsl */ `
   varying vec2 vUv;
@@ -170,7 +171,7 @@ const MenuOverlay = ({ hover }: Props) => {
          subtle — on light sections it's barely there, on dark sections it
          reads as a soft cream glow. Menu text is painted navy so it stays
          legible against the cream ink on any background. */
-      const inkColor = new THREE.Vector3(0xfa / 255, 0xf8 / 255, 0xf2 / 255)
+      const inkColor = new THREE.Vector3(...hexToRgb01(COLOR_CREAM))
       const textColor = new THREE.Vector3(0, 0, 0)
 
       const material = new THREE.ShaderMaterial({

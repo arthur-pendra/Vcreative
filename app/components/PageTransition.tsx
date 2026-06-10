@@ -11,13 +11,6 @@ import styles from '@/app/components/PageTransition.module.css'
      ScrollTriggers from the old page, then refresh once the new
      page has mounted — without this the next page either opens
      mid-scroll or shows triggers firing seconds later. */
-type LenisLike = {
-  stop?: () => void
-  start?: () => void
-  scrollTo?: (target: number, opts?: {immediate?: boolean; force?: boolean}) => void
-  resize?: () => void
-}
-
 type Phase = 'idle' | 'in' | 'out'
 
 const PageTransition = () => {
@@ -51,7 +44,7 @@ const PageTransition = () => {
 
       const gsap = gsapMod.default
       const {ScrollTrigger} = stMod
-      const lenis = lenisMod.getLenisInstance() as LenisLike | null
+      const lenis = lenisMod.getLenisInstance()
 
       /* Entire reset sequence happens while the overlay is at full
          opacity, BEFORE we start fading out. Anything visible during
@@ -61,9 +54,7 @@ const PageTransition = () => {
             agree — Lenis drives animated scroll, but ScrollTrigger
             reads window.scrollY as a fallback and Next's default
             scroll-restoration writes to it too. */
-      if (lenis?.scrollTo) {
-        lenis.scrollTo(0, {immediate: true, force: true})
-      }
+      lenis?.scrollTo(0, {immediate: true, force: true})
       window.scrollTo(0, 0)
 
       /* 2. Give the new page two frames to paint its initial layout
@@ -82,9 +73,9 @@ const PageTransition = () => {
       await new Promise<void>((r) => setTimeout(r, 150))
       if (cancelled) return
 
-      lenis?.resize?.()
+      lenis?.resize()
       ScrollTrigger.refresh()
-      lenis?.start?.()
+      lenis?.start()
 
       const overlay = overlayRef.current
       if (!overlay) {
@@ -171,11 +162,11 @@ const PageTransition = () => {
           import('@/app/lib/lenis'),
         ])
         const gsap = gsapMod.default
-        const lenis = lenisMod.getLenisInstance() as LenisLike | null
+        const lenis = lenisMod.getLenisInstance()
 
         /* Freeze the current scroll so wheel/touch input during the
            fade can't scroll the outgoing page behind the overlay. */
-        lenis?.stop?.()
+        lenis?.stop()
 
         const overlay = overlayRef.current
         if (!overlay) {

@@ -12,17 +12,9 @@ type Props = {
   src: string
   poster?: string
   className?: string
-  loop?: boolean
-  ariaLabel?: string
 }
 
-const LazyVideo = ({
-  src,
-  poster,
-  className,
-  loop = true,
-  ariaLabel,
-}: Props) => {
+const LazyVideo = ({ src, poster, className }: Props) => {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [shouldLoad, setShouldLoad] = useState(false)
 
@@ -96,11 +88,10 @@ const LazyVideo = ({
       src={shouldLoad ? src : undefined}
       poster={poster}
       autoPlay={shouldLoad}
-      loop={loop}
+      loop
       muted
       playsInline
       preload="none"
-      aria-label={ariaLabel}
     />
   )
 }

@@ -10,7 +10,7 @@ import { useEffect } from 'react'
    cream independently per corner.
 
    Dark sections opt in with `data-theme="dark"` on their root element.
-   Chrome items opt in with `data-chrome="tl|tr|bl|br"`.
+   Chrome items opt in with `data-chrome="tl|tc|tr|bl|br"`.
 
    Implementation notes:
      - getBoundingClientRect for each side instead of elementFromPoint,

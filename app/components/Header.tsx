@@ -5,12 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import styles from '@/app/components/Header.module.css'
 import MenuOverlay from '@/app/components/MenuOverlay'
-
-const ITEMS = [
-  { label: 'Projecten', href: '/cases' },
-  { label: 'Over', href: '/over-mij' },
-  { label: 'Start project', href: '/contact' },
-] as const
+import { NAV_ITEMS } from '@/app/lib/navigation'
 
 const Header = () => {
   const [menuVisible, setMenuVisible] = useState(false)
@@ -83,7 +78,7 @@ const Header = () => {
             data-visible={menuVisible}
             aria-label="Hoofdnavigatie"
           >
-            {ITEMS.map((item) => (
+            {NAV_ITEMS.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
