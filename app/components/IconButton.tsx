@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, type ReactNode } from 'react'
 
 /* Arrow glyph shared by all three hidden copies inside the icon pill.
@@ -41,17 +42,21 @@ type IconButtonProps = {
   onClick?: () => void
   className?: string
   ariaLabel?: string
+  /* 'submit' laat de knop het omliggende <form> submitten, zodat de
+     native required-validatie draait vóór de submit-handler. */
+  type?: 'button' | 'submit'
 }
 
 /* Full pill: text (with shadow-duplicate sliding on hover) + animated
-   icon circle + diagonal wipe bg. Renders as <a> when href is set, else
-   as <button type="button">. */
+   icon circle + diagonal wipe bg. Renders as next/link Link for internal
+   hrefs (prefetch), <a> for external, else as <button>. */
 export const IconButton = ({
   children,
   href,
   onClick,
   className = '',
   ariaLabel,
+  type = 'button',
 }: IconButtonProps) => {
   const classes = ['btn-icon-link', className].filter(Boolean).join(' ')
   const inner = (
@@ -67,6 +72,16 @@ export const IconButton = ({
   )
 
   if (href) {
+    /* Interne routes via next/link (viewport-prefetch); PageTransition
+       onderschept de click in de capture-fase, dus het cream-fade
+       gedrag is identiek aan een kale <a>. */
+    if (href.startsWith('/')) {
+      return (
+        <Link href={href} className={classes} aria-label={ariaLabel}>
+          {inner}
+        </Link>
+      )
+    }
     return (
       <a href={href} className={classes} aria-label={ariaLabel}>
         {inner}
@@ -75,7 +90,7 @@ export const IconButton = ({
   }
   return (
     <button
-      type="button"
+      type={type}
       onClick={onClick}
       className={classes}
       aria-label={ariaLabel}

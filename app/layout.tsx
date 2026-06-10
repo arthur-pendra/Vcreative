@@ -8,8 +8,13 @@ import YearStamp from "@/app/components/YearStamp"
 import AdaptiveChrome from "@/app/components/AdaptiveChrome"
 import DynamicCursor from "@/app/components/DynamicCursor"
 import Loader from "@/app/components/Loader"
+import { SITE_URL } from "@/app/lib/site"
 
 export const metadata: Metadata = {
+  /* Basis voor alle relatieve OG/canonical-URL's (en nodig om de
+     "metadataBase not set" warning + localhost-URL's in social
+     previews te voorkomen). */
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "V Creative · Content en strategie",
     template: "%s · V Creative",
@@ -31,11 +36,13 @@ export const metadata: Metadata = {
     description: "Jij runt je bedrijf, ik regel je socials.",
     locale: "nl_NL",
     type: "website",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "V-Creative",
     description: "Jij runt je bedrijf, ik regel je socials.",
+    images: ["/og-image.jpg"],
   },
 }
 
@@ -61,16 +68,16 @@ const RootLayout = ({
         <link rel="stylesheet" href="https://use.typekit.net/uvq1lml.css" />
       </head>
       <body>
-          <LenisScroll />
-          <Header />
-          {children}
-          <YearStamp />
-          <ScrollProgress />
-          <AdaptiveChrome />
-          <DynamicCursor />
-          <PageTransition />
-          <Loader />
-        </body>
+        <LenisScroll />
+        <Header />
+        {children}
+        <YearStamp />
+        <ScrollProgress />
+        <AdaptiveChrome />
+        <DynamicCursor />
+        <PageTransition />
+        <Loader />
+      </body>
     </html>
   )
 }
