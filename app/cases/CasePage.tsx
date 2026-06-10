@@ -8,6 +8,7 @@ import LazyVideo from '@/app/components/LazyVideo'
 import PageFX from '@/app/components/PageFX'
 import { hideImageOnError } from '@/app/lib/hideImageOnError'
 import { CASES, type CaseSlug, type CaseTitle } from './caseData'
+import ed from '@/app/styles/editorial.module.css'
 import styles from './case.module.css'
 
 /* Render <em>script</em>first line<br />…rest, matching the homepage
@@ -35,32 +36,32 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
 
   return (
     <PageFX>
-    <div className={styles.page}>
-      <section className={styles.hero}>
+    <div className={`${ed.page} ${styles.page}`}>
+      <section className={ed.hero}>
         <p className={styles.heroMeta}>
           Case · {data.year}
         </p>
         <h1
           data-animation="webgl-text"
           data-webgl-text-mode="hero"
-          className={styles.heroTitle}
+          className={ed.heroTitle}
         >
           {renderTitle(data.heroTitle)}
         </h1>
-        <ul className={styles.heroTags}>
+        <ul className={ed.heroTags}>
           {data.heroTags.map((tag) => (
-            <li key={tag} className={styles.heroTag}>
+            <li key={tag} className={ed.heroTag}>
               {tag}
             </li>
           ))}
         </ul>
       </section>
 
-      <figure className={styles.heroFigure} data-parallax="trigger">
-        <div className={styles.parallaxTarget} data-parallax="target">
+      <figure className={ed.heroFigure} data-parallax="trigger">
+        <div className={ed.parallaxTarget} data-parallax="target">
           {/* Overscan-wrapper draagt de 150%/-25% pan-ruimte; Image fill
               vult deze div 100% (fill verbiedt style.height). */}
-          <div className={styles.heroImage}>
+          <div className={ed.heroImage}>
             <Image
               src={data.heroImage}
               alt={`${data.name} hero`}
@@ -73,33 +74,33 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
         </div>
       </figure>
 
-      <div className={styles.sections}>
+      <div className={ed.sections}>
         {/* Section 01 — text left, portrait image right */}
-        <section className={`${styles.section} ${styles.sectionA}`}>
-          <div className={styles.sectionText}>
-            <p className={styles.sectionLabel}>
-              <span className={styles.sectionLabelNumber}>01</span>
+        <section className={`${ed.section} ${ed.sectionA}`}>
+          <div className={ed.sectionText}>
+            <p className={ed.sectionLabel}>
+              <span className={ed.sectionLabelNumber}>01</span>
               {data.sections[0].label}
             </p>
-            <h2 data-animation="webgl-text" className={styles.sectionTitle}>
+            <h2 data-animation="webgl-text" className={ed.sectionTitle}>
               {renderTitle(data.sections[0].title)}
             </h2>
             {data.sections[0].body.map((p, i) => (
-              <p key={i} className={styles.sectionBody}>{p}</p>
+              <p key={i} className={ed.sectionBody}>{p}</p>
             ))}
           </div>
           <figure
-            className={`${styles.sectionFigure} ${data.sections[0].imageRatio === 'portrait' ? styles.sectionFigurePortrait : ''}`}
+            className={`${ed.sectionFigure} ${data.sections[0].imageRatio === 'portrait' ? ed.sectionFigurePortrait : ''}`}
             data-parallax="trigger"
             data-parallax-disabled
           >
-            <div className={styles.parallaxTarget} data-parallax="target">
+            <div className={ed.parallaxTarget} data-parallax="target">
               <img
                 data-webgl-media
                 data-webgl-effect="bend"
                 src={data.sections[0].image}
                 alt={`${data.name}, ${data.sections[0].label}`}
-                className={styles.sectionImage}
+                className={ed.sectionImage}
                 loading="lazy"
               />
             </div>
@@ -107,69 +108,69 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
         </section>
 
         {/* Section 02 — landscape image left, text right */}
-        <section className={`${styles.section} ${styles.sectionB}`}>
+        <section className={`${ed.section} ${ed.sectionB}`}>
           <figure
-            className={`${styles.sectionFigure} ${data.sections[1].imageRatio === 'portrait' ? styles.sectionFigurePortrait : ''}`}
+            className={`${ed.sectionFigure} ${data.sections[1].imageRatio === 'portrait' ? ed.sectionFigurePortrait : ''}`}
             data-parallax="trigger"
             data-parallax-disabled
           >
-            <div className={styles.parallaxTarget} data-parallax="target">
+            <div className={ed.parallaxTarget} data-parallax="target">
               <img
                 data-webgl-media
                 data-webgl-effect="bend"
                 src={data.sections[1].image}
                 alt={`${data.name}, ${data.sections[1].label}`}
-                className={styles.sectionImage}
+                className={ed.sectionImage}
                 loading="lazy"
               />
             </div>
           </figure>
-          <div className={styles.sectionText}>
-            <p className={styles.sectionLabel}>
-              <span className={styles.sectionLabelNumber}>02</span>
+          <div className={ed.sectionText}>
+            <p className={ed.sectionLabel}>
+              <span className={ed.sectionLabelNumber}>02</span>
               {data.sections[1].label}
             </p>
-            <h2 data-animation="webgl-text" className={styles.sectionTitle}>
+            <h2 data-animation="webgl-text" className={ed.sectionTitle}>
               {renderTitle(data.sections[1].title)}
             </h2>
             {data.sections[1].body.map((p, i) => (
-              <p key={i} className={styles.sectionBody}>{p}</p>
+              <p key={i} className={ed.sectionBody}>{p}</p>
             ))}
           </div>
         </section>
 
         {/* Section 03 — full-width image + 2-col caption below (optioneel) */}
         {data.sections[2] && (
-          <section className={`${styles.section} ${styles.sectionC}`}>
+          <section className={`${ed.section} ${ed.sectionC}`}>
             <figure
-              className={styles.sectionFigure}
+              className={ed.sectionFigure}
               data-parallax="trigger"
               data-parallax-disabled
             >
-              <div className={styles.parallaxTarget} data-parallax="target">
+              <div className={ed.parallaxTarget} data-parallax="target">
                 <img
                   data-webgl-media
                   data-webgl-effect="bend"
                   src={data.sections[2].image}
                   alt={`${data.name}, ${data.sections[2].label}`}
-                  className={styles.sectionImage}
+                  className={ed.sectionImage}
                   loading="lazy"
                 />
               </div>
             </figure>
-            <div className={styles.sectionCText}>
-              <div className={styles.sectionCTextLead}>
-                <p className={styles.sectionLabel}>
-                  <span className={styles.sectionLabelNumber}>03</span>
+            <div className={ed.sectionCText}>
+              <div className={ed.sectionCTextLead}>
+                <p className={ed.sectionLabel}>
+                  <span className={ed.sectionLabelNumber}>03</span>
                   {data.sections[2].label}
                 </p>
-                <h2 data-animation="webgl-text" className={styles.sectionTitle}>
+                <h2 data-animation="webgl-text" className={ed.sectionTitle}>
                   {renderTitle(data.sections[2].title)}
                 </h2>
               </div>
-              <div className={styles.sectionCTextBody}>
+              <div className={ed.sectionCTextBody}>
                 {data.sections[2].body.map((p, i) => (
-                  <p key={i} className={styles.sectionBody}>{p}</p>
+                  <p key={i} className={ed.sectionBody}>{p}</p>
                 ))}
               </div>
             </div>
@@ -239,7 +240,7 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
         data-parallax-start="9"
         data-parallax-end="-9"
       >
-        <div className={styles.parallaxTarget} data-parallax="target">
+        <div className={ed.parallaxTarget} data-parallax="target">
           {/* Overscan-wrapper draagt de 150%/-25% pan-ruimte; next/image
               fill verbiedt style.height, dus de Image vult deze div 100%. */}
           <div className={styles.fullBleedImage}>
@@ -269,7 +270,7 @@ const CasePage = ({ slug }: { slug: CaseSlug }) => {
             data-cursor-hover
             data-cursor-text="Volgende case"
           >
-            <div className={styles.parallaxTarget} data-parallax="target">
+            <div className={ed.parallaxTarget} data-parallax="target">
               <img
                 data-webgl-media
                 data-webgl-effect="bend"

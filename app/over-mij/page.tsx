@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Footer from '@/app/components/Footer'
 import { IconButton } from '@/app/components/IconButton'
 import PageFX from '@/app/components/PageFX'
+import ed from '@/app/styles/editorial.module.css'
 import styles from '@/app/over-mij/over-mij.module.css'
 
 export const metadata: Metadata = {
@@ -61,72 +62,72 @@ const DownloadIcon = () => (
 
 const OverMij = () => (
   <PageFX>
-    <div className={styles.page}>
-      <section className={styles.hero}>
+    <div className={ed.page}>
+      <section className={ed.hero}>
         <h1
           data-animation="webgl-text"
           data-webgl-text-mode="hero"
-          className={styles.heroTitle}
+          className={ed.heroTitle}
         >
           <em className="scriptCap">B</em>eeld dat laat zien
           <br />
           wie je bent
         </h1>
-        <ul className={styles.heroTags}>
+        <ul className={ed.heroTags}>
           {HERO_TAGS.map((tag) => (
-            <li key={tag} className={styles.heroTag}>
+            <li key={tag} className={ed.heroTag}>
               {tag}
             </li>
           ))}
         </ul>
       </section>
 
-      <figure className={styles.heroFigure} data-parallax="trigger">
-        <div className={styles.parallaxTarget} data-parallax="target">
+      <figure className={ed.heroFigure} data-parallax="trigger">
+        <div className={ed.parallaxTarget} data-parallax="target">
           <img
             src="/images/hero_overmij.webp"
             alt="Vienna aan het werk"
-            className={styles.heroImage}
+            className={ed.heroImage}
             style={{ objectPosition: 'center 28%' }}
           />
         </div>
       </figure>
 
-      <div className={styles.sections}>
+      <div className={ed.sections}>
         {/* Section A — text left, portrait image right */}
-        <section className={`${styles.section} ${styles.sectionA}`}>
-          <div className={styles.sectionText}>
-            <p className={styles.sectionLabel}>
-              <span className={styles.sectionLabelNumber}>01</span>
+        <section className={`${ed.section} ${ed.sectionA}`}>
+          <div className={ed.sectionText}>
+            <p className={ed.sectionLabel}>
+              <span className={ed.sectionLabelNumber}>01</span>
               Mijn verhaal
             </p>
-            <h2 data-animation="webgl-text" className={styles.sectionTitle}>
+            <h2 data-animation="webgl-text" className={ed.sectionTitle}>
               Persoonlijk en betrokken,
               <br />
               van begin af aan
             </h2>
-            <p className={styles.sectionBody}>
+            <p className={ed.sectionBody}>
               Ik ben Vienna, contentmaker vanuit Heerlen. Ik help ondernemers
               en merken om hun verhaal te vertalen naar sterk beeld.
             </p>
-            <p className={styles.sectionBody}>
+            <p className={ed.sectionBody}>
               Van fotografie tot video en social media: ik werk persoonlijk en
               betrokken, zodat je merk online laat zien wie het is.
             </p>
           </div>
           <figure
-            className={styles.sectionFigure}
+            className={ed.sectionFigure}
             data-parallax="trigger"
             data-parallax-disabled
           >
-            <div className={styles.parallaxTarget} data-parallax="target">
+            <div className={ed.parallaxTarget} data-parallax="target">
               <img
                 data-webgl-media
                 data-webgl-effect="bend"
                 data-webgl-y="0.18"
                 src="/images/overmij2.webp"
                 alt="Vienna met de camera in de studio"
-                className={styles.sectionImage}
+                className={ed.sectionImage}
                 style={{ objectPosition: 'center 22%' }}
                 loading="lazy"
               />
@@ -135,36 +136,36 @@ const OverMij = () => (
         </section>
 
         {/* Section B — landscape image left, text right */}
-        <section className={`${styles.section} ${styles.sectionB}`}>
+        <section className={`${ed.section} ${ed.sectionB}`}>
           <figure
-            className={styles.sectionFigure}
+            className={ed.sectionFigure}
             data-parallax="trigger"
             data-parallax-disabled
           >
-            <div className={styles.parallaxTarget} data-parallax="target">
+            <div className={ed.parallaxTarget} data-parallax="target">
               <img
                 data-webgl-media
                 data-webgl-effect="bend"
                 data-webgl-y="0.12"
                 src="/images/overmij3.webp"
                 alt="Vienna aan het werk met laptop en camera"
-                className={styles.sectionImage}
+                className={ed.sectionImage}
                 style={{ objectPosition: 'center 28%' }}
                 loading="lazy"
               />
             </div>
           </figure>
-          <div className={styles.sectionText}>
-            <p className={styles.sectionLabel}>
-              <span className={styles.sectionLabelNumber}>02</span>
+          <div className={ed.sectionText}>
+            <p className={ed.sectionLabel}>
+              <span className={ed.sectionLabelNumber}>02</span>
               Wat ik doe
             </p>
-            <h2 data-animation="webgl-text" className={styles.sectionTitle}>
+            <h2 data-animation="webgl-text" className={ed.sectionTitle}>
               Alles voor je content,
               <br />
               van begin tot eind
             </h2>
-            <p className={styles.sectionBody}>
+            <p className={ed.sectionBody}>
               Fotografie, video, montage, teksten en planning &mdash; ik
               verzorg het hele creatieve traject. Op locatie of in de studio,
               altijd afgestemd op jouw merk.
@@ -180,38 +181,38 @@ const OverMij = () => (
         </section>
 
         {/* Section C — full-width image + 2-col caption below */}
-        <section className={`${styles.section} ${styles.sectionC}`}>
+        <section className={`${ed.section} ${ed.sectionC}`}>
           <figure
-            className={styles.sectionFigure}
+            className={ed.sectionFigure}
             data-parallax="trigger"
             data-parallax-disabled
           >
-            <div className={styles.parallaxTarget} data-parallax="target">
+            <div className={ed.parallaxTarget} data-parallax="target">
               <img
                 data-webgl-media
                 data-webgl-effect="bend"
                 data-webgl-y="0.18"
                 src="/images/overmij2.webp"
                 alt="Vienna in de studio"
-                className={styles.sectionImage}
+                className={ed.sectionImage}
                 style={{ objectPosition: 'center 22%' }}
                 loading="lazy"
               />
             </div>
           </figure>
-          <div className={styles.sectionCText}>
-            <div className={styles.sectionCTextLead}>
-              <p className={styles.sectionLabel}>
-                <span className={styles.sectionLabelNumber}>03</span>
+          <div className={ed.sectionCText}>
+            <div className={ed.sectionCTextLead}>
+              <p className={ed.sectionLabel}>
+                <span className={ed.sectionLabelNumber}>03</span>
                 Hoe ik werk
               </p>
-              <h2 data-animation="webgl-text" className={styles.sectionTitle}>
+              <h2 data-animation="webgl-text" className={ed.sectionTitle}>
                 Vier stappen,
                 <br />
                 één ritme
               </h2>
             </div>
-            <div className={styles.sectionCTextBody}>
+            <div className={ed.sectionCTextBody}>
               <ol className={styles.workflowList}>
                 {WORKFLOW.map((step, i) => (
                   <li key={step.name} className={styles.workflowItem}>

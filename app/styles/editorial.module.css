@@ -1,0 +1,336 @@
+/* ──────────────────────────────────────────────────────────────
+   Editorial layout — gedeeld door case-detail en over-mij.
+
+   Layout contract:
+   - Contained blocks share max-width (--container-max) + side padding
+     (--container-pad) so their left/right edges always match.
+   - Inside containers, children align to a 12-col grid with a --gutter
+     gutter. Section images use spans (5/6/12 of 12) so widths repeat
+     across sections.
+   - Full-bleed blocks (heroFigure) sit flush at 100vw between padded
+     blocks.
+   - Vertical rhythm: every padded block uses `--rhythm` top+bottom
+     padding, so stacking two padded blocks gives `2 * --rhythm` and a
+     padded→full-bleed transition gives `--rhythm` on the padded side.
+
+   Per-pagina accenten gaan via CSS-vars op een extra .page-class in
+   de pagina-module (zie case.module.css):
+     --hero-gap                afstand tussen hero-elementen (def. 2em)
+     --sectionc-gap-tablet     lead/body-afstand in sectie C ≤991px
+
+   Drie sectie-varianten:
+   A) text 5 / portrait figure 6 — text left, image right
+   B) landscape figure 6 / text 5 — image left, text right
+   C) full-width figure + 2-col caption below (5 / 6) — the finale
+   ────────────────────────────────────────────────────────────── */
+
+.page {
+  background: var(--color-cream);
+  min-height: 100vh;
+  --rhythm: 6em;
+  --gutter: 1.5em;
+  --container-max: 68em;
+  --container-pad: 8vw;
+}
+
+/* ── Hero — centered ── */
+
+.hero {
+  width: 100%;
+  padding: 14em var(--container-pad) var(--rhythm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--hero-gap, 2em);
+  max-width: calc(var(--container-max) + 2 * var(--container-pad));
+  margin-inline: auto;
+}
+
+.heroTitle {
+  font-family: var(--font-primary);
+  font-style: italic;
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-regular);
+  color: var(--color-navy);
+  line-height: 0.95;
+  letter-spacing: var(--tracking-tight);
+  margin: 0 auto;
+  max-width: 15em;
+}
+
+.heroTags {
+  list-style: none;
+  padding: 0;
+  margin: 1em 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3em 0;
+  font-family: var(--font-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-navy);
+}
+
+.heroTag {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Streepje tussen opsomming-items (i.p.v. een bolletje). */
+.heroTag + .heroTag::before {
+  content: '–';
+  margin: 0 0.6em;
+}
+
+/* ── Full-width hero image (flush between hero and sections) ── */
+
+.heroFigure {
+  margin: 0;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 21 / 9;
+}
+
+.heroImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 150%;
+  top: -25%;
+  display: block;
+  object-fit: cover;
+}
+
+.parallaxTarget {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+/* ── Sections (de drie editorial varianten) ── */
+
+.sections {
+  width: 100%;
+  max-width: calc(var(--container-max) + 2 * var(--container-pad));
+  margin-inline: auto;
+  padding: var(--rhythm) var(--container-pad);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--rhythm) * 1.25);
+}
+
+.section {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--gutter);
+  row-gap: 2.5em;
+  align-items: center;
+}
+
+/* A — text cols 1-5, portrait image cols 7-12 */
+.sectionA .sectionText { grid-column: 1 / span 5; }
+.sectionA .sectionFigure {
+  grid-column: 7 / span 6;
+  aspect-ratio: 4 / 5;
+}
+
+/* B — landscape image cols 1-6, text cols 8-12 (mirrored widths of A) */
+.sectionB .sectionFigure {
+  grid-column: 1 / span 6;
+  aspect-ratio: 4 / 3;
+}
+.sectionB .sectionText { grid-column: 8 / span 5; }
+
+/* Portrait override — voor secties waar het beeld verticaal (social)
+   is en de standaard landscape het zou croppen. Past de aspect-ratio
+   aan naar dezelfde portrait verhouding als de standaard A. Specifiteit
+   moet matchen met `.sectionB .sectionFigure` (0,2,0) om die te winnen. */
+.sectionB .sectionFigurePortrait,
+.sectionC .sectionFigurePortrait {
+  aspect-ratio: 4 / 5;
+}
+
+/* C — full-width landscape figure + 2-col caption below (same ratios as A/B) */
+.sectionC .sectionFigure {
+  grid-column: 1 / -1;
+  aspect-ratio: 16 / 7;
+}
+.sectionCText {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--gutter);
+  row-gap: 1.5em;
+  align-items: start;
+  padding-top: 0.5em;
+}
+.sectionCTextLead { grid-column: 1 / span 5; }
+.sectionCTextBody { grid-column: 7 / span 6; }
+
+.sectionText {
+  max-width: 100%;
+}
+
+.sectionFigure {
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.sectionLabel {
+  font-family: var(--font-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-navy);
+  margin: 0 0 1.5em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75em;
+}
+
+.sectionLabelNumber {
+  color: var(--color-accent);
+}
+
+.sectionTitle {
+  font-family: var(--font-primary);
+  font-style: italic;
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-regular);
+  color: var(--color-navy);
+  line-height: 0.95;
+  letter-spacing: var(--tracking-tight);
+  margin: 0 0 1em;
+  max-width: 12em;
+}
+
+/* Neutraliseer kale <em> in sectietitels; het sierkapitaal gaat via de
+   globale .scriptCap class. */
+.sectionTitle em {
+  font-family: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+}
+
+.sectionBody {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-loose);
+  color: var(--color-navy);
+  margin: 0;
+  max-width: 32em;
+}
+
+.sectionBody + .sectionBody {
+  margin-top: 1.25em;
+}
+
+.sectionImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 150%;
+  top: -25%;
+  display: block;
+  object-fit: cover;
+}
+
+/* ── Tablet / mobile ── */
+
+@media (max-width: 991px) {
+  .page {
+    --rhythm: 5em;
+    --container-pad: 6vw;
+  }
+
+  .hero { padding: 10em var(--container-pad) var(--rhythm); }
+  .heroTitle { font-size: var(--text-3xl); }
+
+  /* iPad portrait: stack 12-col layouts so text/image columns aren't squeezed */
+  .sectionA .sectionText,
+  .sectionA .sectionFigure,
+  .sectionB .sectionFigure,
+  .sectionB .sectionText,
+  .sectionC .sectionFigure,
+  .sectionCTextLead,
+  .sectionCTextBody {
+    grid-column: 1 / -1;
+  }
+
+  .sectionA .sectionText { order: 2; }
+  .sectionA .sectionFigure { order: 1; aspect-ratio: 16 / 10; }
+  .sectionB .sectionFigure { order: 1; aspect-ratio: 16 / 10; }
+  .sectionB .sectionText { order: 2; }
+  .sectionC .sectionFigure { aspect-ratio: 16 / 10; }
+
+  .sectionCText {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sectionc-gap-tablet, 1.5em);
+  }
+}
+
+@media (max-width: 767px) {
+  .page {
+    --rhythm: 4em;
+    --container-pad: 0.75em;
+    --gutter: 0.75em;
+  }
+
+  /* Match homepage: tekst-sectie + hero-figure elk 50vh, samen
+     een schone twee-helften compositie op mobile. */
+  .hero {
+    padding: 6em var(--container-pad) 2em;
+    height: 50vh;
+    min-height: auto;
+    gap: 1.5em;
+  }
+
+  .heroTitle { font-size: var(--text-3xl); }
+
+  .heroFigure {
+    aspect-ratio: auto;
+    height: 50vh;
+  }
+
+  /* Mobile: stack all variants — image on top, text below */
+  .sectionA .sectionText,
+  .sectionA .sectionFigure,
+  .sectionB .sectionFigure,
+  .sectionB .sectionText,
+  .sectionC .sectionFigure,
+  .sectionCTextLead,
+  .sectionCTextBody {
+    grid-column: 1 / -1;
+  }
+
+  .sectionA .sectionText { order: 2; }
+  /* Sectie 01 image verbergen op mobile — direct na de full-width hero
+     image staan twee afbeeldingen achter elkaar wat te druk oogt. */
+  .sectionA .sectionFigure { display: none; }
+  .sectionB .sectionFigure { order: 1; aspect-ratio: 4 / 3; }
+  .sectionB .sectionText { order: 2; }
+  .sectionC .sectionFigure { aspect-ratio: 4 / 3; }
+
+  .sectionTitle { font-size: var(--text-lg); }
+}
+
+@media (max-width: 479px) {
+  .page {
+    --rhythm: 3em;
+    --container-pad: 0.75em;
+  }
+
+  .hero { padding: 6em var(--container-pad) var(--rhythm); }
+  .heroTitle { font-size: var(--text-2xl); }
+  .sectionTitle { font-size: var(--text-xl); }
+}
